@@ -1,0 +1,627 @@
+import {
+  UpdateItem,
+  UserProfile,
+  NotificationItem,
+  CategoryItem,
+  DepartmentItem,
+  AcademicYearItem,
+  SectionItem,
+  CourseItem,
+  AudienceGroupItem,
+  AuditLogItem,
+  AppSettings,
+} from '@/types'
+
+export const initialUsers: UserProfile[] = [
+  {
+    id: 'user-student-1',
+    name: 'Aarav Mehta',
+    email: 'aarav.mehta@campus.edu',
+    role: 'student',
+    department: 'School of Design',
+    year: 'Year 2',
+    section: 'D2',
+    studentId: 'CV-2026-0142',
+    avatarInitials: 'AM',
+    active: true,
+    lastSeen: '2 min ago',
+    notificationPreferences: {
+      urgentNotices: true,
+      deadlines: true,
+      communityEvents: false,
+      emailChannel: true,
+      pushChannel: true,
+      smsChannel: false,
+    },
+  },
+  {
+    id: 'user-faculty-1',
+    name: 'Dr. Maya Rao',
+    email: 'maya.rao@campus.edu',
+    role: 'faculty',
+    department: 'School of Design',
+    avatarInitials: 'MR',
+    active: true,
+    lastSeen: '18 min ago',
+    notificationPreferences: {
+      urgentNotices: true,
+      deadlines: true,
+      communityEvents: true,
+      emailChannel: true,
+      pushChannel: true,
+      smsChannel: true,
+    },
+  },
+  {
+    id: 'user-admin-1',
+    name: 'Priya Nair',
+    email: 'priya.nair@campus.edu',
+    role: 'admin',
+    department: 'Administration',
+    avatarInitials: 'PN',
+    active: true,
+    lastSeen: '1 hr ago',
+    notificationPreferences: {
+      urgentNotices: true,
+      deadlines: true,
+      communityEvents: true,
+      emailChannel: true,
+      pushChannel: true,
+      smsChannel: true,
+    },
+  },
+  {
+    id: 'user-student-2',
+    name: 'Sana Khan',
+    email: 'sana.khan@campus.edu',
+    role: 'student',
+    department: 'Computer Science',
+    year: 'Year 3',
+    section: 'CS1',
+    studentId: 'CV-2026-0089',
+    avatarInitials: 'SK',
+    active: true,
+    lastSeen: '3 hrs ago',
+    notificationPreferences: {
+      urgentNotices: true,
+      deadlines: true,
+      communityEvents: true,
+      emailChannel: true,
+      pushChannel: false,
+      smsChannel: false,
+    },
+  },
+  {
+    id: 'user-faculty-2',
+    name: 'Prof. Vikram Sen',
+    email: 'vikram.sen@campus.edu',
+    role: 'faculty',
+    department: 'Computer Science',
+    avatarInitials: 'VS',
+    active: true,
+    lastSeen: 'Yesterday',
+    notificationPreferences: {
+      urgentNotices: true,
+      deadlines: false,
+      communityEvents: false,
+      emailChannel: true,
+      pushChannel: true,
+      smsChannel: false,
+    },
+  },
+]
+
+export const initialCategories: CategoryItem[] = [
+  { id: 'cat-exams', name: 'Exams', color: 'var(--accent-orange)', order: 1, permissionGroupsCount: 2 },
+  { id: 'cat-fees', name: 'Fees', color: 'var(--accent-blue)', order: 2, permissionGroupsCount: 1 },
+  { id: 'cat-timetable', name: 'Timetable', color: 'var(--accent-green)', order: 3, permissionGroupsCount: 3 },
+  { id: 'cat-placements', name: 'Placements', color: 'var(--accent-blue)', order: 4, permissionGroupsCount: 2 },
+  { id: 'cat-events', name: 'Events', color: 'var(--accent-green)', order: 5, permissionGroupsCount: 4 },
+  { id: 'cat-holidays', name: 'Holidays', color: 'var(--accent-red)', order: 6, permissionGroupsCount: 1 },
+  { id: 'cat-scholarships', name: 'Scholarships', color: 'var(--accent-blue)', order: 7, permissionGroupsCount: 2 },
+  { id: 'cat-results', name: 'Results', color: 'var(--accent-orange)', order: 8, permissionGroupsCount: 1 },
+]
+
+export const initialDepartments: DepartmentItem[] = [
+  { id: 'dept-design', name: 'School of Design', code: 'DES' },
+  { id: 'dept-cs', name: 'Computer Science', code: 'CS' },
+  { id: 'dept-acad', name: 'Academic Office', code: 'ACAD' },
+  { id: 'dept-fin', name: 'Finance & Accounts', code: 'FIN' },
+  { id: 'dept-career', name: 'Career Services', code: 'CAR' },
+  { id: 'dept-admin', name: 'Administration', code: 'ADM' },
+]
+
+export const initialAcademicYears: AcademicYearItem[] = [
+  { id: 'year-1', name: 'Year 1', code: 'Y1' },
+  { id: 'year-2', name: 'Year 2', code: 'Y2' },
+  { id: 'year-3', name: 'Year 3', code: 'Y3' },
+  { id: 'year-4', name: 'Year 4', code: 'Y4' },
+]
+
+export const initialSections: SectionItem[] = [
+  { id: 'sec-d1', name: 'D1', departmentId: 'dept-design' },
+  { id: 'sec-d2', name: 'D2', departmentId: 'dept-design' },
+  { id: 'sec-cs1', name: 'CS1', departmentId: 'dept-cs' },
+  { id: 'sec-cs2', name: 'CS2', departmentId: 'dept-cs' },
+]
+
+export const initialCourses: CourseItem[] = [
+  { id: 'course-des204', name: 'Design Systems Critique', code: 'DES 204', departmentId: 'dept-design' },
+  { id: 'course-cs301', name: 'Advanced Algorithms', code: 'CS 301', departmentId: 'dept-cs' },
+  { id: 'course-fin101', name: 'Financial Literacy', code: 'FIN 101', departmentId: 'dept-fin' },
+]
+
+export const initialAudienceGroups: AudienceGroupItem[] = [
+  { id: 'aud-all', name: 'All students', memberCount: 2400, description: 'Universal student body' },
+  { id: 'aud-design', name: 'School of Design', memberCount: 184, description: 'Undergraduate and graduate design students' },
+  { id: 'aud-y2', name: 'Year 2 students', memberCount: 620, description: 'All sophomore cohorts' },
+  { id: 'aud-d2', name: 'Studio D2', memberCount: 48, description: 'Year 2 Design studio section D2' },
+  { id: 'aud-faculty', name: 'Faculty & staff', memberCount: 318, description: 'Teaching faculty and department officers' },
+]
+
+export const initialUpdates: UpdateItem[] = [
+  {
+    id: 'exam',
+    title: 'Mid-semester examination schedule released',
+    category: 'Exams',
+    priority: 'Urgent',
+    status: 'Published',
+    excerpt: 'Check your course-wise slots and make a note of the room changes for Friday in the Main Hall.',
+    content: `Mid-semester examinations for Autumn Term 2026 begin on Monday, October 19. All students are requested to download the updated course-wise schedule and verify seating arrangements.
+
+Key instructions:
+1. Carry your physical Student ID card to each examination room.
+2. Friday's DES 204 and CS 301 sessions will take place in Main Hall rather than Studio 2.
+3. Electronic devices and smartwatches are strictly prohibited inside the hall.
+4. For accommodation requests, contact the Academic Office before October 16.`,
+    department: 'Academic Office',
+    postedAt: '2026-10-13T10:30:00Z', // 2 hours ago
+    eventDate: '2026-10-18T09:00:00Z',
+    deadlineDate: '2026-10-18T09:00:00Z',
+    publisher: {
+      name: 'Academic Office',
+      role: 'Official notice',
+      email: 'academics@campus.edu',
+    },
+    read: false,
+    saved: false,
+    readBy: [],
+    savedBy: [],
+    attachments: [
+      { id: 'att-1', name: 'MidSem_Schedule_Oct2026.pdf', size: '1.2 MB', type: 'pdf' },
+      { id: 'att-2', name: 'Seating_Arrangements_MainHall.pdf', size: '840 KB', type: 'pdf' },
+    ],
+    audience: {
+      departments: ['School of Design', 'Computer Science'],
+      years: ['Year 2', 'Year 3'],
+      sections: ['D2', 'CS1', 'CS2'],
+      isUniversal: false,
+      label: 'Targeted: Design & CS (Y2/Y3)',
+    },
+    editHistory: [
+      { date: '2026-10-13T10:30:00Z', author: 'Academic Office', action: 'Published with urgent priority' },
+      { date: '2026-10-13T12:00:00Z', author: 'Academic Office', action: 'Updated room instructions' },
+    ],
+    reachPercentage: 94,
+    viewsCount: 540,
+    readsCount: 480,
+  },
+  {
+    id: 'fee',
+    title: 'Fee payment window closes this Friday',
+    category: 'Fees',
+    priority: 'Normal',
+    status: 'Published',
+    excerpt: 'The portal stays open until 11:59 PM. Installment requests can be raised from finance.',
+    content: `The Autumn Term fee collection portal will close on Friday, October 16, at 11:59 PM. 
+
+Students who require staggered payment plans or corporate sponsor invoicing should submit the fee variance form directly to the Finance Office before Thursday noon. Late fees of $50 per day will apply to unconfirmed balances after October 16.`,
+    department: 'Finance & Accounts',
+    postedAt: '2026-10-12T14:00:00Z', // Yesterday
+    eventDate: '2026-10-16T23:59:00Z',
+    deadlineDate: '2026-10-16T23:59:00Z',
+    publisher: {
+      name: 'Finance Office',
+      role: 'Student services',
+      email: 'finance@campus.edu',
+    },
+    read: true,
+    saved: true,
+    readBy: ['user-student-1'],
+    savedBy: ['user-student-1'],
+    attachments: [
+      { id: 'att-fee-1', name: 'Fee_Structure_Autumn2026.pdf', size: '640 KB', type: 'pdf' },
+    ],
+    audience: {
+      departments: [],
+      years: [],
+      sections: [],
+      isUniversal: true,
+      label: 'All students',
+    },
+    editHistory: [
+      { date: '2026-10-12T14:00:00Z', author: 'Finance Office', action: 'Published notice' },
+    ],
+    reachPercentage: 88,
+    viewsCount: 2110,
+    readsCount: 1850,
+  },
+  {
+    id: 'placement',
+    title: 'Northstar Labs pre-placement talk',
+    category: 'Placements',
+    priority: 'Normal',
+    status: 'Published',
+    excerpt: 'A 45-minute session on product roles, followed by an open Q&A in the auditorium.',
+    content: `Northstar Labs will visit the campus on Wednesday, October 21 at 4:00 PM in the Main Auditorium. 
+
+This session is open to graduating Design and Computer Science students interested in Junior Product Designer, Software Engineer, and Design Technologist positions. Please bring your resume and portfolio QR links.`,
+    department: 'Career Services',
+    postedAt: '2026-10-11T09:00:00Z',
+    eventDate: '2026-10-21T16:00:00Z',
+    publisher: {
+      name: 'Placement Cell',
+      role: 'Student services',
+      email: 'careers@campus.edu',
+    },
+    read: false,
+    saved: true,
+    readBy: [],
+    savedBy: ['user-student-1'],
+    attachments: [
+      { id: 'att-northstar', name: 'Northstar_Job_Descriptions.pdf', size: '2.1 MB', type: 'pdf' },
+    ],
+    audience: {
+      departments: ['School of Design', 'Computer Science'],
+      years: ['Year 2', 'Year 3', 'Year 4'],
+      sections: [],
+      isUniversal: false,
+      label: 'Design & CS Students',
+    },
+    editHistory: [
+      { date: '2026-10-11T09:00:00Z', author: 'Placement Cell', action: 'Published talk details' },
+    ],
+    reachPercentage: 76,
+    viewsCount: 420,
+    readsCount: 310,
+  },
+  {
+    id: 'holiday',
+    title: 'Campus closed for Founders Day',
+    category: 'Holidays',
+    priority: 'Normal',
+    status: 'Published',
+    excerpt: 'Classes and shuttle services pause on October 24. Residence halls remain open.',
+    content: `In honor of Founders Day, administrative offices and academic departments will be closed on Saturday, October 24. 
+
+Key details:
+- Dining commons will operate on Sunday holiday brunch hours.
+- Campus emergency medical services and library quiet zones remain accessible via keycard.`,
+    department: 'Administration',
+    postedAt: '2026-10-10T16:00:00Z',
+    eventDate: '2026-10-24T00:00:00Z',
+    publisher: {
+      name: 'Admin Office',
+      role: 'Official notice',
+      email: 'admin@campus.edu',
+    },
+    read: true,
+    saved: false,
+    readBy: ['user-student-1'],
+    savedBy: [],
+    attachments: [],
+    audience: {
+      departments: [],
+      years: [],
+      sections: [],
+      isUniversal: true,
+      label: 'Campus-wide',
+    },
+    editHistory: [
+      { date: '2026-10-10T16:00:00Z', author: 'Admin Office', action: 'Published holiday calendar' },
+    ],
+    reachPercentage: 99,
+    viewsCount: 2380,
+    readsCount: 2310,
+  },
+  {
+    id: 'result',
+    title: 'Semester 4 results are now available',
+    category: 'Results',
+    priority: 'Normal',
+    status: 'Published',
+    excerpt: 'View your marksheet from the academic records page. Contact your department for corrections.',
+    content: `The Registrar's Office has officially verified and uploaded Semester 4 grade cards. 
+
+Students can review their GPA calculations, course credits, and transcript records on the portal. Any discrepancy petitions must be submitted through the Department Academic Coordinator within 7 working days.`,
+    department: 'Academic Office',
+    postedAt: '2026-10-09T11:00:00Z',
+    publisher: {
+      name: 'Registrar Office',
+      role: 'Academic records',
+      email: 'registrar@campus.edu',
+    },
+    read: true,
+    saved: false,
+    readBy: ['user-student-1'],
+    savedBy: [],
+    attachments: [
+      { id: 'att-res-1', name: 'Grading_Policy_Addendum.pdf', size: '420 KB', type: 'pdf' },
+    ],
+    audience: {
+      departments: ['School of Design', 'Computer Science'],
+      years: ['Year 2'],
+      sections: [],
+      isUniversal: false,
+      label: 'Year 2 Undergraduates',
+    },
+    editHistory: [
+      { date: '2026-10-09T11:00:00Z', author: 'Registrar Office', action: 'Published results announcement' },
+    ],
+    reachPercentage: 91,
+    viewsCount: 560,
+    readsCount: 512,
+  },
+  {
+    id: 'event',
+    title: 'Design club open studio this evening',
+    category: 'Events',
+    priority: 'Normal',
+    status: 'Published',
+    excerpt: 'Drop in for a hands-on typography workshop with materials provided by the club.',
+    content: `The Student Design Collective cordially invites all members of the campus community to an Open Studio session tonight at 6:30 PM in Studio D2. 
+
+We will experiment with wooden movable type, risograph printing, and letterpress techniques. Materials and snacks will be provided.`,
+    department: 'School of Design',
+    postedAt: '2026-10-13T08:00:00Z', // 5 hours ago
+    eventDate: '2026-10-13T18:30:00Z',
+    publisher: {
+      name: 'Design Club',
+      role: 'Student community',
+      email: 'designclub@campus.edu',
+    },
+    read: false,
+    saved: false,
+    readBy: [],
+    savedBy: [],
+    attachments: [
+      { id: 'att-poster', name: 'Open_Studio_Poster.png', size: '1.8 MB', type: 'image' },
+    ],
+    audience: {
+      departments: ['School of Design'],
+      years: [],
+      sections: [],
+      isUniversal: false,
+      label: 'School of Design',
+    },
+    editHistory: [
+      { date: '2026-10-13T08:00:00Z', author: 'Design Club', action: 'Published event flyer' },
+    ],
+    reachPercentage: 62,
+    viewsCount: 140,
+    readsCount: 95,
+  },
+  {
+    id: 'critique',
+    title: 'Design systems critique session',
+    category: 'Events',
+    priority: 'Urgent',
+    status: 'Published',
+    excerpt: 'Mandatory interim critique for DES 204 students in Studio 2.',
+    content: `Interim project review for DES 204: Design Systems. All students enrolled in section D2 must pin up their component documentation and prototype boards by 9:00 AM tomorrow.`,
+    department: 'School of Design',
+    postedAt: '2026-10-13T07:15:00Z',
+    eventDate: '2026-10-14T09:00:00Z',
+    deadlineDate: '2026-10-14T09:00:00Z',
+    publisher: {
+      name: 'Dr. Maya Rao',
+      role: 'Faculty Instructor',
+      email: 'maya.rao@campus.edu',
+    },
+    read: false,
+    saved: true,
+    readBy: [],
+    savedBy: ['user-student-1'],
+    attachments: [
+      { id: 'att-rubric', name: 'Critique_Rubric_DES204.pdf', size: '310 KB', type: 'pdf' },
+    ],
+    audience: {
+      departments: ['School of Design'],
+      years: ['Year 2'],
+      sections: ['D2'],
+      isUniversal: false,
+      label: 'DES 204 Section D2',
+    },
+    editHistory: [
+      { date: '2026-10-13T07:15:00Z', author: 'Dr. Maya Rao', action: 'Created and published' },
+    ],
+    reachPercentage: 100,
+    viewsCount: 48,
+    readsCount: 42,
+  },
+  // Pending updates for faculty and admin queue
+  {
+    id: 'fac-update-1',
+    title: 'Research grant call: Spring 2027',
+    category: 'Scholarships',
+    priority: 'Normal',
+    status: 'Pending',
+    excerpt: 'Faculty seed funding proposals for multi-disciplinary laboratory equipment.',
+    content: `Proposals are invited from faculty members for internal seed grants up to $15,000. Applications should detail research objectives, laboratory infrastructure requirements, and undergraduate research involvement.`,
+    department: 'Academic Office',
+    postedAt: '2026-10-12T16:00:00Z',
+    publisher: {
+      name: 'Dr. Maya Rao',
+      role: 'Faculty',
+      email: 'maya.rao@campus.edu',
+    },
+    read: false,
+    saved: false,
+    attachments: [
+      { id: 'att-grant-app', name: 'Seed_Grant_Guidelines_2027.pdf', size: '950 KB', type: 'pdf' },
+    ],
+    audience: {
+      departments: ['School of Design', 'Computer Science'],
+      years: [],
+      sections: [],
+      isUniversal: false,
+      label: 'Faculty & Researchers',
+    },
+    editHistory: [
+      { date: '2026-10-12T16:00:00Z', author: 'Dr. Maya Rao', action: 'Submitted for Admin Approval' },
+    ],
+    reachPercentage: 0,
+    viewsCount: 4,
+    readsCount: 2,
+  },
+  {
+    id: 'fac-update-2',
+    title: 'Course registration reminder for Spring',
+    category: 'Timetable',
+    priority: 'Normal',
+    status: 'Scheduled',
+    excerpt: 'Elective course add/drop opens on October 15 at 9:00 AM.',
+    content: `Reminder that Spring 2027 elective selections will open on Thursday, October 15. Ensure prerequisite reviews are cleared with your academic counselor before the deadline.`,
+    department: 'Academic Office',
+    postedAt: '2026-10-11T12:00:00Z',
+    eventDate: '2026-10-15T09:00:00Z',
+    publisher: {
+      name: 'Dr. Maya Rao',
+      role: 'Faculty',
+      email: 'maya.rao@campus.edu',
+    },
+    read: true,
+    saved: false,
+    attachments: [],
+    audience: {
+      departments: [],
+      years: [],
+      sections: [],
+      isUniversal: true,
+      label: 'All students',
+    },
+    editHistory: [
+      { date: '2026-10-11T12:00:00Z', author: 'Dr. Maya Rao', action: 'Scheduled for publication' },
+    ],
+    reachPercentage: 0,
+    viewsCount: 0,
+    readsCount: 0,
+  },
+  {
+    id: 'fac-update-draft',
+    title: 'Studio safety guidelines revision',
+    category: 'Events',
+    priority: 'Normal',
+    status: 'Draft',
+    excerpt: 'Updated protocols for laser cutters, 3D printers, and woodshop machinery.',
+    content: `Draft protocols for after-hours shop access. Still awaiting signature from Facilities coordinator.`,
+    department: 'School of Design',
+    postedAt: '2026-10-13T09:00:00Z',
+    publisher: {
+      name: 'Dr. Maya Rao',
+      role: 'Faculty',
+      email: 'maya.rao@campus.edu',
+    },
+    read: true,
+    saved: false,
+    attachments: [],
+    audience: {
+      departments: ['School of Design'],
+      years: [],
+      sections: [],
+      isUniversal: false,
+      label: 'Design Students & Staff',
+    },
+    editHistory: [
+      { date: '2026-10-13T09:00:00Z', author: 'Dr. Maya Rao', action: 'Created draft' },
+    ],
+    reachPercentage: 0,
+    viewsCount: 0,
+    readsCount: 0,
+  },
+]
+
+export const initialNotifications: NotificationItem[] = [
+  {
+    id: 'notif-1',
+    updateId: 'exam',
+    title: 'Exam schedule released',
+    message: 'Your Friday room has changed to Main Hall.',
+    type: 'urgent',
+    timestamp: '2026-10-13T10:32:00Z', // 8 mins ago relative
+    read: false,
+  },
+  {
+    id: 'notif-2',
+    updateId: 'fee',
+    title: 'Fee payment reminder',
+    message: 'Three days remain to complete your payment before the portal closes.',
+    type: 'reminder',
+    timestamp: '2026-10-13T08:30:00Z', // 2 hours ago
+    read: false,
+  },
+  {
+    id: 'notif-3',
+    updateId: 'critique',
+    title: 'Critique session tomorrow',
+    message: 'Mandatory pin-up for DES 204 at 9:00 AM.',
+    type: 'urgent',
+    timestamp: '2026-10-13T07:16:00Z',
+    read: false,
+  },
+  {
+    id: 'notif-4',
+    updateId: 'result',
+    title: 'Semester 4 results published',
+    message: 'Review your semester grade card on the academic portal.',
+    type: 'info',
+    timestamp: '2026-10-09T11:05:00Z',
+    read: true,
+  },
+]
+
+export const initialAuditLogs: AuditLogItem[] = [
+  {
+    id: 'log-1',
+    user: 'Priya Nair',
+    role: 'Admin',
+    action: 'Approved update',
+    details: 'Fee payment window closes this Friday (universal broadcast)',
+    timestamp: '2026-10-13T10:45:00Z',
+    updateId: 'fee',
+  },
+  {
+    id: 'log-2',
+    user: 'Dr. Maya Rao',
+    role: 'Faculty',
+    action: 'Scheduled update',
+    details: 'Course registration reminder for Spring',
+    timestamp: '2026-10-13T10:10:00Z',
+    updateId: 'fac-update-2',
+  },
+  {
+    id: 'log-3',
+    user: 'Priya Nair',
+    role: 'Admin',
+    action: 'Updated audience group',
+    details: 'Added 24 members to Studio D2 section',
+    timestamp: '2026-10-13T08:20:00Z',
+  },
+  {
+    id: 'log-4',
+    user: 'System',
+    role: 'System',
+    action: 'Automated weekly digest',
+    details: 'Dispatched digest email to 2,412 subscribed students',
+    timestamp: '2026-10-12T18:00:00Z',
+  },
+]
+
+export const initialSettings: AppSettings = {
+  emailNotifications: true,
+  pushNotifications: true,
+  smsNotifications: false,
+  urgentApprovalRule: '2-step review for urgent notices',
+  retentionMonths: 12,
+  theme: 'light',
+}
