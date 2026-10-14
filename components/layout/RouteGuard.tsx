@@ -18,6 +18,7 @@ export function RouteGuard({ children, allowedRoles }: RouteGuardProps) {
   const { isAuthenticated, role, isLoaded } = useStore()
 
   const isAuthRoute =
+    pathname === '/' ||
     pathname.startsWith('/login') ||
     pathname.startsWith('/forgot-password') ||
     pathname.startsWith('/reset-password')

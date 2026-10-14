@@ -1,35 +1,38 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
-import Link from 'next/link'
+import React, { useState, useMemo, useEffect } from 'react'
 import {
   ChevronLeft,
   ChevronRight,
-  Calendar as CalendarIcon,
   Download,
   ArrowUpRight,
-  X,
   Clock,
-  MapPin,
 } from 'lucide-react'
 import { useStore } from '@/lib/store'
 import { Button } from '@/components/ui/Button'
 import { StatusChip } from '@/components/ui/StatusChip'
 import { Modal } from '@/components/ui/Modal'
-import { downloadICS, formatDisplayDate } from '@/lib/date'
+import { downloadICS, downloadMonthICS, formatDisplayDate, isSameDay, isToday } from '@/lib/date'
 import { UpdateItem } from '@/types'
 
 export function StudentCalendarView() {
   const { updates, categories } = useStore()
 
-  // Calendar View Mode: Month, Week, Agenda
+  // Calendar View Mode: Month, Week, Agenda (default to Agenda on mobile)
   const [viewMode, setViewMode] = useState<'Month' | 'Week' | 'Agenda'>('Month')
-  // Current anchor date (default: Oct 13, 2026)
-  const [currentDate, setCurrentDate] = useState<Date>(new Date('2026-10-13T10:00:00Z'))
+  // Current anchor date (defaults to today's local date)
+  const [currentDate, setCurrentDate] = useState<Date>(() => new Date())
   // Category filter
   const [selectedCategory, setSelectedCategory] = useState<string>('All')
   // Selected event for popover modal
   const [selectedEvent, setSelectedEvent] = useState<UpdateItem | null>(null)
+
+  // Switch to Agenda on small screens
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setViewMode('Agenda')
+    }
+  }, [])
 
   // Extract all calendar-enabled updates
   const calendarEvents = useMemo(() => {
@@ -66,7 +69,7 @@ export function StudentCalendarView() {
   }
 
   const handleToday = () => {
-    setCurrentDate(new Date('2026-10-13T10:00:00Z'))
+    setCurrentDate(new Date())
   }
 
   // Header display string
@@ -111,11 +114,10 @@ export function StudentCalendarView() {
     // Current month days
     for (let dayNum = 1; dayNum <= lastDay.getDate(); dayNum++) {
       const d = new Date(year, month, dayNum)
-      // Find events matching this date
-      const dStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`
+      // Find events matching this date using timezone-safe local date check
       const evs = calendarEvents.filter((e) => {
-        const evDateStr = (e.eventDate || e.deadlineDate || '').slice(0, 10)
-        return evDateStr === dStr
+        const evDate = e.eventDate || e.deadlineDate
+        return evDate ? isSameDay(evDate, d) : false
       })
       days.push({ date: d, isCurrentMonth: true, events: evs })
     }
@@ -142,21 +144,32 @@ export function StudentCalendarView() {
     for (let i = 0; i < 7; i++) {
       const d = new Date(monday)
       d.setDate(d.getDate() + i)
-      const dStr = d.toISOString().slice(0, 10)
       const evs = calendarEvents.filter((e) => {
-        const evDateStr = (e.eventDate || e.deadlineDate || '').slice(0, 10)
-        return evDateStr === dStr
+        const evDate = e.eventDate || e.deadlineDate
+        return evDate ? isSameDay(evDate, d) : false
       })
       days.push({ date: d, events: evs })
     }
     return days
   }, [currentDate, calendarEvents])
 
+  const handleExportMonth = () => {
+    const exportable = calendarEvents
+      .filter((e) => e.eventDate || e.deadlineDate)
+      .map((e) => ({
+        title: e.title,
+        description: e.excerpt,
+        location: e.department,
+        startDate: (e.eventDate || e.deadlineDate)!,
+      }))
+    downloadMonthICS(exportable, dateRangeDisplay)
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {/* Calendar Toolbar */}
-      <div className="calendar-toolbar">
-        <div className="calendar-date">
+      <div className="calendar-toolbar" style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className="calendar-date" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <button
             type="button"
             className="icon-button"
@@ -169,7 +182,7 @@ export function StudentCalendarView() {
             type="button"
             className="btn ghost small"
             onClick={handleToday}
-            style={{ fontWeight: 500 }}
+            style={{ fontWeight: 700 }}
           >
             Today
           </button>
@@ -184,17 +197,29 @@ export function StudentCalendarView() {
           </button>
         </div>
 
-        <div className="segmented">
-          {(['Month', 'Week', 'Agenda'] as const).map((mode) => (
-            <button
-              key={mode}
-              type="button"
-              className={viewMode === mode ? 'active' : ''}
-              onClick={() => setViewMode(mode)}
-            >
-              {mode}
-            </button>
-          ))}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Button
+            variant="secondary"
+            size="sm"
+            icon={Download}
+            onClick={handleExportMonth}
+            aria-label="Export all events for this month"
+          >
+            Export Month (.ics)
+          </Button>
+
+          <div className="segmented">
+            {(['Month', 'Week', 'Agenda'] as const).map((mode) => (
+              <button
+                key={mode}
+                type="button"
+                className={viewMode === mode ? 'active' : ''}
+                onClick={() => setViewMode(mode)}
+              >
+                {mode}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -238,16 +263,15 @@ export function StudentCalendarView() {
 
           <div className="month-grid-body">
             {monthDays.map((cell, idx) => {
-              const isToday =
-                cell.date.toDateString() === new Date('2026-10-13T10:00:00Z').toDateString()
+              const currentCellIsToday = isToday(cell.date)
 
               return (
                 <div
                   key={idx}
-                  className={`month-cell ${!cell.isCurrentMonth ? 'month-cell-outside' : ''} ${isToday ? 'month-cell-today' : ''}`}
+                  className={`month-cell ${!cell.isCurrentMonth ? 'month-cell-outside' : ''} ${currentCellIsToday ? 'month-cell-today' : ''}`}
                 >
                   <div className="month-cell-date">
-                    <span className={`date-badge ${isToday ? 'active' : ''}`}>
+                    <span className={`date-badge ${currentCellIsToday ? 'active' : ''}`}>
                       {cell.date.getDate()}
                     </span>
                   </div>
@@ -411,11 +435,13 @@ export function StudentCalendarView() {
               >
                 Download .ics
               </Button>
-              <Link href={`/student/updates/${selectedEvent.id}`}>
-                <Button variant="primary" icon={ArrowUpRight}>
-                  Open Full Notice
-                </Button>
-              </Link>
+              <Button
+                variant="primary"
+                icon={ArrowUpRight}
+                href={`/student/updates/${selectedEvent.id}`}
+              >
+                Open Full Notice
+              </Button>
             </div>
           </div>
         )}

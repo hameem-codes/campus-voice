@@ -66,8 +66,8 @@ export function UpdateCard({
         </div>
 
         <div className="update-top-actions">
-          {/* Unread dot / badge */}
-          {isUnread && (
+          {/* Unread dot / badge - Student only */}
+          {role === 'student' && isUnread && (
             <span
               className="unread-badge-dot"
               title="Unread notice"
@@ -75,8 +75,8 @@ export function UpdateCard({
             />
           )}
 
-          {/* Bookmark Button */}
-          {showActions && (
+          {/* Bookmark Button - Student only */}
+          {role === 'student' && showActions && (
             <button
               type="button"
               aria-label={isSaved ? `Remove ${item.title} from saved` : `Save ${item.title}`}
@@ -109,14 +109,14 @@ export function UpdateCard({
         )}
 
         {/* Audience chip only for faculty/admin */}
-        {role !== 'student' && item.audience.label && (
+        {role !== 'student' && item.audience?.label && (
           <StatusChip tone="neutral">{item.audience.label}</StatusChip>
         )}
       </div>
 
-      {/* Main Content */}
-      <div style={{ minHeight: compact ? 'auto' : 64 }}>
-        <h3 id={`update-title-${item.id}`}>
+      {/* Main Content Area */}
+      <div className="update-card-body" style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <h3 id={`update-title-${item.id}`} style={{ margin: 0 }}>
           {href ? (
             <Link
               href={href}
@@ -133,7 +133,7 @@ export function UpdateCard({
       </div>
 
       {/* Single inline metadata line */}
-      <div className="card-meta-line">
+      <div className="card-meta-line" style={{ marginTop: 'auto' }}>
         <span>{item.department}</span>
         <span className="dot">·</span>
         <span>{formatRelativeTime(item.postedAt)}</span>
@@ -147,33 +147,39 @@ export function UpdateCard({
         )}
       </div>
 
-      {/* Footer controls: Mark read/unread toggle & details link */}
+      {/* Footer controls: Only show student read toggle if role is student */}
       <div className="update-card-footer">
-        <button
-          type="button"
-          className="card-read-toggle-btn"
-          aria-label={item.read ? 'Mark as unread' : 'Mark as read'}
-          onClick={(e) => {
-            e.stopPropagation()
-            if (item.read) {
-              markAsUnread(item.id)
-            } else {
-              markAsRead(item.id)
-            }
-          }}
-        >
-          {item.read ? (
-            <>
-              <CheckCircle width={13} height={13} style={{ color: 'var(--chip-green-fg)' }} />
-              <span>Read</span>
-            </>
-          ) : (
-            <>
-              <Circle width={13} height={13} style={{ color: 'var(--accent-orange)' }} />
-              <span>Mark as read</span>
-            </>
-          )}
-        </button>
+        {role === 'student' ? (
+          <button
+            type="button"
+            className="card-read-toggle-btn"
+            aria-label={item.read ? 'Mark as unread' : 'Mark as read'}
+            onClick={(e) => {
+              e.stopPropagation()
+              if (item.read) {
+                markAsUnread(item.id)
+              } else {
+                markAsRead(item.id)
+              }
+            }}
+          >
+            {item.read ? (
+              <>
+                <CheckCircle width={13} height={13} style={{ color: 'var(--chip-green-fg)' }} />
+                <span>Read</span>
+              </>
+            ) : (
+              <>
+                <Circle width={13} height={13} style={{ color: 'var(--accent-orange)' }} />
+                <span>Mark as read</span>
+              </>
+            )}
+          </button>
+        ) : (
+          <span style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 700 }}>
+            {item.priority} priority
+          </span>
+        )}
 
         {href && (
           <Link
@@ -190,3 +196,4 @@ export function UpdateCard({
     </article>
   )
 }
+

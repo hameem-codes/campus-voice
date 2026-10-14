@@ -1,287 +1,183 @@
-# Campus Voice Design System v2
+# Campus Voice Design System (Neo-brutalism)
 
-Warm, bold, friendly. Big color blocks, huge headlines, flat illustrations, and small gamified touches.
-This file replaces DESIGN.md v1 and is the single source of truth for all UI work.
-Values are visual approximations of the reference style. Keep them consistent.
+The single source of truth for all styling, typography, component geometry, tokens, and motion in Campus Voice.
+Every component and page must conform strictly to this specification.
 
 ---
 
-## 1. Principles
+## 1. Design Philosophy: Neo-brutalism with Purpose
 
-- **Bold, not busy:** one huge headline per page is the focal point. Everything else supports it.
-- **Color as surface:** yellow, purple and cream are used as large blocks, not tiny chips.
-- **Human:** flat illustrations with thick outlines, friendly greetings, small delights.
-- **Layered:** hero cards overlap the banner edge so the page feels composed, not just assembled.
-- **Urgent must scream:** red-orange is reserved for Urgent only. Never use it decoratively.
-- **Readable:** long reading areas stay on cream or white. Bright blocks frame the content, they don't hold paragraphs.
+Campus Voice uses a bold, hyper-readable Neo-brutalism aesthetic designed for fast information intake in high-stress campus environments (exams, deadlines, emergencies):
+- **Raw Geometries**: Razor-sharp zero-radius corners (`border-radius: 0px`) for panels, cards, and buttons.
+- **High-Contrast Outlines**: Heavy solid black borders (`#000000`, or `#FFFFFF` in dark mode) ranging from 2px to 4px.
+- **Hard Cast Shadows**: Crisp, zero-blur drop shadows (`box-shadow: Xpx Ypx 0 0 #000000`) providing physical tactility.
+- **Color Discipline**:
+  - **Coral / Hot Red (`#FF6B6B`)** is strictly reserved for **Urgent notices**, destructive actions, and active unread markers. It is never used decoratively.
+  - **Vivid Yellow (`#FFD93D`)** is the primary brand accent (active states, hero blocks, interactive highlights, primary non-urgent CTAs).
+  - **Soft Violet (`#C4B5FD`)**, **Sky Blue (`#7FB7E6`)**, and **Sage Green (`#9BCB8B`)** designate categories and status tags.
+- **Visual Hierarchy**: Not everything can be loud. We enforce three clear emphasis tiers across every screen.
 
 ---
 
 ## 2. Color Tokens
 
-### Base
+### 2.1 Base Tokens
 
-| Token | Value | Use |
-|---|---|---|
-| `--bg-canvas` | `#FBF6E9` | App background, sidebar, page |
-| `--bg-surface` | `#FFFDF7` | Main content area, modals, inputs |
-| `--bg-panel` | `#EDE7D3` | Hero banner, soft section panels |
-| `--bg-card` | `#F3EEDD` | Right-rail cards, list cards |
-| `--border` | `#E4DDC6` | Dividers, input borders, thin outlines |
-| `--ink` | `#16150F` | Headlines, primary text, outlines, primary button |
-| `--text-1` | `#16150F` | Titles |
-| `--text-2` | `#5E5A4C` | Body, descriptions |
-| `--text-3` | `#8E8A7A` | Labels, hints, timestamps |
-
-### Brand blocks
-
-| Token | Value | Use |
-|---|---|---|
-| `--yellow` | `#FFC21A` | Primary brand block, highlight cards, sidebar promo card |
-| `--yellow-soft` | `#FFF1BF` | Yellow tint backgrounds, selected states |
-| `--purple` | `#8A63D2` | Secondary brand block, progress fill, active nav icon |
-| `--purple-soft` | `#E7DDF7` | Purple tint backgrounds |
-| `--cream-card` | `#F5F0DE` | Illustration cards |
-
-### Category colors (one color per category, used as card blocks)
-
-| Category | Block | Illustration idea |
-|---|---|---|
-| Exams | `--purple` `#8A63D2` | Pencil and paper |
-| Fees | `--yellow` `#FFC21A` | Coin or wallet |
-| Timetable | `#7FB7E6` (sky) | Clock |
-| Placements | `#16150F` (ink, white text) | Briefcase |
-| Events | `#F5F0DE` (cream) | Megaphone or party |
-| Holidays | `#9BCB8B` (sage) | Sun or palm |
-| Scholarships | `#F4A6B8` (pink) | Graduation cap |
-| Results | `#FFC21A` with ink outline | Trophy or chart |
-
-### Status and priority (small chips only)
-
-| Meaning | Background | Text |
-|---|---|---|
-| Urgent | `#FFE0D6` | `#D9411E` |
-| Success / Read | `#DDEBD2` | `#4C7A3B` |
-| Info / Scheduled | `#DCEAF8` | `#3F73B0` |
-| Neutral | `#EDE7D3` | `#5E5A4C` |
-
-`--urgent: #FF5A36` is the solid urgent color for banners and badges. Use it nowhere else.
-
-### Dark mode (optional)
-
-| Token | Value |
-|---|---|
-| `--bg-canvas` | `#14130E` |
-| `--bg-surface` | `#1C1B14` |
-| `--bg-panel` | `#26241A` |
-| `--ink` / `--text-1` | `#F6F1E0` |
-| `--text-2` | `#BDB8A4` |
-| Brand blocks | Keep yellow and purple unchanged |
-
----
-
-## 3. Typography
-
-- **Display and headings:** Inter Tight, Satoshi, or General Sans. Fallback: `Inter, system-ui, sans-serif`.
-- **Body:** Inter. Fallback: `system-ui, sans-serif`.
-- **Weights:** 400 for body, 500 for UI labels, 600 for headlines. Headlines use tight letter-spacing (-0.02em to -0.03em).
-
-| Style | Size / Line | Weight | Use |
+| Token | Light Value | Dark Value | Purpose |
 |---|---|---|---|
-| Hero | 56 / 56 (mobile 36 / 38) | 600 | Hero headline |
-| Display | 40 / 44 (mobile 28 / 32) | 600 | Page titles |
-| Heading | 24 / 30 | 600 | Section titles |
-| Title | 18 / 24 | 500 | Card titles |
-| Body | 15 / 22 | 400 | Paragraphs, descriptions |
-| UI | 14 / 20 | 500 | Buttons, nav, tabs |
-| Caption | 12 / 16 | 400 | Meta, timestamps, labels |
-| Micro | 11 / 14 | 500 | Chips, badges (never below 11px) |
+| `--bg-canvas` | `#FFFDF5` | `#0F0F12` | App background, page canvas with subtle 32px grid |
+| `--bg-surface` | `#FFFFFF` | `#1A1A20` | Cards, main panels, modals, dropdowns |
+| `--bg-muted` | `#FFF9E6` | `#26262E` | Secondary panels, subtle table row hovers, date strip |
+| `--border` | `#000000` | `#FFFFFF` | Structural borders, outlines, dividers |
+| `--ink` | `#000000` | `#FFFFFF` | Primary ink color |
+| `--text-1` | `#000000` | `#FFFFFF` | Primary text, titles, headings, strong emphasis |
+| `--text-2` | `#1A1915` | `#E4E4E7` | Body text, descriptions, secondary copy |
+| `--text-3` | `#525048` | `#A1A1AA` | Metadata, timestamps, helper labels |
+
+### 2.2 Brand & Urgency Accents
+
+| Token | Value | Semantic Role |
+|---|---|---|
+| `--neo-accent` | `#FF6B6B` | **URGENT ONLY**, destructive buttons, emergency alert dot/banner |
+| `--neo-secondary` | `#FFD93D` | Primary brand accent, active navigation, primary action buttons |
+| `--neo-muted` | `#C4B5FD` | Soft violet, Timetable & Academics category |
+| `--accent-green` | `#9BCB8B` | Sage green, Published / Active status, positive stats |
+| `--accent-blue` | `#7FB7E6` | Sky blue, Placements & Information notices |
+| `--accent-orange` | `#FFA048` | Warm amber, Deadlines due soon |
+
+### 2.3 Category Color Mapping (Consistent Everywhere)
+
+Chips, calendar event pills, and detail views must share identical category color assignments:
+
+| Category | Background Token / Hex | Text Color |
+|---|---|---|
+| **Exams** | `#C4B5FD` (Soft Violet) | `#000000` |
+| **Fees** | `#FFD93D` (Vivid Yellow) | `#000000` |
+| **Timetable** | `#7FB7E6` (Sky Blue) | `#000000` |
+| **Placements** | `#FFE066` (Sun Gold) | `#000000` |
+| **Events** | `#FFF9E6` (Warm Sand) | `#000000` |
+| **Holidays** | `#9BCB8B` (Sage Green) | `#000000` |
+| **Scholarships** | `#D8B4FE` (Lilac) | `#000000` |
+| **Results** | `#FED7AA` (Peach Amber) | `#000000` |
 
 ---
 
-## 4. Spacing, Radius, Elevation
+## 3. Visual Hierarchy: Three Emphasis Tiers
 
-- **Spacing scale (4px base):** 4, 8, 12, 16, 24, 32, 48, 64
-- **Card padding:** 20 to 24
-- **Grid gap:** 16
-- **Page padding:** 32 desktop, 16 mobile
-- **Section gap:** 40 to 48
+To eliminate equal loudness across the interface, all UI elements fall strictly into one of three tiers:
 
-| Element | Radius |
-|---|---|
-| Hero banner, large panels | 20 |
-| Cards | 16 |
-| Illustration cards | 16 |
-| Buttons, inputs | 12 |
-| Chips, badges | 8 (pill chips: 999) |
-| Avatars | full circle |
+### Tier 1: Primary (Loudest)
+- **Visuals**: Thick 3px or 4px solid border + hard shadow (`--shadow-md` or `--shadow-lg`) + vivid solid fill (`--neo-secondary` for CTAs, `--neo-accent` for Urgent items).
+- **Usage**:
+  - Main call-to-action buttons (`.btn.primary`)
+  - Top urgent announcement banner (`.sticky-urgent-banner`)
+  - Urgent priority cards & badges (`.urgent-card`, `.urgent-badge`)
+  - Active modal dialogue containers (`.modal-container`)
 
-- **Elevation:** flat. No drop shadows. Depth comes from color blocks, 1px borders, and overlap.
-- **Outlines:** illustrations and key icon tiles use a 1.5px `--ink` outline.
-- **Layout:** fixed sidebar 220px, fluid main area, optional right rail 320px on screens 1280px and wider.
-- **Grid:** 3 columns for update cards on desktop, 2 on tablet, 1 on mobile.
+### Tier 2: Secondary (Structural)
+- **Visuals**: 2px or 2.5px solid border, subtle hard shadow (`--shadow-sm` = `3px 3px 0 0 #000`) or flat outline, white or canvas surface.
+- **Usage**:
+  - Standard update cards (`.update-card`)
+  - Form input controls, selects, textareas (`.field input`)
+  - Secondary buttons (`.btn.secondary`), icon buttons (`.icon-button`)
+  - Standard status chips and category filters (`.chip`)
 
----
-
-## 5. Iconography and Illustration
-
-- Outline icons (lucide-react), 1.5px stroke, 18px in navigation, 20px in buttons.
-- Active nav icon uses `--purple`.
-- Illustrations: flat vector, thick ink outlines, limited palette (yellow, purple, cream, ink). One per category. Use unDraw, Open Peeps, or custom SVG. No photos and no gradients.
-- Avatars: initials on `--yellow-soft` or `--purple-soft`, or illustrated faces, 32 to 40px.
+### Tier 3: Tertiary (Quiet)
+- **Visuals**: 1px or 1.5px solid border, zero box shadow, neutral or transparent background.
+- **Usage**:
+  - Table inner rows and cells (`.data-table td`)
+  - Metadata lines, timestamps, author attribution (`.card-meta-line`)
+  - Inline detail links and footnotes
+  - Nested list items inside panels
 
 ---
 
-## 6. Components
+## 4. Typography Scale
 
-### Sidebar
-- Cream (`--bg-canvas`), 220px, brand wordmark on top (large, 600 weight).
-- Nav item: icon + label, 40px tall, 12px radius. Active item has a `--purple-soft` background, `--ink` text and a purple icon.
-- Unread count badge: small pill, `--ink` background with white text.
-- Bottom promo card: solid `--yellow` block with an ink icon in a circle, bold two-line headline (for example "Never miss a deadline"), and a white button ("Turn on alerts").
+Font Family: `Space Grotesk`, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif.
+All headings are rendered in tight tracking and high-contrast uppercase styling.
 
-### Top bar
-- Search field (cream, rounded, with ⌘K hint).
-- Right side: streak badge ("5 day streak"), "read this week" badge, notification bell with dot, avatar.
-- Badges: `--bg-panel` background, 8px radius, icon in a colored circle.
+| Level | Size / Line Height | Weight | Case / Tracking | Target Elements |
+|---|---|---|---|---|
+| **Display / Hero** | 36px / 42px (mobile 28px/34px) | 900 | UPPERCASE, -0.03em | Page main titles (`.page-title`), Hero headlines |
+| **Section Head** | 24px / 30px (mobile 20px/26px) | 900 | UPPERCASE, -0.02em | Section headers (`.section-heading h2`) |
+| **Card Title** | 16px / 22px | 900 | Normal or UPPERCASE, -0.01em | Update card title (`.update-card h3`), Modal titles |
+| **Body Primary** | 14px / 20px | 500 | Normal sentence case | Notice content, excerpts, descriptive paragraphs |
+| **UI Action** | 13px / 18px | 700 or 900 | UPPERCASE, +0.05em | Button labels (`.btn`), Navigation items (`.nav-item`) |
+| **Meta / Label** | 12px / 16px | 700 | UPPERCASE, +0.04em | Breadcrumbs, author role, date labels |
+| **Micro / Tag** | 11px / 14px | 700 or 900 | UPPERCASE, +0.06em | Status chips, badges, keyboard shortcuts |
 
-### Hero banner
-- `--bg-panel` background, 20px radius, 32 to 48px padding.
-- Left: small greeting line, then a Hero headline (for example "You have 3 updates that need you today"), then a dark primary button with an arrow ("View updates").
-- Right: three tall illustration cards (about 150 x 280), each in a category color with a number (01, 02, 03), title and illustration. They overlap and slightly overflow the banner's right edge.
-- Mobile: cards become a horizontal scroll row under the headline.
+*Strict Rule: No font size anywhere in the application may be smaller than 11px.*
+
+---
+
+## 5. Border Widths & Corner Radii
+
+### Border Tokens
+- **Heavy (3px - 4px solid var(--border))**: App shell, sidebar outer frame, main panel container, modal containers, hero cards.
+- **Medium (2.5px solid var(--border))**: Action buttons, search inputs, form fields, table head separators.
+- **Light (1.5px - 2px solid var(--border))**: Chips, status badges, secondary dividers, icon buttons.
+- **Hairline (1px solid var(--border))**: Inner table row dividers, subtle audit lines.
+
+### Radii Tokens
+- `--radius-panel`: `0px` (Strict sharp edges)
+- `--radius-card`: `0px`
+- `--radius-control`: `0px`
+- `--radius-chip`: `9999px` (Fully rounded pills reserved exclusively for status/category tags and notification count dots)
+- `--radius-avatar`: `50%` (Circular user and department avatars)
+
+---
+
+## 6. Hard Shadows & Interactive Depths
+
+Shadows are rendered without blur radius to create solid Neo-brutalism projection:
+
+| Token | Shadow Value | Purpose |
+|---|---|---|
+| `--shadow-sm` | `3px 3px 0px 0px #000000` | Buttons, standard chips, inputs, small cards |
+| `--shadow-md` | `5px 5px 0px 0px #000000` | Sidebar, hero card, toast notifications |
+| `--shadow-lg` | `8px 8px 0px 0px #000000` | Main panel, dropdown menus, popovers |
+| `--shadow-xl` | `12px 12px 0px 0px #000000` | Modal containers, login card |
+
+### Interactive Micro-Motion
+- **Hover**: `transform: translate(-1px, -1px); box-shadow: 4px 4px 0 0 #000000;`
+- **Active / Pressed**: `transform: translate(2px, 2px); box-shadow: 0 0 0 0 #000000;`
+- **Focus Rings**: `:focus-visible { outline: 3px solid #000000 !important; outline-offset: 2px; }`
+
+---
+
+## 7. Component Guidelines
 
 ### Buttons
-- **Primary:** `--ink` background, white text, trailing arrow icon, 12px radius, 44px tall.
-- **Secondary:** transparent, 1px `--ink` border, `--ink` text.
-- **Accent:** `--yellow` background, ink text (used on promo cards).
-- **Ghost:** text only with an underline on hover.
-- Hover: 2px upward lift and a slight color shift. Active: scale 0.98. Focus: 2px `--purple` outline with 2px offset.
+- Height: Standard 40px (Small: 32px, Large: 48px).
+- Font: 13px, weight 700/900, uppercase, letter-spacing 0.05em.
+- Support both `<button>` and `<Link>` semantics natively through `href` prop.
+- Variants:
+  - `primary`: Yellow background (`--neo-secondary`), black text, 2.5px border, hard shadow.
+  - `secondary`: White background, black text, 2.5px border, hard shadow, hover yellow.
+  - `danger`: Red background (`--neo-accent`), black text, 2.5px border, hard shadow.
+  - `ghost`: Transparent background, no border by default, borders and pops on hover.
 
-### Update card
-- Solid category color block (see table) or cream card with an illustration.
-- Top: category label (Micro), unread dot, bookmark icon.
-- Title (Title style, up to 2 lines), one-line excerpt.
-- Footer: posted time (relative), event or deadline date, publisher.
-- Urgent cards add a solid `--urgent` left bar and an "Urgent" chip.
-- Read cards are slightly desaturated (opacity 0.85).
+### Cards
+- Standard cards use CSS grid with `align-items: stretch` and equal row heights.
+- Card footers pin to the bottom with `margin-top: auto`.
+- Dedicated variants:
+  - **Student Card**: Includes bookmark toggle, unread dot, mark-as-read button, and detail link.
+  - **Faculty / Admin Card**: Strips bookmark and mark-as-read; displays full publishing status chip, audience cohort, and inline Approve/Reject action buttons when status is Pending.
 
-### Urgent banner
-- Full-width, solid `--urgent` background, white text, alert icon in a circle, one-line message, white "Read now" button, dismiss icon. Sticky at the top of the content area.
-
-### Module list / timeline
-- Vertical list with icon tiles (outlined squares) connected by a thin line. Checked items get a yellow circle with a check.
-- Right side: short description in `--text-2`.
-
-### Progress
-- Track `--border`, 8px tall, rounded. Fill `--purple`. Percentage label at the right.
-- Used for "updates read this week" and form step progress.
-
-### Right rail ("Coming up")
-- Header "Coming up" with a "See all" link.
-- Sections "Today" and "Tomorrow", each a list of `--bg-card` cards with title, time, and a dot-tag chip (Exam, Fee, Event).
-- Cards with an imminent time show "Starts in 3 min" style helper text.
-
-### Tabs
-- Text tabs with a 2px `--ink` underline that slides between tabs. Inactive in `--text-2`.
-
-### Chips
-- Filter chips: pill, 1px border, 36px tall. Active chip fills with `--ink` and white text.
-- Status chips: see status table, 8px radius, Micro text.
-
-### Tables
-- Cream header row, 1px row dividers, 56px row height, hover row `--bg-card`. On mobile, rows become stacked cards.
-
-### Forms
-- Inputs: `--bg-surface`, 1px `--border`, 12px radius, 48px tall. Focus border `--purple` plus a soft purple ring.
-- Error: `--urgent` border and a small message under the field.
-- Stepper: numbered circles, active = `--ink`, done = `--yellow` with a check.
-
-### Modals, drawers, toasts
-- Modal and drawer on `--bg-surface`, 20px radius, scrim `rgba(22,21,15,0.4)`.
-- Toast: `--ink` background, white text, 12px radius, bottom center.
+### Chips & Badges
+- Height: 26px (standard) or 30px (filter chips).
+- Border: 2px solid #000.
+- Radius: 9999px.
+- Text: 11px uppercase font-weight 700.
 
 ---
 
-## 7. Motion
+## 8. Motion & Transitions
 
-- Easing: `cubic-bezier(0.22, 1, 0.36, 1)`. Durations: 150 to 250ms for UI, 400ms for page and hero entrance.
-- Page transition: fade plus 8px slide up.
-- Hero cards: staggered entrance (80ms apart) and a subtle lift on hover.
-- Cards: stagger on list load, lift 2px on hover.
-- Tab underline slides, progress bars fill on mount, bookmark pops (scale 1.2 then 1).
-- New urgent notification: bell shakes once, toast slides in.
-- Skeleton loaders use a soft shimmer.
-- Respect `prefers-reduced-motion`: disable transforms and keep only fades.
-
----
-
-## 8. Campus Voice Mapping
-
-| Campus Voice element | Pattern |
-|---|---|
-| Student Home hero | Hero banner with greeting, headline and three category cards (top three updates) |
-| Update feed | Category-colored update cards in a 3-column grid |
-| Upcoming deadlines | Right rail "Coming up" with Today and Tomorrow |
-| Updates read this week | Progress bar plus streak badge in the top bar |
-| Urgent notices | Sticky urgent banner plus urgent card treatment |
-| Saved | Update cards with a filled bookmark |
-| Faculty Create steps | Stepper plus form card |
-| Admin approvals | Table with approve and reject actions |
-| Analytics | Stat cards on `--bg-panel` with purple and yellow charts |
-| Sidebar promo card | "Never miss a deadline: turn on alerts" |
-
----
-
-## 9. CSS Variables
-
-```css
-:root {
-  --bg-canvas: #FBF6E9;
-  --bg-surface: #FFFDF7;
-  --bg-panel: #EDE7D3;
-  --bg-card: #F3EEDD;
-  --border: #E4DDC6;
-  --ink: #16150F;
-  --text-1: #16150F;
-  --text-2: #5E5A4C;
-  --text-3: #8E8A7A;
-
-  --yellow: #FFC21A;
-  --yellow-soft: #FFF1BF;
-  --purple: #8A63D2;
-  --purple-soft: #E7DDF7;
-  --sky: #7FB7E6;
-  --sage: #9BCB8B;
-  --pink: #F4A6B8;
-  --urgent: #FF5A36;
-
-  --chip-urgent-bg: #FFE0D6;  --chip-urgent-fg: #D9411E;
-  --chip-success-bg: #DDEBD2; --chip-success-fg: #4C7A3B;
-  --chip-info-bg: #DCEAF8;    --chip-info-fg: #3F73B0;
-  --chip-neutral-bg: #EDE7D3; --chip-neutral-fg: #5E5A4C;
-
-  --radius-xl: 20px;
-  --radius-lg: 16px;
-  --radius-md: 12px;
-  --radius-sm: 8px;
-
-  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
-  --space-6: 24px; --space-8: 32px; --space-12: 48px; --space-16: 64px;
-
-  --ease: cubic-bezier(0.22, 1, 0.36, 1);
-}
-```
-
----
-
-## 10. Rules for Implementation
-
-- Use only the tokens above. No new colors, shadows, or font sizes.
-- Keep spacing on the 4px scale.
-- Use `--urgent` only for Urgent items.
-- Keep body text on `--bg-canvas`, `--bg-surface` or `--bg-card`. Never put paragraphs on yellow or purple.
-- Check WCAG AA contrast: ink text on yellow passes, white text on purple passes at 14px and above, and chip text must be checked.
-- Every interactive element needs visible hover, focus, active, and disabled states.
-- Mobile-first: sidebar becomes a bottom bar with a "More" sheet, hero cards scroll horizontally, right rail moves below the main content.
-- Illustrations must be SVG, inline or local. No external image URLs.
+- Transition duration: 100ms - 180ms ease.
+- Animations powered by `framer-motion`:
+  - Modals & dialogs scale from 0.96 with fade.
+  - Toast notifications slide up 12px.
+  - Urgent alerts shake the notification bell icon with `@keyframes bellShake`.
+  - Respects `@media (prefers-reduced-motion: reduce)`: disable transforms and translations if preferred.

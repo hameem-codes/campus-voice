@@ -221,6 +221,18 @@ export const api = {
     return delay(settings)
   },
 
+  // AI Summary Demo Method (Phase 4.8)
+  async getAiSummary(updateId: string): Promise<{ bullets: string[]; generatedAt: string }> {
+    const list = await this.getUpdates()
+    const update = list.find((u) => u.id === updateId)
+    const bullets = update?.aiSummaryBullets || [
+      `Key announcement: ${update?.title || 'Notice details'}`,
+      `Audience & Scope: Verified for ${update?.audience?.label || 'Target cohorts'} by ${update?.department || 'Department'}.`,
+      `Required Action: Note published schedule and deadlines (${update?.eventDate ? new Date(update.eventDate).toLocaleDateString() : 'immediate notice'}).`,
+    ]
+    return delay({ bullets, generatedAt: new Date().toISOString() }, 250)
+  },
+
   // Reset to default
   async resetAllToDefault(): Promise<void> {
     if (typeof window !== 'undefined') {

@@ -29,6 +29,11 @@ import {
 } from 'lucide-react'
 import { Role } from '@/types'
 import { useStore } from '@/lib/store'
+import {
+  getBrowserNotificationPermission,
+  requestBrowserNotification,
+  NotificationPermissionState,
+} from '@/lib/notifications'
 
 interface NavItemDef {
   href: string
@@ -99,25 +104,75 @@ export function Sidebar() {
     role,
     setRole,
     currentUser,
-    updates,
-    savedIds,
+    studentUnreadCount,
+    savedCount,
+    facultyNoticesCount,
+    adminMetrics,
     sidebarCollapsed,
     toggleSidebar,
     theme,
     toggleTheme,
     simulateNewUrgentUpdate,
     logout,
+    addToast,
+    t,
   } = useStore()
 
   const [roleMenuOpen, setRoleMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [alertPerm, setAlertPerm] = useState<NotificationPermissionState>(() =>
+    getBrowserNotificationPermission()
+  )
 
-  // Compute live nav badges
-  const unreadCount = updates.filter((u) => !u.read && (role !== 'faculty' || u.publisher.name === currentUser.name)).length
-  const savedCount = savedIds.length
+  // Compute live nav badges strictly from selector layer
+  let updatesBadgeCount = 0
+  if (role === 'student') {
+    updatesBadgeCount = studentUnreadCount
+  } else if (role === 'faculty') {
+    updatesBadgeCount = facultyNoticesCount
+  } else if (role === 'admin') {
+    updatesBadgeCount = adminMetrics.pendingCount
+  }
+  const savedBadgeCount = savedCount
 
   const currentRoleCfg = roleConfigs.find((r) => r.key === role) || roleConfigs[0]
   const navItems = roleNavMap[role]
+
+  const getNavLabel = (item: NavItemDef) => {
+    switch (item.href) {
+      case '/student':
+      case '/faculty':
+        return t('navHome')
+      case '/student/updates':
+        return t('navUpdates')
+      case '/student/calendar':
+        return t('navCalendar')
+      case '/student/saved':
+        return t('navSaved')
+      case '/student/profile':
+        return t('navProfile')
+      case '/faculty/create':
+      case '/admin/create':
+        return t('navCreate')
+      case '/faculty/updates':
+        return t('navNotices')
+      case '/faculty/analytics':
+      case '/admin/analytics':
+        return t('navAnalytics')
+      case '/admin':
+        return t('navHome')
+      case '/admin/updates':
+        return t('navUpdates')
+      case '/admin/users':
+        return t('navUsers')
+      case '/admin/setup':
+        return t('navSetup')
+      case '/admin/logs':
+        return t('navLogs')
+      default:
+        return item.label
+    }
+  }
 
   const handleRoleSelect = (nextRole: Role) => {
     setRole(nextRole)
@@ -152,8 +207,8 @@ export function Sidebar() {
           </div>
           {!sidebarCollapsed && (
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div className="brand-name">Campus Voice</div>
-              <div className="brand-subtitle">Design Institute</div>
+              <div className="brand-name" style={{ whiteSpace: 'nowrap' }}>Campus Voice</div>
+              <div className="brand-subtitle" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Design Institute</div>
             </div>
           )}
         </Link>
@@ -210,22 +265,24 @@ export function Sidebar() {
 
           let countBadge: string | number | undefined
           if (item.badgeKey === 'updates') {
-            countBadge = unreadCount > 0 ? unreadCount : undefined
+            countBadge = updatesBadgeCount > 0 ? updatesBadgeCount : undefined
           } else if (item.badgeKey === 'saved') {
-            countBadge = savedCount > 0 ? savedCount : undefined
+            countBadge = savedBadgeCount > 0 ? savedBadgeCount : undefined
           }
+
+          const labelText = getNavLabel(item)
 
           return (
             <Link
               key={item.href}
               href={item.href}
               className={`nav-item ${isActive ? 'active' : ''}`}
-              title={sidebarCollapsed ? item.label : undefined}
+              title={sidebarCollapsed ? labelText : undefined}
             >
               <Icon />
               {!sidebarCollapsed && (
                 <>
-                  <span className="nav-item-label">{item.label}</span>
+                  <span className="nav-item-label">{labelText}</span>
                   {countBadge !== undefined && (
                     <span className="nav-count">{countBadge}</span>
                   )}
@@ -272,23 +329,43 @@ export function Sidebar() {
           <p style={{ margin: '0 0 10px', fontSize: 11, fontWeight: 700, lineHeight: '15px' }}>
             Never miss urgent exam or fee deadlines.
           </p>
-          <Link
-            href="/student/profile"
+          <button
+            type="button"
+            onClick={async () => {
+              const res = await requestBrowserNotification()
+              setAlertPerm(res)
+              if (res === 'granted') {
+                addToast({
+                  type: 'success',
+                  title: 'Instant alerts activated',
+                  message: 'Your browser will now receive desktop notifications for urgent notices.',
+                })
+              } else if (res === 'denied') {
+                addToast({
+                  type: 'error',
+                  title: 'Notification permission blocked',
+                  message: 'Please unblock notifications in your browser address bar settings.',
+                })
+              }
+            }}
             style={{
+              width: '100%',
               display: 'block',
               textAlign: 'center',
-              background: '#000',
-              color: '#fff',
+              background: alertPerm === 'granted' ? 'var(--chip-green-bg)' : '#000',
+              color: alertPerm === 'granted' ? '#000' : '#fff',
+              border: '2px solid #000',
+              boxShadow: '2px 2px 0 0 #000',
               padding: '6px 10px',
               fontSize: 11,
               fontWeight: 900,
               textTransform: 'uppercase',
-              textDecoration: 'none',
               letterSpacing: '0.05em',
+              cursor: 'pointer',
             }}
           >
-            Turn on alerts →
-          </Link>
+            {alertPerm === 'granted' ? '✓ Alerts Active' : 'Turn on alerts →'}
+          </button>
         </div>
       )}
 

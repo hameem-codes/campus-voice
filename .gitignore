@@ -18,6 +18,7 @@ coverage/
 .DS_Store
 Thumbs.db
 *.pem
+*.png
 
 # debug
 npm-debug.log*

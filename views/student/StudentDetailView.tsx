@@ -17,8 +17,10 @@ import {
   Building,
   User,
   AlertCircle,
+  Sparkles,
 } from 'lucide-react'
 import { useStore } from '@/lib/store'
+import { api } from '@/lib/api'
 import { Button } from '@/components/ui/Button'
 import { StatusChip } from '@/components/ui/StatusChip'
 import { Avatar } from '@/components/ui/Avatar'
@@ -39,6 +41,24 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
 
   const [previewAttachment, setPreviewAttachment] = useState<Attachment | null>(null)
   const [historyOpen, setHistoryOpen] = useState(false)
+  const [loadingSummary, setLoadingSummary] = useState(false)
+  const [summaryData, setSummaryData] = useState<{ bullets: string[]; generatedAt: string } | null>(null)
+
+  const handleSummarize = async () => {
+    if (summaryData) {
+      setSummaryData(null)
+      return
+    }
+    setLoadingSummary(true)
+    try {
+      const res = await api.getAiSummary(updateId)
+      setSummaryData(res)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoadingSummary(false)
+    }
+  }
 
   const item = updates.find((u) => u.id === updateId)
   const isSaved = item ? savedIds.includes(item.id) : false
@@ -142,6 +162,21 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
             </Button>
           )}
 
+          {/* AI Summarize */}
+          <Button
+            variant="secondary"
+            icon={Sparkles}
+            onClick={handleSummarize}
+            disabled={loadingSummary}
+            style={{
+              background: summaryData ? 'var(--neo-accent)' : undefined,
+              color: summaryData ? '#000' : undefined,
+              fontWeight: 800,
+            }}
+          >
+            {loadingSummary ? 'Summarizing...' : summaryData ? 'Hide AI summary' : 'Summarize'}
+          </Button>
+
           {/* Share */}
           <Button variant="secondary" icon={Share2} onClick={handleShare}>
             Share
@@ -225,6 +260,74 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
             )}
           </div>
         </div>
+
+        {/* AI Executive Summary Box (Phase 4.8) */}
+        {summaryData && (
+          <div
+            style={{
+              background: '#fef08a',
+              border: '3px solid #000',
+              boxShadow: '4px 4px 0 0 #000',
+              padding: '20px 24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 12,
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Sparkles width={18} height={18} style={{ color: '#000' }} />
+                <span style={{ fontWeight: 900, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#000' }}>
+                  Executive Takeaways
+                </span>
+              </div>
+              <span
+                style={{
+                  background: '#000',
+                  color: '#fff',
+                  fontSize: 10,
+                  fontWeight: 900,
+                  textTransform: 'uppercase',
+                  padding: '3px 8px',
+                  border: '1.5px solid #000',
+                  letterSpacing: '0.05em',
+                }}
+              >
+                AI summary (demo)
+              </span>
+            </div>
+
+            <ul
+              style={{
+                margin: 0,
+                paddingLeft: 20,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 8,
+                color: '#000',
+                fontSize: 13,
+                fontWeight: 700,
+                lineHeight: '20px',
+              }}
+            >
+              {summaryData.bullets.map((b, i) => (
+                <li key={i}>{b}</li>
+              ))}
+            </ul>
+
+            <div
+              style={{
+                fontSize: 11,
+                color: '#000',
+                fontWeight: 700,
+                borderTop: '1.5px dashed rgba(0,0,0,0.3)',
+                paddingTop: 8,
+              }}
+            >
+              Synthesized from official notice content · Local deterministic demo model
+            </div>
+          </div>
+        )}
 
         {/* Body Content */}
         <div

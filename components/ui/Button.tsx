@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Link from 'next/link'
 import type { LucideIcon } from 'lucide-react'
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -9,6 +10,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   icon?: LucideIcon
   iconRight?: LucideIcon
   loading?: boolean
+  href?: string
 }
 
 export function Button({
@@ -20,17 +22,15 @@ export function Button({
   loading = false,
   className = '',
   disabled,
+  href,
   ...props
 }: ButtonProps) {
   const sizeClass = size === 'sm' ? 'small' : size === 'lg' ? 'large' : ''
   const variantClass = variant === 'danger' ? 'danger' : variant
+  const combinedClass = `btn ${variantClass} ${sizeClass} ${className}`.trim()
 
-  return (
-    <button
-      className={`btn ${variantClass} ${sizeClass} ${className}`.trim()}
-      disabled={disabled || loading}
-      {...props}
-    >
+  const content = (
+    <>
       {loading ? (
         <span className="btn-spinner" aria-hidden="true" />
       ) : (
@@ -38,6 +38,31 @@ export function Button({
       )}
       {children && <span>{children}</span>}
       {!loading && IconRight && <IconRight className="btn-icon-right" aria-hidden="true" />}
+    </>
+  )
+
+  if (href && !disabled) {
+    return (
+      <Link
+        href={href}
+        className={combinedClass}
+        style={props.style}
+        aria-label={props['aria-label']}
+        tabIndex={props.tabIndex}
+      >
+        {content}
+      </Link>
+    )
+  }
+
+  return (
+    <button
+      className={combinedClass}
+      disabled={disabled || loading}
+      {...props}
+    >
+      {content}
     </button>
   )
 }
+

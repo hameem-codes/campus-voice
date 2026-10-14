@@ -1,18 +1,31 @@
-import type { Metadata } from 'next'
-import { Space_Grotesk } from 'next/font/google'
+import type { Metadata, Viewport } from 'next'
+import '@fontsource/space-grotesk/400.css'
+import '@fontsource/space-grotesk/500.css'
+import '@fontsource/space-grotesk/700.css'
 import './globals.css'
 import { StoreProvider } from '@/lib/store'
 
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  variable: '--font-space-grotesk',
-  display: 'swap',
-})
+export const viewport: Viewport = {
+  themeColor: '#FFD93D',
+  width: 'device-width',
+  initialScale: 1,
+}
 
 export const metadata: Metadata = {
-  title: 'Campus Voice',
-  description: 'A clear campus updates workspace for students, faculty and admins.',
+  title: {
+    default: 'Campus Voice · Real-Time Campus Updates',
+    template: '%s · Campus Voice',
+  },
+  description: 'Verified, noise-free announcements, exams, and event updates for students, faculty, and administration.',
+  manifest: '/manifest.json',
+  icons: {
+    icon: '/favicon.ico',
+  },
+  openGraph: {
+    title: 'Campus Voice · Real-Time Campus Updates',
+    description: 'Verified, noise-free announcements, exams, and event updates for university campuses.',
+    type: 'website',
+  },
 }
 
 export default function RootLayout({
@@ -21,19 +34,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={spaceGrotesk.variable} suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;900&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className={spaceGrotesk.className}>
+    <html lang="en" suppressHydrationWarning>
+      <body>
         <StoreProvider>{children}</StoreProvider>
       </body>
     </html>
   )
 }
+
 

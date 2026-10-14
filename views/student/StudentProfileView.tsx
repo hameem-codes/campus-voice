@@ -24,6 +24,12 @@ import { useStore } from '@/lib/store'
 import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
+import {
+  getBrowserNotificationPermission,
+  requestBrowserNotification,
+  NotificationPermissionState,
+} from '@/lib/notifications'
 
 export function StudentProfileView() {
   const router = useRouter()
@@ -48,6 +54,11 @@ export function StudentProfileView() {
   const [year, setYear] = useState(currentUser.year || 'Year 2')
   const [section, setSection] = useState(currentUser.section || 'D2')
   const [editError, setEditError] = useState('')
+
+  // Browser Notification state
+  const [browserPerm, setBrowserPerm] = useState<NotificationPermissionState>(() =>
+    getBrowserNotificationPermission()
+  )
 
   // Password Change Form State
   const [currentPassword, setCurrentPassword] = useState('')
@@ -149,9 +160,6 @@ export function StudentProfileView() {
               <p style={{ color: 'var(--text-2)', margin: '4px 0 0', fontSize: 13 }}>
                 {currentUser.department} · {currentUser.year} · Section {currentUser.section}
               </p>
-              <div style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 2 }}>
-                Student ID: <strong>{currentUser.studentId}</strong> · {currentUser.email}
-              </div>
             </div>
           </div>
 
@@ -277,7 +285,7 @@ export function StudentProfileView() {
         )}
       </section>
 
-      {/* 2. Notification Preferences per Category AND per Channel */}
+      {/* 2. Notification Preferences per Category (All 8 Categories) AND Channels */}
       <section className="panel-card" style={{ padding: 24 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <div>
@@ -285,7 +293,7 @@ export function StudentProfileView() {
               Notification Preferences
             </h2>
             <p style={{ margin: '4px 0 0', fontSize: 12, color: 'var(--text-2)' }}>
-              Configure alert subscriptions per category and delivery channels.
+              Configure alert subscriptions for all 8 campus categories and system delivery channels.
             </p>
           </div>
           <Button
@@ -299,56 +307,41 @@ export function StudentProfileView() {
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
-          {/* Category Toggles */}
+          {/* Category Toggles - Complete 8 Categories */}
           <div>
             <div className="nav-section-label" style={{ marginBottom: 12, padding: 0 }}>
-              Notice Categories
+              All 8 Notice Categories
             </div>
             <div className="settings-list">
-              <div className="setting-row">
-                <div className="setting-copy">
-                  <strong>Urgent Campus Notices</strong>
-                  <span>Emergency alerts, exam venue changes</span>
-                </div>
-                <button
-                  type="button"
-                  className={`switch ${prefs.urgentNotices ? 'on' : ''}`}
-                  onClick={() => handleTogglePref('urgentNotices')}
-                  aria-label="Toggle urgent campus notices"
-                >
-                  <span />
-                </button>
-              </div>
+              {[
+                { key: 'catExams', label: 'Exams & Schedules', desc: 'Exam timetables, seating allotments, admit cards' },
+                { key: 'catFees', label: 'Fees & Accounts', desc: 'Tuition fees, dues, installment deadlines' },
+                { key: 'catTimetable', label: 'Timetable & Classes', desc: 'Lecture slots, studio hours, room changes' },
+                { key: 'catPlacements', label: 'Placements & Internships', desc: 'Campus drives, interview shortlists, CV deadlines' },
+                { key: 'catEvents', label: 'Events & Workshops', desc: 'Club events, design symposiums, guest lectures' },
+                { key: 'catHolidays', label: 'Holidays & Closures', desc: 'Official semester breaks and public holidays' },
+                { key: 'catScholarships', label: 'Scholarships & Grants', desc: 'Merit awards, application criteria, fee concessions' },
+                { key: 'catResults', label: 'Results & Evaluations', desc: 'Semester grade sheets and revaluation portals' },
+              ].map((category) => {
+                const isEnabled = prefs[category.key] !== false
 
-              <div className="setting-row">
-                <div className="setting-copy">
-                  <strong>Deadlines and Reminders</strong>
-                  <span>Fee payment window, course registration</span>
-                </div>
-                <button
-                  type="button"
-                  className={`switch ${prefs.deadlines ? 'on' : ''}`}
-                  onClick={() => handleTogglePref('deadlines')}
-                  aria-label="Toggle deadline reminders"
-                >
-                  <span />
-                </button>
-              </div>
-
-              <div className="setting-row">
-                <div className="setting-copy">
-                  <strong>Student Community Events</strong>
-                  <span>Club workshops, open studios, talks</span>
-                </div>
-                <button
-                  type="button"
-                  className={`switch ${prefs.communityEvents ? 'on' : ''}`}
-                  onClick={() => handleTogglePref('communityEvents')}
-                  aria-label="Toggle community events"
-                >
-                  <span />
-                </button>
-              </div>
+                return (
+                  <div className="setting-row" key={category.key}>
+                    <div className="setting-copy">
+                      <strong>{category.label}</strong>
+                      <span>{category.desc}</span>
+                    </div>
+                    <button
+                      type="button"
+                      className={`switch ${isEnabled ? 'on' : ''}`}
+                      onClick={() => handleTogglePref(category.key as keyof typeof prefs)}
+                      aria-label={`Toggle alerts for ${category.label}`}
+                    >
+                      <span />
+                    </button>
+                  </div>
+                )
+              })}
             </div>
           </div>
 
@@ -358,12 +351,13 @@ export function StudentProfileView() {
               Delivery Channels
             </div>
             <div className="settings-list">
+              {/* Email Channel */}
               <div className="setting-row">
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                   <Mail width={16} height={16} style={{ color: 'var(--text-3)' }} />
                   <div className="setting-copy">
                     <strong>Email Delivery</strong>
-                    <span>Digest and critical announcements</span>
+                    <span>Digest and critical announcements ({currentUser.email})</span>
                   </div>
                 </div>
                 <button
@@ -376,12 +370,52 @@ export function StudentProfileView() {
                 </button>
               </div>
 
-              <div className="setting-row">
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <Smartphone width={16} height={16} style={{ color: 'var(--text-3)' }} />
+              {/* Push Notifications with Browser API State */}
+              <div className="setting-row" style={{ alignItems: 'flex-start' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                  <Smartphone width={16} height={16} style={{ color: 'var(--text-3)', marginTop: 2 }} />
                   <div className="setting-copy">
-                    <strong>Push Notifications</strong>
-                    <span>In-app and mobile alerts</span>
+                    <strong>Desktop / Browser Push</strong>
+                    <span>Real-time system notification when urgent notice arrives</span>
+                    <div style={{ marginTop: 6, display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span
+                        style={{
+                          fontSize: 10,
+                          fontWeight: 900,
+                          textTransform: 'uppercase',
+                          padding: '2px 6px',
+                          border: '1.5px solid #000',
+                          background:
+                            browserPerm === 'granted'
+                              ? 'var(--chip-green-bg)'
+                              : browserPerm === 'denied'
+                                ? 'var(--chip-orange-bg)'
+                                : 'var(--neo-secondary)',
+                        }}
+                      >
+                        Browser: {browserPerm}
+                      </span>
+                      {browserPerm !== 'granted' && browserPerm !== 'unsupported' && (
+                        <button
+                          type="button"
+                          className="btn ghost small"
+                          style={{ padding: '2px 6px', fontSize: 10, height: 22 }}
+                          onClick={async () => {
+                            const res = await requestBrowserNotification()
+                            setBrowserPerm(res)
+                            if (res === 'granted') {
+                              addToast({
+                                type: 'success',
+                                title: 'Browser alerts activated',
+                                message: 'You will receive real OS notifications for urgent campus alerts.',
+                              })
+                            }
+                          }}
+                        >
+                          Request Permission
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <button
@@ -394,19 +428,35 @@ export function StudentProfileView() {
                 </button>
               </div>
 
-              <div className="setting-row">
+              {/* SMS Alerts - Clearly Labeled Planned (Task 5.1) */}
+              <div className="setting-row" style={{ opacity: 0.75 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                   <MessageSquare width={16} height={16} style={{ color: 'var(--text-3)' }} />
                   <div className="setting-copy">
-                    <strong>SMS Critical Alerts</strong>
-                    <span>Restricted to urgent emergency notices</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <strong>SMS Critical Alerts</strong>
+                      <span
+                        style={{
+                          fontSize: 9,
+                          fontWeight: 900,
+                          textTransform: 'uppercase',
+                          padding: '1px 5px',
+                          border: '1px solid #000',
+                          background: 'var(--neo-muted)',
+                        }}
+                      >
+                        Planned
+                      </span>
+                    </div>
+                    <span>SMS carrier integration scheduled for Campus Voice v2.0</span>
                   </div>
                 </div>
                 <button
                   type="button"
-                  className={`switch ${prefs.smsChannel ? 'on' : ''}`}
-                  onClick={() => handleTogglePref('smsChannel')}
-                  aria-label="Toggle SMS alerts"
+                  className="switch"
+                  disabled
+                  title="SMS gateway integration is planned for Campus Voice v2.0"
+                  aria-label="SMS alerts planned"
                 >
                   <span />
                 </button>
@@ -477,17 +527,8 @@ export function StudentProfileView() {
             </div>
 
             <div className="field">
-              <label htmlFor="pref-lang">Interface Language</label>
-              <select
-                id="pref-lang"
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-              >
-                <option value="English (US)">English (US)</option>
-                <option value="English (UK)">English (UK)</option>
-                <option value="Hindi">Hindi (हिंदी)</option>
-                <option value="Spanish">Spanish (Español)</option>
-              </select>
+              <label style={{ display: 'block', marginBottom: 6 }}>Interface Language</label>
+              <LanguageSwitcher />
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 8 }}>

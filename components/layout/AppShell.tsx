@@ -9,14 +9,14 @@ import { useStore } from '@/lib/store'
 import { AlertTriangle, X, ArrowUpRight } from 'lucide-react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
+import { DemoTools } from '@/components/demo/DemoTools'
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
   const {
     role,
-    updates,
-    dismissedUrgentIds,
+    urgentUnreadUpdates,
     dismissUrgent,
     sidebarCollapsed,
   } = useStore()
@@ -38,15 +38,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [router])
 
-  // Active unread urgent updates for student
-  const activeUrgentUpdates = updates.filter(
-    (u) =>
-      u.priority === 'Urgent' &&
-      !u.read &&
-      !dismissedUrgentIds.includes(u.id) &&
-      u.status === 'Published'
-  )
-
   if (isAuthPage) {
     return (
       <div className="auth-shell">
@@ -64,9 +55,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <main className="main-panel">
         {/* Sticky Orange Urgent Banner for Students with exit animation */}
         <AnimatePresence>
-          {role === 'student' && activeUrgentUpdates.length > 0 && (
+          {role === 'student' && urgentUnreadUpdates.length > 0 && (
             <motion.div
-              key={activeUrgentUpdates[0].id}
+              key={urgentUnreadUpdates[0].id}
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
@@ -78,12 +69,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <div className="urgent-banner-left">
                   <AlertTriangle width={16} height={16} className="urgent-banner-icon" />
                   <span>
-                    <strong>Urgent Notice:</strong> {activeUrgentUpdates[0].title}
+                    <strong>Urgent Notice:</strong> {urgentUnreadUpdates[0].title}
                   </span>
                 </div>
                 <div className="urgent-banner-actions">
                   <Link
-                    href={`/student/updates/${activeUrgentUpdates[0].id}`}
+                    href={`/student/updates/${urgentUnreadUpdates[0].id}`}
                     className="urgent-banner-link"
                   >
                     <span>Review now</span>
@@ -93,7 +84,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     type="button"
                     className="urgent-banner-dismiss"
                     aria-label="Dismiss this urgent banner"
-                    onClick={() => dismissUrgent(activeUrgentUpdates[0].id)}
+                    onClick={() => dismissUrgent(urgentUnreadUpdates[0].id)}
                   >
                     <X width={14} height={14} />
                   </button>
@@ -107,6 +98,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </main>
 
       <MobileBar />
+      <DemoTools />
     </div>
   )
 }

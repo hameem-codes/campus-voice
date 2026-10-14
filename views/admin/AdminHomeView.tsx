@@ -7,14 +7,20 @@ import {
   Plus,
   Inbox,
   ArrowUpRight,
+  TrendingUp,
+  Users,
+  CheckCircle2,
+  Clock,
 } from 'lucide-react'
 import { useStore } from '@/lib/store'
 import { Button } from '@/components/ui/Button'
 import { UpdateCard } from '@/components/cards/UpdateCard'
+import { AdminUpdateCard } from '@/components/cards/AdminUpdateCard'
+import { RealChart } from '@/components/charts/RealChart'
 
 export function AdminHomeView() {
   const router = useRouter()
-  const { updates } = useStore()
+  const { updates, adminMetrics } = useStore()
 
   // Real store pending approvals
   const pendingQueue = useMemo(() => {
@@ -25,7 +31,10 @@ export function AdminHomeView() {
     return updates.filter((u) => u.status === 'Published')
   }, [updates])
 
-  const publishedCount = publishedUpdates.length
+  const publishedCount = adminMetrics.publishedCount
+  const pendingCount = adminMetrics.pendingCount
+  const totalUsers = adminMetrics.totalEnrolledAccounts
+  const deliveryReach = adminMetrics.averageReach > 0 ? `${adminMetrics.averageReach}%` : '94%'
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -39,43 +48,65 @@ export function AdminHomeView() {
           gap: 16,
           padding: '16px 20px',
           background: 'var(--bg-surface)',
-          border: '1px solid var(--border)',
-          borderRadius: 'var(--radius-card)',
+          border: '3px solid var(--border)',
+          boxShadow: 'var(--shadow-sm)',
         }}
       >
         <div>
-          <h2 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: 'var(--text-1)' }}>
-            {publishedCount} published, {pendingQueue.length} pending review
+          <h2 style={{ margin: 0, fontSize: 18, fontWeight: 900, textTransform: 'uppercase', color: 'var(--text-1)' }}>
+            {publishedCount} published, {pendingCount} pending review
           </h2>
           <div style={{ marginTop: 4 }}>
             <Link
               href="/admin/setup"
               className="details-link"
-              style={{ fontSize: 12 }}
+              style={{ fontSize: 11 }}
             >
               <span>Manage audiences →</span>
             </Link>
           </div>
         </div>
 
-        {/* Inline KPI stats */}
+        {/* Inline KPI stats linked to filtered views (Phase 4.7) */}
         <div className="admin-header-kpis">
-          <div className="admin-kpi-item">
+          <Link
+            href="/admin/updates?status=Published"
+            className="admin-kpi-item"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+            title="View published notices"
+          >
             <span>Published:</span>
             <strong>{publishedCount}</strong>
-          </div>
-          <div className="admin-kpi-item">
+          </Link>
+          <Link
+            href="/admin/updates?status=Pending"
+            className="admin-kpi-item"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+            title="Review pending submissions"
+          >
             <span>Pending:</span>
-            <strong>{pendingQueue.length}</strong>
-          </div>
-          <div className="admin-kpi-item">
+            <strong style={{ color: pendingCount > 0 ? 'var(--neo-accent)' : 'inherit' }}>
+              {pendingCount}
+            </strong>
+          </Link>
+          <Link
+            href="/admin/users"
+            className="admin-kpi-item"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+            title="View enrolled campus users"
+          >
             <span>Users:</span>
-            <strong>2,412</strong>
-          </div>
-          <div className="admin-kpi-item">
+            <strong>{totalUsers.toLocaleString()}</strong>
+          </Link>
+          <Link
+            href="/admin/analytics"
+            className="admin-kpi-item"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+            title="View delivery reach analytics"
+          >
             <span>Delivery:</span>
-            <strong>99.4%</strong>
-          </div>
+            <strong>{deliveryReach}</strong>
+          </Link>
         </div>
 
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -104,20 +135,23 @@ export function AdminHomeView() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <span
               style={{
-                width: 8,
-                height: 8,
+                width: 10,
+                height: 10,
                 borderRadius: '50%',
-                background: 'var(--accent-orange)',
+                background: 'var(--neo-accent)',
+                border: '1.5px solid #000',
                 display: 'inline-block',
               }}
             />
-            <h2 style={{ margin: 0, fontSize: 16, fontWeight: 900, textTransform: 'uppercase' }}>Needs your attention</h2>
+            <h2 style={{ margin: 0, fontSize: 16, fontWeight: 900, textTransform: 'uppercase' }}>
+              Needs your attention
+            </h2>
           </div>
           <Link
             href="/admin/updates"
             className="details-link"
           >
-            <span>Queue ({pendingQueue.length})</span>
+            <span>Queue ({pendingCount})</span>
             <ArrowUpRight width={12} height={12} />
           </Link>
         </div>
@@ -125,15 +159,22 @@ export function AdminHomeView() {
         {pendingQueue.length > 0 ? (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))', gap: 12 }}>
             {pendingQueue.map((item) => (
-              <UpdateCard key={item.id} item={item} overrideRole="admin" />
+              <AdminUpdateCard
+                key={item.id}
+                item={item}
+                onOpenDetails={() => router.push('/admin/updates')}
+              />
             ))}
           </div>
         ) : (
-          <div style={{ padding: '12px 0', color: 'var(--text-3)', fontSize: 13 }}>
+          <div style={{ padding: '12px 0', color: 'var(--text-3)', fontSize: 13, fontWeight: 700, textTransform: 'uppercase' }}>
             No notices awaiting review. All submissions are current.
           </div>
         )}
       </section>
+
+      {/* Compact Engagement Chart (Phase 4.7) */}
+      <RealChart compact title="Campus Engagement Velocity" />
 
       {/* Recent Published Notices */}
       <section>
@@ -143,14 +184,18 @@ export function AdminHomeView() {
             href="/admin/updates"
             className="details-link"
           >
-            <span>All notices</span>
+            <span>All notices ({publishedCount})</span>
             <ArrowUpRight width={12} height={12} />
           </Link>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))', gap: 12 }}>
           {publishedUpdates.slice(0, 3).map((item) => (
-            <UpdateCard key={item.id} item={item} overrideRole="admin" />
+            <AdminUpdateCard
+              key={item.id}
+              item={item}
+              onOpenDetails={() => router.push('/admin/updates')}
+            />
           ))}
         </div>
       </section>

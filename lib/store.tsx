@@ -18,6 +18,7 @@ import {
   CreateUpdateInput,
 } from '@/types'
 import { api } from '@/lib/api'
+import { Locale, TranslationKey, getTranslation } from '@/lib/i18n'
 import {
   initialUsers,
   initialUpdates,
@@ -30,7 +31,23 @@ import {
   initialAudienceGroups,
   initialAuditLogs,
   initialSettings,
+  getInitialUpdates,
+  getInitialNotifications,
 } from '@/data/mockData'
+import {
+  matchesStudentAudience,
+  getStudentFeed,
+  getStudentAllCount,
+  getStudentUnreadCount,
+  getUrgentUnreadUpdates,
+  getUrgentUnreadCount,
+  getAttentionItems,
+  getSavedUpdates,
+  getSavedCount,
+  getFacultyNotices,
+  getFacultyNoticesCount,
+  getAdminMetrics,
+} from '@/lib/selectors'
 
 interface StoreContextType {
   // Auth & Session
@@ -53,6 +70,29 @@ interface StoreContextType {
   audienceGroups: AudienceGroupItem[]
   auditLogs: AuditLogItem[]
   settings: AppSettings
+
+  // Unified Selectors & Derived Counts
+  studentFeed: UpdateItem[]
+  studentAllCount: number
+  studentUnreadCount: number
+  urgentUnreadUpdates: UpdateItem[]
+  urgentUnreadCount: number
+  attentionItems: UpdateItem[]
+  savedUpdates: UpdateItem[]
+  savedCount: number
+  facultyNotices: UpdateItem[]
+  facultyNoticesCount: number
+  adminMetrics: {
+    totalNotices: number
+    publishedCount: number
+    pendingCount: number
+    scheduledCount: number
+    draftCount: number
+    totalViews: number
+    totalReads: number
+    averageReach: number
+    totalEnrolledAccounts: number
+  }
 
   // Student specific state
   savedIds: string[]
@@ -131,6 +171,11 @@ interface StoreContextType {
   // Dev simulation
   simulateNewUrgentUpdate: () => void
   resetAllData: () => Promise<void>
+
+  // i18n Language Toggle (Phase 4.9)
+  locale: Locale
+  setLocale: (locale: Locale) => void
+  t: (key: TranslationKey) => string
 }
 
 const StoreContext = createContext<StoreContextType | null>(null)
@@ -140,7 +185,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [isLoaded, setIsLoaded] = useState(false)
   const [users, setUsers] = useState<UserProfile[]>(initialUsers)
   const [currentUser, setCurrentUser] = useState<UserProfile>(initialUsers[0])
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true)
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
   const [updates, setUpdates] = useState<UpdateItem[]>(initialUpdates)
   const [notifications, setNotifications] = useState<NotificationItem[]>(initialNotifications)
   const [categories, setCategories] = useState<CategoryItem[]>(initialCategories)
@@ -158,6 +203,18 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false)
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
   const [toasts, setToasts] = useState<ToastMessage[]>([])
+  const [locale, setLocaleState] = useState<Locale>('en')
+
+  const setLocale = useCallback((newLocale: Locale) => {
+    setLocaleState(newLocale)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('cv_locale_v1', newLocale)
+    }
+  }, [])
+
+  const t = useCallback((key: TranslationKey) => {
+    return getTranslation(locale, key)
+  }, [locale])
 
   // Load from LocalStorage on mount
   useEffect(() => {
@@ -214,10 +271,18 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           document.documentElement.classList.remove('dark')
         }
 
+        // Locale (Phase 4.9)
+        const storedLocale = localStorage.getItem('cv_locale_v1') as Locale | null
+        if (storedLocale === 'en' || storedLocale === 'hi') {
+          setLocaleState(storedLocale)
+        }
+
         // Current user
         const storedRole = localStorage.getItem('cv_role_v1') as Role
         const authFlag = localStorage.getItem('cv_authenticated_v1')
-        if (authFlag === 'false') {
+        if (authFlag === 'true') {
+          setIsAuthenticated(true)
+        } else {
           setIsAuthenticated(false)
         }
         if (storedRole) {
@@ -292,6 +357,96 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       title: 'Signed out',
       message: 'You have been logged out of your session.',
     })
+  }, [addToast])
+
+  // Unified Selectors & Derived Counts
+  const studentFeed = useMemo(
+    () => getStudentFeed(updates, currentUser),
+    [updates, currentUser]
+  )
+  const studentAllCount = useMemo(
+    () => getStudentAllCount(updates, currentUser),
+    [updates, currentUser]
+  )
+  const studentUnreadCount = useMemo(
+    () => getStudentUnreadCount(updates, currentUser),
+    [updates, currentUser]
+  )
+  const urgentUnreadUpdates = useMemo(
+    () => getUrgentUnreadUpdates(updates, currentUser, dismissedUrgentIds),
+    [updates, currentUser, dismissedUrgentIds]
+  )
+  const urgentUnreadCount = useMemo(
+    () => getUrgentUnreadCount(updates, currentUser, dismissedUrgentIds),
+    [updates, currentUser, dismissedUrgentIds]
+  )
+  const attentionItems = useMemo(
+    () => getAttentionItems(updates, currentUser),
+    [updates, currentUser]
+  )
+  const savedUpdates = useMemo(
+    () => getSavedUpdates(updates, savedIds, currentUser),
+    [updates, savedIds, currentUser]
+  )
+  const savedCount = useMemo(
+    () => getSavedCount(updates, savedIds, currentUser),
+    [updates, savedIds, currentUser]
+  )
+  const facultyNotices = useMemo(
+    () => getFacultyNotices(updates, currentUser),
+    [updates, currentUser]
+  )
+  const facultyNoticesCount = useMemo(
+    () => getFacultyNoticesCount(updates, currentUser),
+    [updates, currentUser]
+  )
+  const adminMetrics = useMemo(
+    () => getAdminMetrics(updates),
+    [updates]
+  )
+
+  // Live Cross-Tab Synchronization (BroadcastChannel + storage event fallback)
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    let channel: BroadcastChannel | null = null
+    try {
+      channel = new BroadcastChannel('campusvoice_cross_tab_sync')
+      channel.onmessage = (event) => {
+        const data = event.data
+        if (data?.type === 'UPDATE_APPROVED') {
+          if (data.updates) setUpdates(data.updates)
+          if (data.urgentAlert) {
+            addToast({
+              type: 'warning',
+              title: '🚨 Urgent Notice Approved & Live!',
+              message: data.urgentAlert.title,
+              duration: 8000,
+            })
+          }
+        } else if (data?.type === 'SYNC_ALL') {
+          if (data.updates) setUpdates(data.updates)
+          if (data.notifications) setNotifications(data.notifications)
+        }
+      }
+    } catch {
+      // BroadcastChannel unsupported or restricted
+    }
+
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === 'cv_updates_v1' && e.newValue) {
+        try {
+          setUpdates(JSON.parse(e.newValue))
+        } catch {
+          // ignore malformed storage payload
+        }
+      }
+    }
+    window.addEventListener('storage', handleStorage)
+
+    return () => {
+      channel?.close()
+      window.removeEventListener('storage', handleStorage)
+    }
   }, [addToast])
 
   // Save / Bookmark
@@ -601,6 +756,21 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         type: 'success',
         title: 'Notice approved and published',
       })
+
+      // Cross-tab broadcast for live judge demo
+      if (typeof window !== 'undefined') {
+        try {
+          const channel = new BroadcastChannel('campusvoice_cross_tab_sync')
+          channel.postMessage({
+            type: 'UPDATE_APPROVED',
+            updates: updates.map((item) => (item.id === id ? updated : item)),
+            urgentAlert: updated.priority === 'Urgent' ? updated : null,
+          })
+          channel.close()
+        } catch {
+          // ignore
+        }
+      }
     },
     [updates, currentUser, notifications, addToast]
   )
@@ -1122,8 +1292,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   const resetAllData = useCallback(async () => {
     await api.resetAllToDefault()
-    setUpdates(initialUpdates)
-    setNotifications(initialNotifications)
+    const freshUpdates = getInitialUpdates()
+    const freshNotifs = getInitialNotifications()
+    setUpdates(freshUpdates)
+    setNotifications(freshNotifs)
     setCategories(initialCategories)
     setDepartments(initialDepartments)
     setAcademicYears(initialAcademicYears)
@@ -1134,12 +1306,28 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     setSettings(initialSettings)
     setUsers(initialUsers)
     setCurrentUser(initialUsers[0])
-    setSavedIds(['placement', 'result', 'critique'])
+    setSavedIds(['exam', 'critique'])
     setDismissedUrgentIds([])
     setRecentSearches(['Exams', 'Fee deadline', 'Design critique'])
+
+    if (typeof window !== 'undefined') {
+      try {
+        const channel = new BroadcastChannel('campusvoice_cross_tab_sync')
+        channel.postMessage({
+          type: 'SYNC_ALL',
+          updates: freshUpdates,
+          notifications: freshNotifs,
+        })
+        channel.close()
+      } catch {
+        // BroadcastChannel unsupported or blocked
+      }
+    }
+
     addToast({
       type: 'info',
-      title: 'Workspace restored to defaults',
+      title: 'Demo workspace data reset successfully',
+      message: 'All counts, dates, and seed notices refreshed to now.',
     })
   }, [addToast])
 
@@ -1162,6 +1350,17 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       audienceGroups,
       auditLogs,
       settings,
+      studentFeed,
+      studentAllCount,
+      studentUnreadCount,
+      urgentUnreadUpdates,
+      urgentUnreadCount,
+      attentionItems,
+      savedUpdates,
+      savedCount,
+      facultyNotices,
+      facultyNoticesCount,
+      adminMetrics,
       savedIds,
       dismissedUrgentIds,
       toggleSave,
@@ -1213,6 +1412,9 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       removeToast,
       simulateNewUrgentUpdate,
       resetAllData,
+      locale,
+      setLocale,
+      t,
     }),
     [
       currentUser,
@@ -1231,6 +1433,17 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       audienceGroups,
       auditLogs,
       settings,
+      studentFeed,
+      studentAllCount,
+      studentUnreadCount,
+      urgentUnreadUpdates,
+      urgentUnreadCount,
+      attentionItems,
+      savedUpdates,
+      savedCount,
+      facultyNotices,
+      facultyNoticesCount,
+      adminMetrics,
       savedIds,
       dismissedUrgentIds,
       toggleSave,
@@ -1282,6 +1495,9 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       removeToast,
       simulateNewUrgentUpdate,
       resetAllData,
+      locale,
+      setLocale,
+      t,
     ]
   )
 

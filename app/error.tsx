@@ -3,7 +3,6 @@
 import React, { useEffect } from 'react'
 import { AlertCircle, RefreshCw, Home } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
-import Link from 'next/link'
 
 export default function ErrorPage({
   error,
@@ -30,11 +29,9 @@ export default function ErrorPage({
           <Button variant="secondary" icon={RefreshCw} onClick={() => reset()}>
             Try again
           </Button>
-          <Link href="/student">
-            <Button variant="primary" icon={Home}>
-              Go to Home
-            </Button>
-          </Link>
+          <Button variant="primary" icon={Home} href="/student">
+            Go to Home
+          </Button>
         </div>
       </div>
     </div>

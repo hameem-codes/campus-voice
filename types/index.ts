@@ -57,6 +57,7 @@ export interface UpdateItem {
   reachPercentage?: number
   viewsCount?: number
   readsCount?: number
+  aiSummaryBullets?: string[]
 }
 
 export type CreateUpdateInput = Omit<UpdateItem, 'id' | 'postedAt' | 'editHistory' | 'read' | 'saved'> & {
@@ -93,6 +94,15 @@ export interface UserProfile {
     emailChannel: boolean
     pushChannel: boolean
     smsChannel: boolean
+    catExams?: boolean
+    catFees?: boolean
+    catTimetable?: boolean
+    catPlacements?: boolean
+    catEvents?: boolean
+    catHolidays?: boolean
+    catScholarships?: boolean
+    catResults?: boolean
+    [key: string]: boolean | undefined
   }
 }
 

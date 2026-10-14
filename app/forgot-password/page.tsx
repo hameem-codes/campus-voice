@@ -47,9 +47,9 @@ export default function ForgotPasswordPage() {
               We sent password recovery instructions to <strong>{email}</strong>.
             </p>
             <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-              <Link href="/reset-password">
-                <Button variant="primary">Proceed to reset code</Button>
-              </Link>
+              <Button variant="primary" href="/reset-password">
+                Proceed to reset code
+              </Button>
             </div>
           </div>
         ) : (

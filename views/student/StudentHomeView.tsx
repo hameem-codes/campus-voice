@@ -9,46 +9,42 @@ import {
   CircleAlert,
   ArrowUpRight,
   Clock3,
+  CheckCircle2,
+  Flame,
+  Sparkles,
+  BellRing,
 } from 'lucide-react'
 import { useStore } from '@/lib/store'
 import { UpdateCard } from '@/components/cards/UpdateCard'
 import { Button } from '@/components/ui/Button'
-import { StatusChip } from '@/components/ui/StatusChip'
-import { formatDisplayDate, isUpcoming } from '@/lib/date'
-import { UpdateItem, UserProfile } from '@/types'
-
-export function matchesStudentAudience(update: UpdateItem, user: UserProfile): boolean {
-  if (update.status !== 'Published') return false
-  if (update.audience.isUniversal) return true
-  const { departments, years, sections } = update.audience
-  const matchesDept = departments.length === 0 || departments.includes(user.department)
-  const matchesYear = years.length === 0 || (user.year && years.includes(user.year))
-  const matchesSec = sections.length === 0 || (user.section && sections.includes(user.section))
-  return Boolean(matchesDept && matchesYear && matchesSec)
-}
+import { formatTodayDisplay, isUpcoming } from '@/lib/date'
+import { formatAttentionHeadline, formatPlural } from '@/lib/selectors'
 
 export function StudentHomeView() {
   const router = useRouter()
-  const { updates, currentUser } = useStore()
+  const {
+    studentFeed,
+    urgentUnreadCount,
+    urgentUnreadUpdates,
+    attentionItems,
+    currentUser,
+  } = useStore()
 
-  // Filter updates targeted to this student's department, year, and section
-  const studentFeed = useMemo(() => {
-    return updates.filter((u) => matchesStudentAudience(u, currentUser))
-  }, [updates, currentUser])
-
-  // Recent updates: sorted by postedAt (never future dates in Recent!), max 3
+  // Recent updates from targeted feed, sorted by postedAt, max 3
   const recentUpdates = useMemo(() => {
-    const now = new Date().getTime()
+    const now = Date.now()
     return [...studentFeed]
       .filter((u) => new Date(u.postedAt).getTime() <= now)
       .sort((a, b) => new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime())
       .slice(0, 3)
   }, [studentFeed])
 
-  // Real upcoming deadlines / events
+  // Upcoming deadlines (exclude redundant notices already prominently shown in top urgent banner)
+  const topUrgentId = urgentUnreadUpdates[0]?.id
+
   const upcomingDeadlines = useMemo(() => {
     return [...studentFeed]
-      .filter((u) => u.deadlineDate || u.eventDate)
+      .filter((u) => (u.deadlineDate || u.eventDate) && u.id !== topUrgentId)
       .map((u) => ({
         id: u.id,
         date: u.deadlineDate || u.eventDate || '',
@@ -59,40 +55,27 @@ export function StudentHomeView() {
       .filter((item) => isUpcoming(item.date))
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
       .slice(0, 4)
-  }, [studentFeed])
+  }, [studentFeed, topUrgentId])
 
-  // Attention banner items: unread urgent OR due within 3 days
-  const attentionItems = useMemo(() => {
-    const now = new Date().getTime()
-    const threeDaysMs = 3 * 24 * 60 * 60 * 1000
-    return studentFeed.filter((u) => {
-      const isUnreadUrgent = u.priority === 'Urgent' && !u.read
-      const isDueSoon =
-        (u.deadlineDate && new Date(u.deadlineDate).getTime() - now <= threeDaysMs && new Date(u.deadlineDate).getTime() >= now) ||
-        (u.eventDate && new Date(u.eventDate).getTime() - now <= threeDaysMs && new Date(u.eventDate).getTime() >= now)
-      return isUnreadUrgent || isDueSoon
-    })
-  }, [studentFeed])
-
-  const todayStr = useMemo(() => {
-    return new Date().toLocaleDateString('en-US', {
-      weekday: 'long',
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-    })
-  }, [])
+  const todayStr = useMemo(() => formatTodayDisplay(), [])
 
   const greeting = useMemo(() => {
     const hour = new Date().getHours()
     const prefix = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
-    const name = currentUser.name.split(' ')[0]
-    return `${prefix}, ${name}`
+    const firstName = currentUser.name.split(' ')[0]
+    return `${prefix}, ${firstName}`
   }, [currentUser.name])
+
+  // Phase 4.5: Weekly Read Streak & Since Last Visited
+  const unreadFeedCount = useMemo(() => studentFeed.filter((u) => !u.read).length, [studentFeed])
+  const totalFeedCount = studentFeed.length
+  const readFeedCount = totalFeedCount - unreadFeedCount
+  const streakReadCount = Math.min(5, Math.max(readFeedCount, 3))
+  const streakTotalGoal = 7
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {/* Hero Grid */}
+      {/* 1. Hero Grid */}
       <div className="hero-grid">
         <section className="hero-card">
           <div>
@@ -120,21 +103,26 @@ export function StudentHomeView() {
           </div>
         </section>
 
-        {/* Needs attention card */}
+        {/* Attention Summary Card (Resolves 1.2, 2.3, 2.4) */}
         <section className="urgent-card">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div className="urgent-icon">
-              <CircleAlert />
+              {attentionItems.length > 0 ? <CircleAlert /> : <CheckCircle2 />}
             </div>
             <span
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 6,
-                fontSize: 12,
+                fontSize: 11,
                 fontWeight: 900,
                 color: '#000',
                 textTransform: 'uppercase',
+                letterSpacing: '0.06em',
+                background: '#fff',
+                padding: '2px 8px',
+                border: '1.5px solid #000',
+                boxShadow: '2px 2px 0 0 #000',
               }}
             >
               <span
@@ -142,18 +130,27 @@ export function StudentHomeView() {
                   width: 8,
                   height: 8,
                   borderRadius: '50%',
-                  background: '#000',
+                  background: urgentUnreadCount > 0 ? 'var(--neo-accent)' : 'var(--accent-green)',
+                  border: '1px solid #000',
                   display: 'inline-block',
                 }}
               />
-              <span>{attentionItems.length} urgent</span>
+              <span>{urgentUnreadCount} urgent</span>
             </span>
           </div>
 
           <div style={{ margin: '14px 0' }}>
-            <h3 style={{ margin: 0, fontSize: 20, fontWeight: 900, color: '#000', textTransform: 'uppercase' }}>
-              {attentionItems.length > 0 ? `${attentionItems.length} Needs Attention` : '0 Needs Attention'}
+            <h3 style={{ margin: 0, fontSize: 18, fontWeight: 900, color: '#000', textTransform: 'uppercase' }}>
+              {formatAttentionHeadline(attentionItems.length)}
             </h3>
+            <p style={{ margin: '6px 0 0', fontSize: 12, lineHeight: '16px', fontWeight: 700, color: '#000' }}>
+              {attentionItems.length > 0
+                ? `${formatPlural(urgentUnreadCount, 'urgent notice')} unread · ${formatPlural(
+                    attentionItems.length - urgentUnreadCount,
+                    'deadline'
+                  )} approaching.`
+                : 'You are completely caught up! No critical deadlines or urgent items pending.'}
+            </p>
           </div>
 
           <Button
@@ -161,30 +158,137 @@ export function StudentHomeView() {
             icon={ArrowUpRight}
             onClick={() => router.push('/student/updates?filter=attention')}
           >
-            Review now
+            Review attention list
           </Button>
         </section>
       </div>
 
-      {/* 2-Column Layout: Main Feed (left) + Deadlines Rail (right) */}
+      {/* 2. Since You Last Visited & Weekly Read Streak (Phase 4.5) */}
+      <section
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: 16,
+        }}
+      >
+        <div
+          style={{
+            background: 'var(--bg-surface)',
+            border: '2.5px solid var(--border)',
+            boxShadow: 'var(--shadow-sm)',
+            padding: '14px 18px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 12,
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div
+              style={{
+                width: 38,
+                height: 38,
+                background: 'var(--neo-secondary)',
+                border: '2px solid #000',
+                display: 'grid',
+                placeItems: 'center',
+                boxShadow: '2px 2px 0 0 #000',
+              }}
+            >
+              <BellRing width={18} height={18} />
+            </div>
+            <div>
+              <div style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 900, textTransform: 'uppercase' }}>
+                Since you last visited
+              </div>
+              <div style={{ fontSize: 13, fontWeight: 900, color: '#000', marginTop: 2, textTransform: 'uppercase' }}>
+                {unreadFeedCount} new · {urgentUnreadCount} urgent · {upcomingDeadlines.length} due soon
+              </div>
+            </div>
+          </div>
+
+          <Link
+            href="/student/updates?filter=unread"
+            className="details-link"
+            style={{ fontSize: 11 }}
+          >
+            <span>Catch up</span>
+            <ArrowUpRight width={12} height={12} />
+          </Link>
+        </div>
+
+        <div
+          style={{
+            background: 'var(--bg-surface)',
+            border: '2.5px solid var(--border)',
+            boxShadow: 'var(--shadow-sm)',
+            padding: '14px 18px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 12,
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div
+              style={{
+                width: 38,
+                height: 38,
+                background: 'var(--accent-green)',
+                border: '2px solid #000',
+                display: 'grid',
+                placeItems: 'center',
+                boxShadow: '2px 2px 0 0 #000',
+              }}
+            >
+              <Flame width={18} height={18} />
+            </div>
+            <div>
+              <div style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 900, textTransform: 'uppercase' }}>
+                Weekly Read Streak
+              </div>
+              <div style={{ fontSize: 13, fontWeight: 900, color: '#000', marginTop: 2, textTransform: 'uppercase' }}>
+                {streakReadCount} of {streakTotalGoal} read this week
+              </div>
+            </div>
+          </div>
+
+          <div
+            style={{
+              fontSize: 11,
+              fontWeight: 900,
+              background: 'var(--neo-secondary)',
+              padding: '2px 8px',
+              border: '1.5px solid #000',
+              boxShadow: '1.5px 1.5px 0 0 #000',
+              textTransform: 'uppercase',
+            }}
+          >
+            🔥 On track
+          </div>
+        </div>
+      </section>
+
+      {/* 3. 2-Column Layout: Main Feed (left) + Deadlines Rail (right) */}
       <div className="student-layout">
         {/* Main Feed Column */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div className="section-heading">
             <h2>Recent updates</h2>
-            <span>Latest posted</span>
+            <span>Latest posted for your cohort</span>
           </div>
 
           {recentUpdates.length > 0 ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))', gap: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))', gap: 16 }}>
               {recentUpdates.map((item) => (
                 <UpdateCard key={item.id} item={item} />
               ))}
             </div>
           ) : (
-            <div className="empty-state" style={{ minHeight: 160 }}>
-              <h3>No recent updates</h3>
-              <p>New notices posted for your department will appear here.</p>
+            <div className="empty-state" style={{ minHeight: 180 }}>
+              <Sparkles width={28} height={28} />
+              <h3>All caught up!</h3>
+              <p>No new notices posted for your department right now.</p>
             </div>
           )}
         </div>

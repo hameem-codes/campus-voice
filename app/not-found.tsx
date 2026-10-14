@@ -17,11 +17,9 @@ export default function NotFound() {
           The page or update you are looking for has been moved, archived, or does not exist.
         </p>
         <div style={{ marginTop: 16 }}>
-          <Link href="/student">
-            <Button variant="primary" icon={Home}>
-              Return to Campus Voice
-            </Button>
-          </Link>
+          <Button variant="primary" icon={Home} href="/student">
+            Return to Campus Voice
+          </Button>
         </div>
       </div>
     </div>

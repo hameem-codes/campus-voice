@@ -33,8 +33,10 @@ export function MobileBar() {
     role,
     setRole,
     currentUser,
-    updates,
-    savedIds,
+    studentUnreadCount,
+    savedCount,
+    facultyNoticesCount,
+    adminMetrics,
     theme,
     toggleTheme,
     logout,
@@ -42,13 +44,10 @@ export function MobileBar() {
 
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false)
 
-  const unreadCount = updates.filter((u) => !u.read && (role !== 'faculty' || u.publisher.name === currentUser.name)).length
-  const savedCount = savedIds.length
-
   const allItemsForRole = {
     student: [
       { href: '/student', label: 'Home', icon: Home },
-      { href: '/student/updates', label: 'Updates', icon: Inbox, count: unreadCount },
+      { href: '/student/updates', label: 'Updates', icon: Inbox, count: studentUnreadCount },
       { href: '/student/calendar', label: 'Calendar', icon: CalendarDays },
       { href: '/student/saved', label: 'Saved', icon: Bookmark, count: savedCount },
       { href: '/student/profile', label: 'Profile', icon: UserRound },
@@ -56,12 +55,12 @@ export function MobileBar() {
     faculty: [
       { href: '/faculty', label: 'Home', icon: Home },
       { href: '/faculty/create', label: 'Create', icon: FilePlus2 },
-      { href: '/faculty/updates', label: 'My Updates', icon: Inbox, count: unreadCount },
+      { href: '/faculty/updates', label: 'My Notices', icon: Inbox, count: facultyNoticesCount },
       { href: '/faculty/analytics', label: 'Analytics', icon: LineChart },
     ],
     admin: [
       { href: '/admin', label: 'Home', icon: Home },
-      { href: '/admin/updates', label: 'Updates', icon: Inbox, count: unreadCount },
+      { href: '/admin/updates', label: 'Notices', icon: Inbox, count: adminMetrics.pendingCount },
       { href: '/admin/create', label: 'Create update', icon: FilePlus2 },
       { href: '/admin/users', label: 'Users', icon: Users },
       { href: '/admin/setup', label: 'Setup', icon: SlidersHorizontal },

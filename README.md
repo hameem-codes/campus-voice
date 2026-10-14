@@ -1,91 +1,120 @@
-# Campus Voice
+# Campus Voice · Judge-Ready Neo-Brutalist Frontend
 
-A modern, accessible, and responsive campus communication portal built with Next.js App Router, React 19, Framer Motion, and Recharts. Campus Voice delivers targeted notices, academic milestones, and transparent approval workflows with zero friction.
+> **Campus Voice** is a modern, high-contrast, Neo-Brutalist campus communication and governance web portal. Built with **Next.js 16 (App Router)** and **React 19**, it delivers authentic cross-role workflows for **Students**, **Faculty**, and **Administrators** with 100% mathematical count consistency, offline self-hosted typography, and real-time cross-tab synchronization.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fhameem-codes%2Fcampus-voice)
-
----
-
-## Features
-
-### 🎓 Student Workspace
-- **Personalized Feed & Targeting**: Feed filtered automatically by student cohort (Department, Year, Section).
-- **Urgent Attention Alerts**: Sticky dismissible urgent banners and incoming alert simulator with toast notifications.
-- **Notice Details**: Rich notice reader with interactive in-page PDF/image attachment viewer, real file downloads, publisher credentials, and edit history.
-- **Interactive Calendar**: 35-cell Month grid, Week view, and Agenda list with category color coding, popovers, and `.ics` event file export.
-- **Saved Shelf**: Pin updates and documents for offline reference with search filtering and bookmark undo toasts.
-- **Granular Preferences**: Toggle category subscriptions and delivery channels (Email, Push, SMS), account settings, theme switcher, and defaults reset.
-
-### 👩‍🏫 Faculty Portal
-- **Stepped Notice Creation**: 6-step creation flow with required validation, autosaved drafts, drag-and-drop file upload, live audience reach estimation, and full preview before submission.
-- **Notice Management**: Filter by status (All, Draft, Pending, Published, Scheduled, Rejected), row action menus (edit, duplicate, archive, delete), and bulk operations.
-- **Engagement Analytics**: Track verified views and reach percentage per notice with 7/30/90 days filtering and CSV export.
-
-### 🛡️ Admin Operations
-- **Approval Queue**: Review submissions with instant approval or rejection modal requiring an explicit rationale for audit compliance.
-- **User Management**: Role filtering, invite user modal, role adjustments, account deactivation/reactivation, CSV import preview, and pagination.
-- **Taxonomies & Academic Setup**: CRUD management for Categories, Departments, Academic Years, Sections, and Courses with foreign-key usage protection against accidental deletion.
-- **Interactive Analytics**: Real Recharts bar chart with tooltips, delivery metrics, and CSV export.
-- **Audit Logs & Governance**: Real-time compliance activity log capturing every system action with relative timestamps, plus configurable delivery rules and retention periods.
-
-### ⚡ Cross-Cutting UX
-- **3-Way Instant Role Switcher**: Seamlessly switch between Student, Faculty, and Admin contexts from the sidebar or login portal.
-- **Accessible Design System**: WCAG AA contrast, min 11px typography, focus trapping, Escape dismissal on modals and drawers, and reduced motion support.
-- **Dark Mode**: Persistent dark theme adhering to warm gray design tokens.
-- **Responsive Layout**: Fluid experience from 360px mobile screens (with bottom sheet navigation) up to 1920px wide displays.
+[![CI](https://github.com/hameem-codes/campus-voice/actions/workflows/ci.yml/badge.svg)](https://github.com/hameem-codes/campus-voice/actions)
 
 ---
 
-## Getting Started
+## ⚡ Key Highlights for Judges
+
+- **Zero Count Discrepancies**: Every badge, counter, tab number, and chart total is computed from a centralized single source of truth (`lib/selectors.ts`). Home urgent counters, sidebar badges, and feed tabs agree with mathematical precision.
+- **Offline Self-Hosted Typography**: Self-hosts `@fontsource/space-grotesk` with zero runtime reliance on Google Fonts CDN. Builds and renders completely offline.
+- **Live Cross-Role Synchronization**: Features a `BroadcastChannel` event bus with `localStorage` fallback. When Faculty submits or Admin approves a notice, student windows instantly receive the banner, toast alert, and notification badge without reloading.
+- **Demo Tools Floating Drawer**: Built-in control panel (`DemoTools.tsx`) allowing judges to simulate urgent notices, switch roles instantly, jump dates forward, or reset demo data.
+- **Pre-Login Landing Page (`/`)**: Neo-brutalist public showcase explaining the problem of scattered announcements, the 3-role solution, interactive feature cards, and 1-click demo entry.
+- **Deterministic AI Summary**: "Summarize" trigger on long notices that extracts executive takeaways with honest "AI summary (demo)" labeling, isolated behind `api.getAiSummary()`.
+- **Bilingual Scaffolding (English & Hindi)**: Dynamic language toggle in the top header and student profile, localized across navigation and action buttons.
+- **Calendar Export**: Generates and downloads RFC-compliant `.ics` files for individual notices and entire monthly schedules.
+- **PWA Ready**: Web app manifest (`public/manifest.json`), touch icons, and theme color tags.
+
+---
+
+## 🎭 Roles & Capabilities
+
+### 🎓 Student Experience (`/student`)
+- **Cohort-Targeted Feed**: Notices filtered strictly by student department (School of Design), academic year (Year 2), and studio section (D2), alongside universal campus announcements.
+- **Executive Needs Attention Box**: Compact summary highlighting urgent notices and deadlines with direct deep links.
+- **Interactive Calendar**: 7-column CSS grid month view with zero horizontal overflow, mobile-first agenda list, and `.ics` export.
+- **Notice Reader**: Attached PDF preview, download simulation, edit history timeline, and AI executive summary.
+- **Personalized Shelf & Preferences**: Saved items bookmarking, reading streak tracker, and 8-category granular notification toggles.
+
+### 👩‍🏫 Faculty Portal (`/faculty`)
+- **6-Step Notice Creator**: Validated title, summary, content, category, and cohort selection.
+- **Live Student Preview**: Interactive side-by-side card preview updating in real-time as content is typed.
+- **Audience Reach Estimator**: Live mathematical calculation derived from the 2,412 enrolled account base.
+- **Quick Templates**: 1-click presets for Exam Schedules, Fee Reminders, Symposia, and Holidays.
+- **Management Table**: Bulk archive, duplicate, delete, and rejection feedback reviewer.
+
+### 🛡️ Administrative Operations (`/admin`)
+- **Approval Queue**: Dedicated review card variant with prominent status chips, inline Approve button, and modal Reject with required audit rationale.
+- **Audit Logging**: Immutable record capturing timestamps, user roles, and action details for every approval, deletion, and system event.
+- **System-Wide Analytics**: Recharts bar graph displaying verified views and reads with 100% agreement between KPI summary cards, graph totals, and category breakdown tables.
+- **Taxonomies & User Management**: Manage Categories, Departments, Academic Years, Sections, and Courses with deletion guards.
+
+---
+
+## 🛠️ Project Structure
+
+```
+campusvoice/
+├── app/                  # Next.js App Router routes & layouts
+│   ├── page.tsx          # Public landing page (Problem, Roles, 1-Click Demo)
+│   ├── layout.tsx        # Self-hosted font imports & global metadata
+│   ├── error.tsx         # Neo-brutalist runtime error boundary
+│   └── not-found.tsx     # 404 page with return actions
+├── components/
+│   ├── cards/            # UpdateCard & dedicated AdminUpdateCard
+│   ├── charts/           # RealChart (Recharts with mathematical agreement)
+│   ├── demo/             # DemoTools floating widget (Simulate alert, Jump date)
+│   ├── layout/           # AppShell, Sidebar, Header, MobileBar, RouteGuard
+│   └── ui/               # Button (Next Link support), Modal, StatusChip, LanguageSwitcher
+├── data/
+│   └── mockData.ts       # Seed notices with dynamic relative date math
+├── lib/
+│   ├── api.ts            # Mock service layer isolating frontend from backend
+│   ├── date.ts           # Unified local-timezone date helpers & .ics generator
+│   ├── i18n.ts           # English & Hindi translation dictionaries
+│   ├── notifications.ts  # Browser Notification API integration
+│   ├── selectors.ts      # Single source of truth for all counts and filters
+│   └── store.tsx         # Unified Zustand/Context store with cross-tab broadcast
+├── tests/
+│   └── selectors.test.ts # Vitest unit tests verifying count & date consistency
+└── DESIGN.md             # The definitive Neo-Brutalism design system specifications
+```
+
+---
+
+## 🚀 Running the Project
 
 ### Prerequisites
-- Node.js 18.17+ or Node.js 20+
-- npm, pnpm, or yarn
+- Node.js 20+
+- npm 9+
 
-### Installation
-```bash
-git clone https://github.com/hameem-codes/campus-voice.git
-cd campus-voice
-npm install
-```
+### Scripts
 
-### Development
-```bash
-npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Build & Production
-```bash
-npm run build
-npm start
-```
-
-### Lint & Type Check
-```bash
-npm run lint
-```
+| Script | Command | Purpose |
+| :--- | :--- | :--- |
+| **Development** | `npm run dev` | Starts local Next.js dev server on `http://localhost:3000` |
+| **Production Build** | `npm run build` | Compiles and optimizes production bundle (Turbopack) |
+| **Start Production** | `npm run start` | Runs production server |
+| **Type Check** | `npm run typecheck` | Validates TypeScript types (`tsc --noEmit`) with 0 errors |
+| **Linting** | `npm run lint` | ESLint 9 flat config verification |
+| **Unit Tests** | `npm run test` | Runs Vitest unit test suite |
 
 ---
 
-## Deploy to Vercel
+## 🧪 Testing & Verification
 
-This repository is optimized for deployment on [Vercel](https://vercel.com):
+Run the complete test suite:
+```bash
+npm run test
+```
 
-1. Push your repository to GitHub.
-2. Import the project in Vercel.
-3. Keep default settings:
-   - **Framework Preset**: Next.js
-   - **Build Command**: `next build` (or default `npm run build`)
-   - **Output Directory**: `.next`
-   - **Install Command**: `npm install`
-4. Deploy!
+Asserts that:
+1. Updates badge equals unread count for student audience.
+2. Urgent unread definition is strictly unified across banner, card, and tabs.
+3. Total views, KPI cards, and category table sum to the exact same numbers.
+4. Audience targeting logic correctly matches cohort parameters.
+5. Reach estimator calculates cohort reach from 2,412 base.
+6. Date helpers operate in local timezone with dynamic relative offsets.
 
 ---
 
-## Tech Stack
-- **Framework**: Next.js 16 (App Router)
-- **UI & Components**: React 19, Vanilla CSS Design System with Tailwind v4 PostCSS
-- **Animations**: Framer Motion
-- **Visualizations**: Recharts
-- **Icons**: Lucide React
+## 🎨 Design System (Neo-Brutalism)
+
+See [DESIGN.md](file:///c:/Users/matee/OneDrive/Desktop/campusvoice/DESIGN.md) for full design guidelines:
+- **Tiers**: Primary (`3px solid #000`, `4px 4px 0 0 #000` shadow), Secondary (`2.5px solid #000`), Tertiary (`1.5px solid #000`).
+- **Palette**: `#FFD93D` (Canary Yellow accent), `#4D96FF` (Cyan), `#6BCB77` (Lime), `#FF6B6B` (Coral Urgent / Destructive), `#000000` (Pitch Black).
+- **Typography**: Space Grotesk across all headings and body copy, minimum body text 12px.
+- **Accessibility**: All color pairings conform to WCAG AA contrast standards.

@@ -14,17 +14,30 @@ import {
 import { useStore } from '@/lib/store'
 import { UpdateCard } from '@/components/cards/UpdateCard'
 import { Button } from '@/components/ui/Button'
-import { matchesStudentAudience } from './StudentHomeView'
+import { matchesStudentAudience } from '@/lib/selectors'
 import { EmptyState } from '@/components/feedback/EmptyState'
 
 export function StudentUpdatesView() {
   const searchParams = useSearchParams()
   const initialFilterParam = searchParams.get('filter')
-  const { updates, currentUser, categories, departments, markAllUpdatesRead } = useStore()
+  const {
+    currentUser,
+    categories,
+    departments,
+    markAllUpdatesRead,
+    studentFeed,
+    studentAllCount,
+    studentUnreadCount,
+    urgentUnreadCount,
+  } = useStore()
 
   // State
   const [activeTab, setActiveTab] = useState<'All' | 'Unread' | 'Urgent'>(
-    initialFilterParam === 'attention' ? 'Urgent' : 'All'
+    initialFilterParam === 'attention' || initialFilterParam === 'urgent'
+      ? 'Urgent'
+      : initialFilterParam === 'unread'
+      ? 'Unread'
+      : 'All'
   )
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string>('All')
@@ -50,27 +63,13 @@ export function StudentUpdatesView() {
     }
   }
 
-  // Audience targeted items
-  const targetedUpdates = useMemo(() => {
-    return updates.filter((u) => matchesStudentAudience(u, currentUser))
-  }, [updates, currentUser])
-
-  // Computed counts for the tabs
-  const unreadCount = useMemo(() => {
-    return targetedUpdates.filter((u) => !u.read).length
-  }, [targetedUpdates])
-
-  const urgentCount = useMemo(() => {
-    return targetedUpdates.filter((u) => u.priority === 'Urgent').length
-  }, [targetedUpdates])
-
   // Filtered & sorted items
   const filteredUpdates = useMemo(() => {
-    return targetedUpdates
+    return studentFeed
       .filter((item) => {
-        // Tab filter
+        // Tab filter: Unread matches !item.read; Urgent matches unread urgent
         if (activeTab === 'Unread' && item.read) return false
-        if (activeTab === 'Urgent' && item.priority !== 'Urgent') return false
+        if (activeTab === 'Urgent' && (item.priority !== 'Urgent' || item.read)) return false
 
         // Unread only toggle
         if (unreadOnly && item.read) return false
@@ -110,7 +109,7 @@ export function StudentUpdatesView() {
         return new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime()
       })
   }, [
-    targetedUpdates,
+    studentFeed,
     activeTab,
     unreadOnly,
     selectedCategory,
@@ -180,7 +179,7 @@ export function StudentUpdatesView() {
           onClick={() => setActiveTab('All')}
         >
           All updates
-          <span className="tab-pill">{targetedUpdates.length}</span>
+          <span className="tab-pill">{studentAllCount}</span>
         </button>
         <button
           type="button"
@@ -188,7 +187,7 @@ export function StudentUpdatesView() {
           onClick={() => setActiveTab('Unread')}
         >
           Unread
-          {unreadCount > 0 && <span className="tab-pill">{unreadCount}</span>}
+          {studentUnreadCount > 0 && <span className="tab-pill">{studentUnreadCount}</span>}
         </button>
         <button
           type="button"
@@ -196,7 +195,7 @@ export function StudentUpdatesView() {
           onClick={() => setActiveTab('Urgent')}
         >
           Urgent
-          {urgentCount > 0 && <span className="tab-pill orange">{urgentCount}</span>}
+          {urgentUnreadCount > 0 && <span className="tab-pill orange">{urgentUnreadCount}</span>}
         </button>
       </div>
 

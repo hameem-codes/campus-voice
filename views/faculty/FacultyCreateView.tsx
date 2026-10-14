@@ -22,6 +22,8 @@ import { Button } from '@/components/ui/Button'
 import { StatusChip } from '@/components/ui/StatusChip'
 import { Modal } from '@/components/ui/Modal'
 import { Attachment, Priority, UpdateStatus, UpdateItem } from '@/types'
+import { UpdateCard } from '@/components/cards/UpdateCard'
+import { estimateAudienceReach } from '@/lib/selectors'
 
 const steps = [
   { label: 'Content', title: 'Notice Content & Title', sub: 'Write the primary announcement copy' },
@@ -74,6 +76,18 @@ export function FacultyCreateView() {
   const [isSavingDraft, setIsSavingDraft] = useState(false)
   const [previewAttachment, setPreviewAttachment] = useState<Attachment | null>(null)
 
+  // Unsaved changes warning on leave (Task 4.6)
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if ((title.trim() || message.trim()) && !submittedSuccess) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [title, message, submittedSuccess])
+
   // Load existing update if in edit mode
   useEffect(() => {
     if (editId) {
@@ -95,16 +109,44 @@ export function FacultyCreateView() {
     }
   }, [editId, updates, currentUser.department])
 
-  // Compute live estimated reach
+  // Compute live estimated reach derived from TOTAL_ENROLLED_ACCOUNTS (2,412) (Task 4.6 & 7.1)
   const estimatedReach = useMemo(() => {
-    if (audienceScope === 'All') return 2400
-    let total = 0
-    if (selectedDepts.includes('School of Design')) total += 184
-    if (selectedDepts.includes('Computer Science')) total += 420
-    if (selectedYears.length > 0) total = Math.round(total * (selectedYears.length / 4))
-    if (selectedSections.length > 0) total = Math.max(30, Math.round(total * 0.4))
-    return Math.max(24, total)
+    return estimateAudienceReach(audienceScope, selectedDepts, selectedYears, selectedSections)
   }, [audienceScope, selectedDepts, selectedYears, selectedSections])
+
+  // Apply quick pre-filled notice template (Task 4.6)
+  const handleApplyTemplate = (type: 'exam' | 'fee' | 'event' | 'holiday') => {
+    if (type === 'exam') {
+      setTitle('Final Semester Examination Schedule & Room Allocations')
+      setCategory('Exams')
+      setPriority('Urgent')
+      setSummary('Complete timetable, roll numbers, and examination center allocations for Fall 2026.')
+      setMessage('The Academic Office has published the final examination timetable for all undergraduate and postgraduate cohorts. Reporting time is strictly 30 minutes prior to session commencement. Admit cards must be displayed at entry.')
+    } else if (type === 'fee') {
+      setTitle('Semester Tuition Fee Installment Deadline Notice')
+      setCategory('Fees')
+      setPriority('Urgent')
+      setSummary('Final date to submit second installment fees before late fee surcharge applies.')
+      setMessage('Students are advised that the deadline for the second installment of tuition fees is Friday, October 30. Payments must be processed through the official campus online portal. Inquiries may be addressed to Accounts.')
+    } else if (type === 'event') {
+      setTitle('Annual Design Innovation Symposium & Keynote Lectures')
+      setCategory('Events')
+      setPriority('Normal')
+      setSummary('Guest lectures, masterclasses, and portfolio reviews with leading industry designers.')
+      setMessage('Join us for the 2026 Design Innovation Symposium held at the Main Auditorium. Registration is free for all current design and engineering students. Industry portfolio reviews require prior slot booking.')
+    } else if (type === 'holiday') {
+      setTitle('Official Campus Closure for Diwali & Mid-Term Recess')
+      setCategory('Holidays')
+      setPriority('Normal')
+      setSummary('Campus facilities schedule, library operating hours, and administrative closures.')
+      setMessage('The University will remain closed for the upcoming festive recess from October 28 to November 2. Normal academic sessions and administrative services will resume on Tuesday, November 3.')
+    }
+    addToast({
+      type: 'info',
+      title: 'Template applied',
+      message: 'Notice content, category, and urgency pre-filled. Customize as needed.',
+    })
+  }
 
   // Required-field validation per step
   const validateStep = (currentStep: number): boolean => {
@@ -362,6 +404,52 @@ export function FacultyCreateView() {
         {/* STEP 0: DETAILS */}
         {step === 0 && (
           <div className="form-grid">
+            {/* Quick Templates Bar (Task 4.6) */}
+            <div className="field full" style={{ marginBottom: 4, padding: 12, background: 'var(--bg-muted)', border: '2px solid var(--border)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                <span style={{ fontSize: 11, fontWeight: 900, textTransform: 'uppercase', color: 'var(--text-1)' }}>
+                  ⚡ Quick Notice Templates
+                </span>
+                <span style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 700 }}>
+                  Pre-fills structure, category & urgency
+                </span>
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                <button
+                  type="button"
+                  className="btn ghost small"
+                  style={{ border: '1.5px solid #000', background: 'var(--bg-surface)', fontSize: 10, padding: '4px 8px' }}
+                  onClick={() => handleApplyTemplate('exam')}
+                >
+                  📝 Exam Schedule
+                </button>
+                <button
+                  type="button"
+                  className="btn ghost small"
+                  style={{ border: '1.5px solid #000', background: 'var(--bg-surface)', fontSize: 10, padding: '4px 8px' }}
+                  onClick={() => handleApplyTemplate('fee')}
+                >
+                  💰 Fee Reminder
+                </button>
+                <button
+                  type="button"
+                  className="btn ghost small"
+                  style={{ border: '1.5px solid #000', background: 'var(--bg-surface)', fontSize: 10, padding: '4px 8px' }}
+                  onClick={() => handleApplyTemplate('event')}
+                >
+                  🎨 Campus Event
+                </button>
+                <button
+                  type="button"
+                  className="btn ghost small"
+                  style={{ border: '1.5px solid #000', background: 'var(--bg-surface)', fontSize: 10, padding: '4px 8px' }}
+                  onClick={() => handleApplyTemplate('holiday')}
+                >
+                  🏖️ Holiday Recess
+                </button>
+              </div>
+            </div>
+
             <div className="field full">
               <label htmlFor="update-title">Update Title *</label>
               <input
@@ -747,6 +835,68 @@ export function FacultyCreateView() {
           )}
         </div>
       </section>
+
+      {/* Live Student Preview Panel (Task 4.6 & 3.6) */}
+      <aside className="preview-panel" style={{ width: 340, flexShrink: 0 }}>
+        <div className="panel-card" style={{ padding: 18, border: '3px solid var(--border)', boxShadow: 'var(--shadow-sm)', position: 'sticky', top: 80 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Eye width={15} height={15} />
+              <strong style={{ fontSize: 12, textTransform: 'uppercase', fontWeight: 900 }}>Student Feed Preview</strong>
+            </div>
+            <StatusChip tone="neutral">Live</StatusChip>
+          </div>
+
+          <div style={{ background: 'var(--bg-muted)', padding: '10px 12px', border: '2px solid var(--border)', marginBottom: 14 }}>
+            <div style={{ fontSize: 10, fontWeight: 900, textTransform: 'uppercase', color: 'var(--text-3)' }}>
+              🎯 Estimated Cohort Reach
+            </div>
+            <div style={{ fontSize: 20, fontWeight: 900, color: 'var(--text-1)', marginTop: 2 }}>
+              {estimatedReach.toLocaleString()} <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-3)' }}>/ 2,412 students</span>
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--text-2)', marginTop: 2, fontWeight: 700 }}>
+              {audienceScope === 'All' ? 'Campus-wide broadcast' : `${selectedDepts.join(', ') || 'Selected departments'}`}
+            </div>
+          </div>
+
+          {/* Real UpdateCard rendering exactly as student sees it */}
+          <div style={{ pointerEvents: 'none' }}>
+            <UpdateCard
+              item={{
+                id: 'preview-sim',
+                title: title.trim() || 'Notice title will appear here...',
+                excerpt: summary.trim() || (message ? message.slice(0, 100) + '...' : 'Notice summary will appear here in the student feed...'),
+                content: message,
+                category,
+                priority,
+                status: 'Draft',
+                department: selectedDepts[0] || currentUser.department,
+                postedAt: new Date().toISOString(),
+                eventDate: `${publishDate}T${publishTime}:00Z`,
+                read: false,
+                saved: false,
+                publisher: {
+                  name: currentUser.name,
+                  role: 'Faculty Member',
+                  email: currentUser.email,
+                },
+                audience: {
+                  departments: selectedDepts,
+                  years: selectedYears,
+                  sections: selectedSections,
+                  isUniversal: audienceScope === 'All',
+                  label: audienceScope === 'All' ? 'Campus-wide' : `${selectedDepts[0] || 'Targeted'} (${selectedYears.join(',') || 'All'})`,
+                },
+                attachments,
+                editHistory: [],
+              }}
+              compact
+              showActions={false}
+              overrideRole="student"
+            />
+          </div>
+        </div>
+      </aside>
 
       {/* Attachment Preview Modal */}
       <Modal

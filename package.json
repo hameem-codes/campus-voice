@@ -6,24 +6,33 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next typegen"
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
+    "@fontsource/space-grotesk": "^5.2.5",
     "@tailwindcss/postcss": "^4.3.3",
-    "@types/node": "22.10.2",
+    "@types/node": "^22.12.0",
     "@types/react": "19.0.3",
     "@types/react-dom": "19.0.2",
     "framer-motion": "^14.2.0",
     "lucide-react": "0.468.0",
     "next": "^16.4.0",
+    "next-intl": "^4.14.9",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-is": "^19.3.1",
     "recharts": "^3.10.1",
     "typescript": "5.7.2"
   },
   "devDependencies": {
     "autoprefixer": "10.4.20",
+    "eslint": "^9.21.0",
+    "eslint-config-next": "^15.2.1",
     "postcss": "^8.5.30",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "typescript-eslint": "^8.71.2",
+    "vitest": "^3.0.7"
   }
 }
