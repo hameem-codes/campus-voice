@@ -1140,4 +1140,231 @@ button:disabled { cursor: not-allowed; opacity: .5; }
   color: #000; display: grid; place-items: center; margin: 0 auto 16px; border: 2.5px solid #000; box-shadow: 3px 3px 0 0 #000;
 }
 
+/* ==========================================================================
+   NEO-BRUTALISM DARK THEME
+   ========================================================================== */
+html.dark, .dark {
+  --bg-canvas: #0F0F12;
+  --bg-surface: #1A1A20;
+  --bg-muted: #26262E;
+  --border: #FFFFFF;
+  --ink: #FFFFFF;
+  --text-1: #FFFFFF;
+  --text-2: #E4E4E7;
+  --text-3: #A1A1AA;
+  --action: #FFD93D;
+
+  --neo-accent: #FF6B6B;     /* Hot Red */
+  --neo-secondary: #FFD93D;  /* Vivid Yellow */
+  --neo-muted: #C4B5FD;      /* Soft Violet */
+  --urgent: #FF6B6B;
+
+  --chip-orange-bg: #FF6B6B; --chip-orange-fg: #000000;
+  --chip-green-bg: #9BCB8B;  --chip-green-fg: #000000;
+  --chip-blue-bg: #C4B5FD;   --chip-blue-fg: #000000;
+
+  --accent-green: #9BCB8B;
+  --accent-orange: #FF6B6B;
+  --accent-blue: #7FB7E6;
+  --accent-red: #FF6B6B;
+  --accent-indigo: #FFD93D;
+  --accent-indigo-light: #26262E;
+
+  --shadow-sm: 3px 3px 0px 0px #000000;
+  --shadow-md: 5px 5px 0px 0px #000000;
+  --shadow-lg: 8px 8px 0px 0px #000000;
+  --shadow-xl: 12px 12px 0px 0px #000000;
+}
+
+html.dark {
+  background-color: #0F0F12;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+}
+
+html.dark body {
+  color: #FFFFFF;
+}
+
+/* Dark mode specific component adjustments */
+html.dark .btn {
+  color: #FFFFFF;
+  background: var(--bg-surface);
+  border-color: var(--border);
+}
+html.dark .btn:hover {
+  background: var(--neo-secondary);
+  color: #000000;
+}
+html.dark .btn.primary {
+  color: #000000;
+  background: var(--neo-accent);
+  border-color: var(--border);
+}
+html.dark .btn.primary:hover {
+  background: #FF5252;
+  color: #000000;
+}
+html.dark .btn.secondary {
+  color: #FFFFFF;
+  background: var(--bg-surface);
+  border-color: var(--border);
+}
+html.dark .btn.secondary:hover {
+  background: var(--neo-secondary);
+  color: #000000;
+}
+html.dark .btn.outline-indigo {
+  color: #000000;
+  background: var(--neo-secondary);
+  border-color: var(--border);
+}
+html.dark .btn.danger {
+  color: #000000;
+  background: var(--neo-accent);
+  border-color: var(--border);
+}
+html.dark .btn.ghost {
+  color: #FFFFFF;
+}
+html.dark .btn.ghost:hover {
+  color: #000000;
+  background: var(--neo-secondary);
+  border-color: var(--border);
+}
+
+html.dark .update-card:hover {
+  background: #24242D;
+}
+html.dark .update-card.unread-card {
+  background: #23201F;
+}
+
+html.dark .bookmark {
+  background: var(--bg-surface);
+  color: #FFFFFF;
+  border-color: var(--border);
+}
+html.dark .bookmark:hover, html.dark .bookmark.saved {
+  background: var(--neo-secondary);
+  color: #000000;
+  border-color: var(--border);
+}
+
+html.dark .deadline-list {
+  background: var(--bg-surface);
+}
+html.dark .deadline-row:hover {
+  background: #26262E;
+}
+html.dark .deadline-arrow-btn {
+  background: var(--bg-surface);
+  color: #FFFFFF;
+  border-color: var(--border);
+}
+html.dark .deadline-date-box {
+  border-color: #000000;
+  color: #000000;
+}
+
+html.dark .hero-card {
+  color: #000000;
+}
+html.dark .urgent-card {
+  color: #000000;
+}
+html.dark .sticky-urgent-banner {
+  color: #000000;
+}
+
+html.dark .interactive-link, html.dark .details-link {
+  color: #FFFFFF;
+}
+html.dark .interactive-link:hover, html.dark .details-link:hover {
+  color: #000000;
+}
+
+html.dark .mobile-bar {
+  background: var(--bg-surface);
+  border-color: var(--border);
+}
+html.dark .mobile-nav-item {
+  color: #FFFFFF;
+}
+html.dark .mobile-nav-item.active {
+  color: #000000;
+  background: var(--neo-secondary);
+  border-color: var(--border);
+}
+
+html.dark .bottom-sheet-content {
+  background: var(--bg-surface);
+  border-color: var(--border);
+}
+html.dark .bottom-sheet-link {
+  color: #FFFFFF;
+  border-color: var(--border);
+}
+html.dark .bottom-sheet-link:hover, html.dark .bottom-sheet-link.active {
+  background: var(--neo-secondary);
+  color: #000000;
+}
+html.dark .bottom-sheet-role-btn {
+  color: #FFFFFF;
+  border-color: var(--border);
+}
+html.dark .bottom-sheet-role-btn.active {
+  color: #000000;
+  background: var(--neo-secondary);
+  border-color: var(--border);
+}
+html.dark .bottom-sheet-label {
+  color: #FFFFFF;
+}
+
+html.dark input, html.dark select, html.dark textarea {
+  color: #FFFFFF;
+  background: var(--bg-muted);
+  border-color: var(--border);
+}
+html.dark input:focus, html.dark select:focus, html.dark textarea:focus {
+  background: var(--bg-surface);
+  color: #FFFFFF;
+}
+html.dark select option {
+  background: #1A1A20;
+  color: #FFFFFF;
+}
+
+html.dark .icon-button {
+  background: var(--bg-surface);
+  color: #FFFFFF;
+  border-color: var(--border);
+}
+html.dark .icon-button:hover {
+  background: var(--neo-secondary);
+  color: #000000;
+}
+
+html.dark .role-chevron {
+  color: #FFFFFF;
+}
+html.dark .role-caption {
+  color: var(--text-3);
+}
+html.dark .role-switch {
+  color: #FFFFFF;
+  border-color: var(--border);
+}
+html.dark .role-switch:hover {
+  border-color: var(--border);
+}
+html.dark .role-dropdown-item {
+  color: #FFFFFF;
+}
+html.dark .role-dropdown-item:hover, html.dark .role-dropdown-item.selected {
+  background: var(--neo-secondary);
+  color: #000000;
+}
+
 
