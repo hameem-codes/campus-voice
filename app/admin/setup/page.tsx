@@ -11,8 +11,8 @@ export default function AdminSetupPage() {
     <RouteGuard allowedRoles={['admin']}>
       <AppShell>
         <PageHeader
-          title="Campus Setup & Taxonomies"
-          subtitle="Configure notice categories, academic structure, and audience groups."
+          title="Settings"
+          depth={2}
         />
         <AdminSetupView />
       </AppShell>

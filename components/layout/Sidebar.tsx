@@ -47,18 +47,18 @@ const roleNavMap: Record<Role, NavItemDef[]> = {
   ],
   faculty: [
     { href: '/faculty', label: 'Home', icon: Home },
-    { href: '/faculty/create', label: 'Create', icon: FilePlus2 },
-    { href: '/faculty/updates', label: 'My Updates', icon: Inbox, badgeKey: 'updates' },
+    { href: '/faculty/create', label: 'New notice', icon: FilePlus2 },
+    { href: '/faculty/updates', label: 'My notices', icon: Inbox, badgeKey: 'updates' },
     { href: '/faculty/analytics', label: 'Analytics', icon: LineChart },
   ],
   admin: [
-    { href: '/admin', label: 'Home', icon: Home },
-    { href: '/admin/updates', label: 'Updates', icon: Inbox, badgeKey: 'updates' },
-    { href: '/admin/create', label: 'Create update', icon: FilePlus2 },
-    { href: '/admin/users', label: 'Users', icon: Users },
-    { href: '/admin/setup', label: 'Setup', icon: SlidersHorizontal },
+    { href: '/admin', label: 'Dashboard', icon: Home },
+    { href: '/admin/updates', label: 'Notices', icon: Inbox, badgeKey: 'updates' },
+    { href: '/admin/create', label: 'New notice', icon: FilePlus2 },
+    { href: '/admin/users', label: 'People', icon: Users },
+    { href: '/admin/setup', label: 'Settings', icon: SlidersHorizontal },
     { href: '/admin/analytics', label: 'Analytics', icon: LineChart },
-    { href: '/admin/logs', label: 'Logs & Settings', icon: Settings2 },
+    { href: '/admin/logs', label: 'Activity log', icon: Settings2 },
   ],
 }
 
@@ -71,21 +71,21 @@ const roleConfigs: {
 }[] = [
   {
     key: 'student',
-    label: 'Student dashboard',
+    label: 'Student',
     roleTitle: 'Aarav Mehta',
     icon: UserRound,
     defaultRoute: '/student',
   },
   {
     key: 'faculty',
-    label: 'Faculty dashboard',
+    label: 'Faculty',
     roleTitle: 'Dr. Maya Rao',
     icon: GraduationCap,
     defaultRoute: '/faculty',
   },
   {
     key: 'admin',
-    label: 'Admin dashboard',
+    label: 'Admin',
     roleTitle: 'Priya Nair',
     icon: ShieldCheck,
     defaultRoute: '/admin',
@@ -153,7 +153,7 @@ export function Sidebar() {
           {!sidebarCollapsed && (
             <div style={{ flex: 1, minWidth: 0 }}>
               <div className="brand-name">Campus Voice</div>
-              <div className="brand-subtitle">One clear campus signal</div>
+              <div className="brand-subtitle">Design Institute</div>
             </div>
           )}
         </Link>
@@ -193,7 +193,10 @@ export function Sidebar() {
 
       {/* Role label */}
       {!sidebarCollapsed && (
-        <div className="nav-section-label">{currentRoleCfg.label}</div>
+        <div className="nav-section-label" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <currentRoleCfg.icon width={12} height={12} />
+          <span>{currentRoleCfg.label}</span>
+        </div>
       )}
 
       {/* Navigation List */}
@@ -233,26 +236,12 @@ export function Sidebar() {
         })}
       </nav>
 
-      {/* Quick Tools & Dev Helper */}
+      {/* Spacer */}
       <div className="sidebar-spacer" />
-
-      {!sidebarCollapsed && (
-        <div className="sidebar-quick-tools">
-          <button
-            type="button"
-            className="sidebar-tool-btn"
-            onClick={simulateNewUrgentUpdate}
-            title="Simulate incoming urgent alert"
-          >
-            <Sparkles width={13} height={13} style={{ color: 'var(--accent-orange)' }} />
-            <span>Simulate Urgent Notice</span>
-          </button>
-        </div>
-      )}
 
       {/* Role Switcher panel (3-way: Student, Faculty, Admin) */}
       <div className="role-panel">
-        {!sidebarCollapsed && <div className="role-caption">Switch dashboard</div>}
+        {!sidebarCollapsed && <div className="role-caption">Switch role</div>}
 
         <div style={{ position: 'relative' }}>
           <button

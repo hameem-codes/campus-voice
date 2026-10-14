@@ -6,10 +6,7 @@ import Link from 'next/link'
 import {
   Plus,
   Inbox,
-  ShieldCheck,
-  Check,
   ArrowUpRight,
-  SlidersHorizontal,
 } from 'lucide-react'
 import { useStore } from '@/lib/store'
 import { Button } from '@/components/ui/Button'
@@ -24,115 +21,138 @@ export function AdminHomeView() {
     return updates.filter((u) => u.status === 'Pending')
   }, [updates])
 
-  const publishedCount = useMemo(() => {
-    return updates.filter((u) => u.status === 'Published').length
+  const publishedUpdates = useMemo(() => {
+    return updates.filter((u) => u.status === 'Published')
   }, [updates])
 
-  const todayStr = useMemo(() => {
-    return new Date().toLocaleDateString('en-US', {
-      weekday: 'long',
-      month: 'long',
-      day: 'numeric',
-    })
-  }, [])
+  const publishedCount = publishedUpdates.length
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {/* Hero Grid */}
-      <div className="hero-grid">
-        <section className="hero-card">
-          <div>
-            <div className="eyebrow">Admin Workspace · {todayStr}</div>
-            <h2>Publish one clear signal for the whole campus.</h2>
-            <p>
-              Admins broadcast universal notices. Individual student issues stay inside private account workflows.
-            </p>
-          </div>
-          <div className="hero-actions">
-            <Button
-              variant="primary"
-              icon={Plus}
-              onClick={() => router.push('/admin/create')}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      {/* Dense Header: factual summary + inline KPIs + actions */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 16,
+          padding: '16px 20px',
+          background: 'var(--bg-surface)',
+          border: '1px solid var(--border)',
+          borderRadius: 'var(--radius-card)',
+        }}
+      >
+        <div>
+          <h2 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: 'var(--text-1)' }}>
+            {publishedCount} published, {pendingQueue.length} pending review
+          </h2>
+          <div style={{ marginTop: 4 }}>
+            <Link
+              href="/admin/setup"
+              className="details-link"
+              style={{ fontSize: 12 }}
             >
-              Create universal update
-            </Button>
-            <Button
-              variant="secondary"
-              icon={Inbox}
-              onClick={() => router.push('/admin/updates')}
-            >
-              Review approval queue
-            </Button>
+              <span>Manage audiences →</span>
+            </Link>
           </div>
-        </section>
+        </div>
 
-        <section className="urgent-card">
-          <div className="urgent-icon">
-            <ShieldCheck />
+        {/* Inline KPI stats */}
+        <div className="admin-header-kpis">
+          <div className="admin-kpi-item">
+            <span>Published:</span>
+            <strong>{publishedCount}</strong>
           </div>
-          <div>
-            <h3>Universal by default.</h3>
-            <p>
-              Every published notice reaches an approved campus audience, never one named individual.
-            </p>
+          <div className="admin-kpi-item">
+            <span>Pending:</span>
+            <strong>{pendingQueue.length}</strong>
           </div>
+          <div className="admin-kpi-item">
+            <span>Users:</span>
+            <strong>2,412</strong>
+          </div>
+          <div className="admin-kpi-item">
+            <span>Delivery:</span>
+            <strong>99.4%</strong>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <Button
-            variant="ghost"
-            icon={ArrowUpRight}
-            onClick={() => router.push('/admin/setup')}
+            variant="secondary"
+            size="sm"
+            icon={Inbox}
+            onClick={() => router.push('/admin/updates')}
           >
-            Manage audiences
+            Review queue
           </Button>
-        </section>
-      </div>
-
-      {/* 4 Stats Cards from real store */}
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-label">Pending Approvals</div>
-          <div className="stat-value">{pendingQueue.length}</div>
-          <div className="stat-note">Waiting in approval queue</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">Active Users</div>
-          <div className="stat-value">2,412</div>
-          <div className="stat-note positive">+12% this month</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">Published Notices</div>
-          <div className="stat-value">{publishedCount}</div>
-          <div className="stat-note positive">Live in circulation</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">Delivery Health</div>
-          <div className="stat-value">99.4%</div>
-          <div className="stat-note positive">All channels healthy</div>
+          <Button
+            variant="primary"
+            size="sm"
+            icon={Plus}
+            onClick={() => router.push('/admin/create')}
+          >
+            New notice
+          </Button>
         </div>
       </div>
 
-      {/* Needs your attention: Approval Queue */}
-      <section>
-        <div className="section-heading">
-          <h2>Needs your attention</h2>
+      {/* Needs your attention: Amber left border & tinted bg */}
+      <section className="admin-attention-card">
+        <div className="section-heading" style={{ marginBottom: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                background: 'var(--accent-orange)',
+                display: 'inline-block',
+              }}
+            />
+            <h2 style={{ margin: 0, fontSize: 16, fontWeight: 600 }}>Needs your attention</h2>
+          </div>
           <Link
             href="/admin/updates"
-            style={{ fontSize: 12, color: 'var(--text-3)', textDecoration: 'none' }}
+            className="details-link"
           >
-            Approval queue ({pendingQueue.length}) <ArrowUpRight width={13} height={13} style={{ verticalAlign: 'middle' }} />
+            <span>Queue ({pendingQueue.length})</span>
+            <ArrowUpRight width={12} height={12} />
           </Link>
         </div>
 
         {pendingQueue.length > 0 ? (
-          <div className="card-grid">
-            {pendingQueue.slice(0, 3).map((item) => (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))', gap: 12 }}>
+            {pendingQueue.map((item) => (
               <UpdateCard key={item.id} item={item} overrideRole="admin" />
             ))}
           </div>
         ) : (
-          <div className="empty-state" style={{ minHeight: 140 }}>
-            <p>No notices currently pending approval.</p>
+          <div style={{ padding: '12px 0', color: 'var(--text-3)', fontSize: 13 }}>
+            No notices awaiting review. All submissions are current.
           </div>
         )}
+      </section>
+
+      {/* Recent Published Notices */}
+      <section>
+        <div className="section-heading">
+          <h2>Active notices in circulation</h2>
+          <Link
+            href="/admin/updates"
+            className="details-link"
+          >
+            <span>All notices</span>
+            <ArrowUpRight width={12} height={12} />
+          </Link>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))', gap: 12 }}>
+          {publishedUpdates.slice(0, 3).map((item) => (
+            <UpdateCard key={item.id} item={item} overrideRole="admin" />
+          ))}
+        </div>
       </section>
     </div>
   )

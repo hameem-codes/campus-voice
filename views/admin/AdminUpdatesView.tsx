@@ -132,8 +132,9 @@ export function AdminUpdatesView() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {/* 1. Status Tabs */}
       <div className="tabs">
-        {(['Approval queue', 'Published', 'Scheduled', 'Archived', 'Rejected'] as const).map(
-          (tab) => (
+        {(['Approval queue', 'Published', 'Scheduled', 'Archived', 'Rejected'] as const)
+          .filter((tab) => tab === 'Approval queue' || tab === 'Published' || counts[tab] > 0)
+          .map((tab) => (
             <button
               key={tab}
               type="button"
@@ -148,8 +149,7 @@ export function AdminUpdatesView() {
                 {counts[tab]}
               </span>
             </button>
-          )
-        )}
+          ))}
       </div>
 
       {/* 2. Toolbar */}
@@ -205,7 +205,7 @@ export function AdminUpdatesView() {
             icon={Plus}
             onClick={() => router.push('/admin/create')}
           >
-            Create universal update
+            New notice
           </Button>
         </div>
       </div>

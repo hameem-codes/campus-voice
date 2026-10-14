@@ -145,9 +145,11 @@ export function FacultyUpdatesView() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {/* 1. Status Tabs with accurate live counts */}
+      {/* 1. Status Tabs (only show tabs with counts > 0) */}
       <div className="tabs">
-        {['All', 'Draft', 'Pending', 'Published', 'Rejected', 'Scheduled', 'Archived'].map(
-          (status) => (
+        {['All', 'Draft', 'Pending', 'Published', 'Rejected', 'Scheduled', 'Archived']
+          .filter((status) => status === 'All' || (tabCounts[status] || 0) > 0)
+          .map((status) => (
             <button
               key={status}
               type="button"
@@ -162,8 +164,7 @@ export function FacultyUpdatesView() {
                 {tabCounts[status] || 0}
               </span>
             </button>
-          )
-        )}
+          ))}
       </div>
 
       {/* 2. Toolbar */}
@@ -201,7 +202,7 @@ export function FacultyUpdatesView() {
             icon={Plus}
             onClick={() => router.push('/faculty/create')}
           >
-            Create update
+            New notice
           </Button>
         </div>
       </div>

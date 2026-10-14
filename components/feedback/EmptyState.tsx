@@ -6,7 +6,7 @@ import { Inbox } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
 interface EmptyStateProps {
-  title: string
+  title?: string
   description?: string
   icon?: LucideIcon
   actionLabel?: string
@@ -14,8 +14,8 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({
-  title,
-  description,
+  title = 'No matches',
+  description = 'Try a different filter.',
   icon: Icon = Inbox,
   actionLabel,
   onAction,

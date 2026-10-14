@@ -11,8 +11,8 @@ export default function SearchPage() {
     <RouteGuard allowedRoles={['student', 'faculty', 'admin']}>
       <AppShell>
         <PageHeader
-          title="Global Search"
-          subtitle="Real-time search across all verified campus signals, files, and notices."
+          title="Search"
+          depth={2}
         />
         <GlobalSearchView />
       </AppShell>

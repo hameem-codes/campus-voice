@@ -11,8 +11,8 @@ export default function AdminHomePage() {
     <RouteGuard allowedRoles={['admin']}>
       <AppShell>
         <PageHeader
-          title="Admin Operations"
-          subtitle="One clear signal and centralized governance for the whole campus."
+          title="Dashboard"
+          depth={1}
         />
         <AdminHomeView />
       </AppShell>

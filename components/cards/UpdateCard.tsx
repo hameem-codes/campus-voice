@@ -128,23 +128,18 @@ export function UpdateCard({
         <p className="update-excerpt">{item.excerpt}</p>
       </div>
 
-      {/* Meta grid */}
-      <div className="meta-grid">
-        <div>
-          <div className="meta-label">Department</div>
-          <div className="meta-value">{item.department}</div>
-        </div>
-        <div>
-          <div className="meta-label">Posted</div>
-          <div className="meta-value">{formatRelativeTime(item.postedAt)}</div>
-        </div>
+      {/* Single inline metadata line */}
+      <div className="card-meta-line">
+        <span>{item.department}</span>
+        <span className="dot">·</span>
+        <span>{formatRelativeTime(item.postedAt)}</span>
         {item.eventDate && (
-          <div style={{ gridColumn: '1 / -1', marginTop: 2 }}>
-            <div className="meta-label">Event / Deadline</div>
-            <div className="meta-value" style={{ color: 'var(--accent-blue)', fontWeight: 500 }}>
+          <>
+            <span className="dot">·</span>
+            <span style={{ color: 'var(--accent-indigo)', fontWeight: 500 }}>
               {formatDisplayDate(item.eventDate)}
-            </div>
-          </div>
+            </span>
+          </>
         )}
       </div>
 

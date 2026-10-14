@@ -11,8 +11,8 @@ export default function AdminLogsPage() {
     <RouteGuard allowedRoles={['admin']}>
       <AppShell>
         <PageHeader
-          title="Audit Log & Operations"
-          subtitle="Real-time compliance log of every action, notice modification, and delivery channel rule."
+          title="Activity log"
+          depth={2}
         />
         <AdminLogsView />
       </AppShell>

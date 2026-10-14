@@ -11,8 +11,8 @@ export default function AdminAnalyticsPage() {
     <RouteGuard allowedRoles={['admin']}>
       <AppShell>
         <PageHeader
-          title="Campus Analytics"
-          subtitle="System-wide metrics on notice delivery, category volume, and audience reach."
+          title="Analytics"
+          depth={2}
         />
         <AdminAnalyticsView />
       </AppShell>

@@ -11,8 +11,8 @@ export default function FacultyCreatePage() {
     <RouteGuard allowedRoles={['faculty', 'admin']}>
       <AppShell>
         <PageHeader
-          title="Create Campus Update"
-          subtitle="Compose verified notices with targeted reach and scheduled dispatch."
+          title="New notice"
+          depth={2}
         />
         <FacultyCreateView />
       </AppShell>

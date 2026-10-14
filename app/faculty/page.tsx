@@ -11,8 +11,8 @@ export default function FacultyHomePage() {
     <RouteGuard allowedRoles={['faculty', 'admin']}>
       <AppShell>
         <PageHeader
-          title="Faculty Dashboard"
-          subtitle="Your publishing and notice management workspace at a glance."
+          title="Dashboard"
+          depth={1}
         />
         <FacultyHomeView />
       </AppShell>

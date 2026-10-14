@@ -116,7 +116,7 @@ export function AdminSetupView() {
           onClick={() => setActiveTab('Categories')}
         >
           <SlidersHorizontal width={15} height={15} />
-          <span>Notice Categories</span>
+          <span>Categories</span>
           <span className="tab-pill">{categories.length}</span>
         </button>
         <button
@@ -125,7 +125,7 @@ export function AdminSetupView() {
           onClick={() => setActiveTab('Academic')}
         >
           <Building width={15} height={15} />
-          <span>Academic Units & Courses</span>
+          <span>Departments</span>
         </button>
         <button
           type="button"
@@ -133,7 +133,7 @@ export function AdminSetupView() {
           onClick={() => setActiveTab('Audiences')}
         >
           <Users width={15} height={15} />
-          <span>Audience Cohort Groups</span>
+          <span>Audiences</span>
           <span className="tab-pill">{audienceGroups.length}</span>
         </button>
       </div>

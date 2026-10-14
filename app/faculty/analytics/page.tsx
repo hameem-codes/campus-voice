@@ -11,8 +11,8 @@ export default function FacultyAnalyticsPage() {
     <RouteGuard allowedRoles={['faculty', 'admin']}>
       <AppShell>
         <PageHeader
-          title="Engagement Analytics"
-          subtitle="A quieter view of what is reaching and informing your student cohorts."
+          title="Analytics"
+          depth={2}
         />
         <FacultyAnalyticsView />
       </AppShell>

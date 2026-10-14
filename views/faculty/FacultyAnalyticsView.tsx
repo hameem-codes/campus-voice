@@ -102,29 +102,27 @@ export function FacultyAnalyticsView() {
         </Button>
       </div>
 
-      {/* 4 Computed Stat Cards */}
-      <div className="stats-grid">
+      {/* 4 Computed Stat Cards (alternating 2-col layout) */}
+      <div className="stats-grid-alternating">
         <div className="stat-card">
           <div className="stat-label">Total Views</div>
           <div className="stat-value">{totalViews.toLocaleString()}</div>
-          <div className="stat-note positive">+14% vs previous 30 days</div>
+          <div className="stat-note positive">+14% / 30d</div>
         </div>
         <div className="stat-card">
           <div className="stat-label">Average Read Rate</div>
           <div className="stat-value">{averageReadRate}</div>
-          <div className="stat-note positive">+6% student completion</div>
+          <div className="stat-note positive">+6%</div>
         </div>
         <div className="stat-card">
           <div className="stat-label">Average Reach</div>
           <div className="stat-value">{averageReach}</div>
-          <div className="stat-note">Across targeted cohorts</div>
         </div>
         <div className="stat-card">
           <div className="stat-label">Notices Published</div>
           <div className="stat-value">
             {facultyUpdates.filter((u) => u.status === 'Published').length}
           </div>
-          <div className="stat-note positive">Healthy signal volume</div>
         </div>
       </div>
 

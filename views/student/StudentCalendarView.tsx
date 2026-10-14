@@ -205,7 +205,7 @@ export function StudentCalendarView() {
           className={`chip filter ${selectedCategory === 'All' ? 'active' : ''}`}
           onClick={() => setSelectedCategory('All')}
         >
-          All categories ({calendarEvents.length})
+          All {calendarEvents.length}
         </button>
         {categories.map((c) => {
           const count = updates.filter(
@@ -219,7 +219,7 @@ export function StudentCalendarView() {
               className={`chip filter ${selectedCategory === c.name ? 'active' : ''}`}
               onClick={() => setSelectedCategory(c.name)}
             >
-              {c.name} ({count})
+              {c.name} {count}
             </button>
           )
         })}

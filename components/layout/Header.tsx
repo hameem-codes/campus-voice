@@ -13,43 +13,41 @@ interface PageHeaderProps {
   subtitle?: string
   breadcrumb?: string
   action?: React.ReactNode
+  depth?: 1 | 2 | 3
 }
 
-export function PageHeader({ title, subtitle, breadcrumb, action }: PageHeaderProps) {
+export function PageHeader({ title, subtitle, breadcrumb, action, depth }: PageHeaderProps) {
   const router = useRouter()
-  const { role, unreadNotificationsCount, hasUrgentNotification, simulateNewUrgentUpdate } = useStore()
+  const { role, unreadNotificationsCount, hasUrgentNotification } = useStore()
   const [notificationsOpen, setNotificationsOpen] = useState(false)
 
-  const defaultBreadcrumb =
-    breadcrumb ||
-    (role === 'student'
-      ? 'Student workspace'
-      : role === 'faculty'
-      ? 'Faculty workspace'
-      : 'Admin workspace')
+  const renderBreadcrumb = () => {
+    if (breadcrumb) {
+      return (
+        <div className="breadcrumb">
+          {breadcrumb} <span aria-hidden="true">/</span> {title}
+        </div>
+      )
+    }
+    if (title === 'Dashboard' || title === 'Home') {
+      return <div className="breadcrumb">Dashboard</div>
+    }
+    return (
+      <div className="breadcrumb">
+        Dashboard <span aria-hidden="true">/</span> {title}
+      </div>
+    )
+  }
 
   return (
     <header className="page-header">
       <div>
-        <div className="breadcrumb">
-          {defaultBreadcrumb} <span aria-hidden="true">/</span> {title}
-        </div>
-        <h1 className="page-title">{title}</h1>
+        {renderBreadcrumb()}
+        <h1 className={`page-title ${depth ? `depth-${depth}` : ''}`}>{title}</h1>
         {subtitle && <p className="page-subtitle">{subtitle}</p>}
       </div>
 
       <div className="header-actions">
-        {/* Quick simulate alert for verification */}
-        <button
-          type="button"
-          className="icon-button"
-          aria-label="Simulate urgent alert"
-          title="Simulate incoming urgent alert (Dev)"
-          onClick={simulateNewUrgentUpdate}
-        >
-          <Sparkles width={15} height={15} style={{ color: 'var(--accent-orange)' }} />
-        </button>
-
         {/* Notifications Bell */}
         <div className="bell-wrap">
           <button
@@ -82,7 +80,7 @@ export function PageHeader({ title, subtitle, breadcrumb, action }: PageHeaderPr
             icon={Plus}
             onClick={() => router.push('/faculty/create')}
           >
-            Create update
+            New notice
           </Button>
         ) : role === 'admin' ? (
           <Button
@@ -91,12 +89,13 @@ export function PageHeader({ title, subtitle, breadcrumb, action }: PageHeaderPr
             className="secondary-action"
             onClick={() => router.push('/admin/setup')}
           >
-            Setup
+            Settings
           </Button>
         ) : (
           <Button
-            variant="primary"
+            variant="secondary"
             icon={Search}
+            className="outline-indigo"
             onClick={() => router.push('/search')}
           >
             Find an update

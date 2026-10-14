@@ -11,8 +11,8 @@ export default function AdminCreatePage() {
     <RouteGuard allowedRoles={['admin']}>
       <AppShell>
         <PageHeader
-          title="Create Universal Notice"
-          subtitle="Publish verified campus-wide notices without targeting individual named students."
+          title="New notice"
+          depth={2}
         />
         <AdminCreateView />
       </AppShell>

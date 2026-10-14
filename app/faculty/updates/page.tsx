@@ -11,8 +11,8 @@ export default function FacultyUpdatesPage() {
     <RouteGuard allowedRoles={['faculty', 'admin']}>
       <AppShell>
         <PageHeader
-          title="My Published Updates"
-          subtitle="Track draft status, pending administrator approvals, and student engagement reach."
+          title="My notices"
+          depth={2}
         />
         <FacultyUpdatesView />
       </AppShell>

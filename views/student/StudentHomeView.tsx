@@ -83,6 +83,13 @@ export function StudentHomeView() {
     })
   }, [])
 
+  const greeting = useMemo(() => {
+    const hour = new Date().getHours()
+    const prefix = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
+    const name = currentUser.name.split(' ')[0]
+    return `${prefix}, ${name}`
+  }, [currentUser.name])
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       {/* Hero Grid */}
@@ -90,11 +97,9 @@ export function StudentHomeView() {
         <section className="hero-card">
           <div>
             <div className="eyebrow">{todayStr}</div>
-            <h2>Your campus, in one clear view.</h2>
-            <p>
-              Good day, {currentUser.name.split(' ')[0]}. You are viewing notices for{' '}
-              <strong>{currentUser.department}</strong> ({currentUser.year || 'General'},{' '}
-              {currentUser.section || 'All'}).
+            <h2>{greeting}</h2>
+            <p style={{ fontSize: 12, color: 'var(--text-3)', margin: '4px 0 0' }}>
+              {currentUser.department} · {currentUser.year || 'Undergraduate'} · Section {currentUser.section || 'A'}
             </p>
           </div>
           <div className="hero-actions">
@@ -115,23 +120,41 @@ export function StudentHomeView() {
           </div>
         </section>
 
-        {/* Needs attention banner */}
+        {/* Needs attention card */}
         <section className="urgent-card">
-          <div className="urgent-icon">
-            <CircleAlert />
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div className="urgent-icon">
+              <CircleAlert />
+            </div>
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                fontSize: 12,
+                fontWeight: 600,
+                color: 'var(--accent-orange)',
+              }}
+            >
+              <span
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: '50%',
+                  background: 'var(--accent-orange)',
+                  display: 'inline-block',
+                }}
+              />
+              <span>{attentionItems.length} urgent</span>
+            </span>
           </div>
-          <div>
-            <h3>
-              {attentionItems.length === 0
-                ? 'No immediate alerts.'
-                : `${attentionItems.length} update${attentionItems.length === 1 ? '' : 's'} need your attention.`}
+
+          <div style={{ margin: '14px 0' }}>
+            <h3 style={{ margin: 0, fontSize: 18, fontWeight: 500, color: 'var(--text-1)' }}>
+              {attentionItems.length > 0 ? `${attentionItems.length} urgent` : '0 urgent'}
             </h3>
-            <p>
-              {attentionItems.length === 0
-                ? 'You are up to date on all urgent notices and approaching deadlines.'
-                : 'Urgent notices and approaching course milestones.'}
-            </p>
           </div>
+
           <Button
             variant="ghost"
             icon={ArrowUpRight}
@@ -142,83 +165,81 @@ export function StudentHomeView() {
         </section>
       </div>
 
-      {/* Recent Updates section */}
-      <section>
-        <div className="section-heading">
-          <h2>Recent updates</h2>
-          <span>Sorted by latest posted date</span>
-        </div>
-        {recentUpdates.length > 0 ? (
-          <div className="card-grid">
-            {recentUpdates.map((item) => (
-              <UpdateCard key={item.id} item={item} />
-            ))}
+      {/* 2-Column Layout: Main Feed (left) + Deadlines Rail (right) */}
+      <div className="student-layout">
+        {/* Main Feed Column */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div className="section-heading">
+            <h2>Recent updates</h2>
+            <span>Latest posted</span>
           </div>
-        ) : (
-          <div className="empty-state" style={{ minHeight: 160 }}>
-            <h3>No recent updates</h3>
-            <p>New notices posted for your department will appear here.</p>
-          </div>
-        )}
-      </section>
 
-      {/* Upcoming Deadlines section */}
-      <section>
-        <div className="section-heading">
-          <h2>Upcoming deadlines & events</h2>
-          <Link
-            href="/student/calendar"
-            style={{
-              fontSize: 12,
-              color: 'var(--text-3)',
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 4,
-            }}
-          >
-            <span>Calendar view</span>
-            <ArrowUpRight width={14} height={14} />
-          </Link>
+          {recentUpdates.length > 0 ? (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))', gap: 12 }}>
+              {recentUpdates.map((item) => (
+                <UpdateCard key={item.id} item={item} />
+              ))}
+            </div>
+          ) : (
+            <div className="empty-state" style={{ minHeight: 160 }}>
+              <h3>No recent updates</h3>
+              <p>New notices posted for your department will appear here.</p>
+            </div>
+          )}
         </div>
 
-        {upcomingDeadlines.length > 0 ? (
-          <div className="deadline-list">
-            {upcomingDeadlines.map((item) => {
-              const d = new Date(item.date)
-              const month = d.toLocaleDateString('en-US', { month: 'short' }).toUpperCase()
-              const day = d.getDate()
-              return (
-                <div
-                  className="deadline-row"
-                  key={item.id}
-                  onClick={() => router.push(`/student/updates/${item.id}`)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <div className="deadline-date">
-                    {month} {day}
-                  </div>
-                  <div>
-                    <div className="deadline-title">{item.title}</div>
-                    <div className="deadline-meta">{item.meta}</div>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <StatusChip tone={item.tone}>
-                      {formatDisplayDate(item.date)}
-                    </StatusChip>
-                    <ArrowUpRight width={14} height={14} style={{ color: 'var(--text-3)' }} />
-                  </div>
-                </div>
-              )
-            })}
+        {/* Sticky Deadlines Rail (right) */}
+        <aside className="deadlines-rail">
+          <div className="section-heading">
+            <h2>Upcoming</h2>
+            <Link
+              href="/student/calendar"
+              className="details-link"
+              style={{ fontSize: 11 }}
+            >
+              <span>Calendar</span>
+              <ArrowUpRight width={12} height={12} />
+            </Link>
           </div>
-        ) : (
-          <div className="empty-state" style={{ minHeight: 120 }}>
-            <Clock3 width={20} height={20} />
-            <p>No deadlines scheduled for the next 7 days.</p>
-          </div>
-        )}
-      </section>
+
+          {upcomingDeadlines.length > 0 ? (
+            <div className="deadline-list">
+              {upcomingDeadlines.map((item) => {
+                const d = new Date(item.date)
+                const month = d.toLocaleDateString('en-US', { month: 'short' }).toUpperCase()
+                const day = d.getDate()
+                return (
+                  <div
+                    className="deadline-row"
+                    key={item.id}
+                    onClick={() => router.push(`/student/updates/${item.id}`)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div className="deadline-date">
+                      {month} {day}
+                    </div>
+                    <div>
+                      <div className="deadline-title">{item.title}</div>
+                      <div className="deadline-meta">{item.meta}</div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <StatusChip tone={item.tone}>
+                        {formatDisplayDate(item.date)}
+                      </StatusChip>
+                      <ArrowUpRight width={14} height={14} style={{ color: 'var(--text-3)' }} />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          ) : (
+            <div className="empty-state" style={{ minHeight: 120 }}>
+              <Clock3 width={20} height={20} />
+              <p>No deadlines scheduled for the next 7 days.</p>
+            </div>
+          )}
+        </aside>
+      </div>
     </div>
   )
 }

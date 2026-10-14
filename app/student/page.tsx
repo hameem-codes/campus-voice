@@ -11,8 +11,8 @@ export default function StudentHomePage() {
     <RouteGuard allowedRoles={['student']}>
       <AppShell>
         <PageHeader
-          title="Student Dashboard"
-          subtitle="The latest verified notices and updates from your campus."
+          title="Dashboard"
+          depth={1}
         />
         <StudentHomeView />
       </AppShell>

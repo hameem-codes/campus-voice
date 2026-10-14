@@ -11,8 +11,8 @@ export default function StudentProfilePage() {
     <RouteGuard allowedRoles={['student']}>
       <AppShell>
         <PageHeader
-          title="Student Profile"
-          subtitle="Manage your academic credentials, cohort targeting, and notification delivery."
+          title="Profile"
+          depth={2}
         />
         <StudentProfileView />
       </AppShell>

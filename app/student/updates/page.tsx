@@ -11,8 +11,8 @@ export default function StudentUpdatesPage() {
     <RouteGuard allowedRoles={['student']}>
       <AppShell>
         <PageHeader
-          title="Campus Updates"
-          subtitle="All notices, examination schedules, and community alerts."
+          title="Updates"
+          depth={2}
         />
         <StudentUpdatesView />
       </AppShell>

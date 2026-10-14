@@ -242,8 +242,8 @@ export function GlobalSearchView() {
         </div>
       ) : query.trim() || selectedCategory !== 'All' || selectedDepartment !== 'All' ? (
         <EmptyState
-          title="No results found"
-          description={`We could not find any notices matching "${query}". Try searching with alternate keywords or clearing filters.`}
+          title="No matches"
+          description="Try a different filter or search term."
           icon={Search}
           actionLabel="Clear search"
           onAction={() => {
@@ -256,8 +256,8 @@ export function GlobalSearchView() {
       ) : (
         <div className="empty-state" style={{ minHeight: 200 }}>
           <Search width={24} height={24} style={{ color: 'var(--text-3)' }} />
-          <h3>Type a query to search</h3>
-          <p>Search across official examination schedules, fee deadlines, results, and campus events.</p>
+          <h3>Search notices and files</h3>
+          <p>Search by title, department, or keyword.</p>
         </div>
       )}
     </div>

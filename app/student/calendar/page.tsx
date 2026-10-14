@@ -11,8 +11,8 @@ export default function StudentCalendarPage() {
     <RouteGuard allowedRoles={['student']}>
       <AppShell>
         <PageHeader
-          title="Campus Calendar"
-          subtitle="Examination dates, payment windows, and academic milestones in one view."
+          title="Calendar"
+          depth={2}
         />
         <StudentCalendarView />
       </AppShell>

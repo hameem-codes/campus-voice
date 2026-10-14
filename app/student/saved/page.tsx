@@ -11,8 +11,8 @@ export default function StudentSavedPage() {
     <RouteGuard allowedRoles={['student']}>
       <AppShell>
         <PageHeader
-          title="Saved Shelf"
-          subtitle="Notices and official documentation pinned for quick retrieval."
+          title="Saved"
+          depth={2}
         />
         <StudentSavedView />
       </AppShell>

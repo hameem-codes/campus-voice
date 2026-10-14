@@ -16,12 +16,7 @@ import { Button } from '@/components/ui/Button'
 import { StatusChip } from '@/components/ui/StatusChip'
 import { Priority, UpdateStatus } from '@/types'
 
-const steps = [
-  ['Message', 'What should the campus know?'],
-  ['Scope', 'Choose a universal audience'],
-  ['Schedule', 'When should it go live?'],
-  ['Preview', 'Review before publishing'],
-]
+const steps = ['Content', 'Audience', 'Schedule', 'Review']
 
 export function AdminCreateView() {
   const router = useRouter()
@@ -115,7 +110,7 @@ export function AdminCreateView() {
     <div className="form-layout">
       {/* Stepper */}
       <div className="stepper">
-        {steps.map(([label, copy], index) => (
+        {steps.map((label, index) => (
           <button
             key={label}
             type="button"
@@ -129,7 +124,6 @@ export function AdminCreateView() {
             </span>
             <span className="step-copy">
               <strong>{label}</strong>
-              <span>{copy}</span>
             </span>
           </button>
         ))}

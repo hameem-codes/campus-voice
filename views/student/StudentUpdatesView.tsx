@@ -33,6 +33,7 @@ export function StudentUpdatesView() {
   const [sortBy, setSortBy] = useState<'newest' | 'priority' | 'eventDate'>('newest')
   const [filterPanelOpen, setFilterPanelOpen] = useState(false)
   const [unreadOnly, setUnreadOnly] = useState(false)
+  const [showAllCategories, setShowAllCategories] = useState(false)
 
   // Persisted Grid / List mode
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
@@ -393,16 +394,16 @@ export function StudentUpdatesView() {
         </div>
       )}
 
-      {/* Category quick bar */}
-      <div className="filter-row">
+      {/* Category quick bar (max 5 with overflow) */}
+      <div className="filter-row" style={{ alignItems: 'center', flexWrap: 'wrap' }}>
         <button
           type="button"
           className={`chip filter ${selectedCategory === 'All' ? 'active' : ''}`}
           onClick={() => setSelectedCategory('All')}
         >
-          All categories
+          All
         </button>
-        {categories.map((c) => (
+        {(showAllCategories ? categories : categories.slice(0, 5)).map((c) => (
           <button
             key={c.id}
             type="button"
@@ -412,6 +413,16 @@ export function StudentUpdatesView() {
             {c.name}
           </button>
         ))}
+        {categories.length > 5 && (
+          <button
+            type="button"
+            className="chip filter"
+            onClick={() => setShowAllCategories((v) => !v)}
+            style={{ color: 'var(--accent-indigo)', fontWeight: 500 }}
+          >
+            {showAllCategories ? 'Show less' : `+ ${categories.length - 5} more`}
+          </button>
+        )}
       </div>
 
       {/* 5. Updates Grid / List */}
@@ -427,9 +438,9 @@ export function StudentUpdatesView() {
         </div>
       ) : (
         <EmptyState
-          title="No updates match your filters"
-          description="Try broadening your search term or clearing active filters."
-          actionLabel="Clear all filters"
+          title="No matches"
+          description="Try a different filter."
+          actionLabel="Reset filters"
           onAction={clearAllFilters}
         />
       )}

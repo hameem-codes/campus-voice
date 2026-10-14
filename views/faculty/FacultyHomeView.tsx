@@ -1,14 +1,12 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   Plus,
   Inbox,
-  Clock3,
   ArrowUpRight,
-  TrendingUp,
 } from 'lucide-react'
 import { useStore } from '@/lib/store'
 import { Button } from '@/components/ui/Button'
@@ -17,6 +15,7 @@ import { RealChart } from '@/components/charts/RealChart'
 export function FacultyHomeView() {
   const router = useRouter()
   const { updates, currentUser } = useStore()
+  const [analyticsTab, setAnalyticsTab] = useState<'Views' | 'Completion'>('Views')
 
   const facultyUpdates = useMemo(() => {
     return updates.filter(
@@ -31,111 +30,99 @@ export function FacultyHomeView() {
   const publishedCount = facultyUpdates.filter((u) => u.status === 'Published').length
   const scheduledCount = facultyUpdates.filter((u) => u.status === 'Scheduled').length
 
-  const todayStr = useMemo(() => {
-    return new Date().toLocaleDateString('en-US', {
-      weekday: 'long',
-      month: 'long',
-      day: 'numeric',
-    })
-  }, [])
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {/* Hero Grid */}
-      <div className="hero-grid">
-        <section className="hero-card">
-          <div>
-            <div className="eyebrow">Faculty Workspace · {todayStr}</div>
-            <h2>Make the next campus signal clear.</h2>
-            <p>
-              {draftsCount} draft{draftsCount === 1 ? '' : 's'} ready for editing and{' '}
-              {scheduledCount} notice{scheduledCount === 1 ? '' : 's'} scheduled for dispatch.
-            </p>
-          </div>
-          <div className="hero-actions">
-            <Button
-              variant="primary"
-              icon={Plus}
-              onClick={() => router.push('/faculty/create')}
-            >
-              Create update
-            </Button>
-            <Button
-              variant="secondary"
-              icon={Inbox}
-              onClick={() => router.push('/faculty/updates')}
-            >
-              Review my updates
-            </Button>
-          </div>
-        </section>
-
-        <section className="urgent-card">
-          <div className="urgent-icon">
-            <Clock3 />
-          </div>
-          <div>
-            <h3>
-              {pendingCount === 0
-                ? 'Approval queue is clear.'
-                : `${pendingCount} update${pendingCount === 1 ? '' : 's'} awaiting review.`}
-            </h3>
-            <p>
-              Notices submitted from your department will go live once confirmed by administration.
-            </p>
-          </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      {/* Compact inline status bar */}
+      <div className="faculty-status-bar">
+        <div className="faculty-status-counts">
+          <span>{draftsCount} draft{draftsCount === 1 ? '' : 's'}</span>
+          <span className="faculty-status-sep">·</span>
+          <span>{scheduledCount} scheduled</span>
+          <span className="faculty-status-sep">·</span>
+          <Link
+            href="/faculty/updates"
+            className="details-link"
+            style={{ fontWeight: 500 }}
+          >
+            <span>{pendingCount} pending review</span>
+            <ArrowUpRight width={12} height={12} />
+          </Link>
+        </div>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <Button
-            variant="ghost"
-            icon={ArrowUpRight}
+            variant="secondary"
+            size="sm"
+            icon={Inbox}
             onClick={() => router.push('/faculty/updates')}
           >
-            Open updates
+            My notices
           </Button>
-        </section>
+          <Button
+            variant="primary"
+            size="sm"
+            icon={Plus}
+            onClick={() => router.push('/faculty/create')}
+          >
+            New notice
+          </Button>
+        </div>
       </div>
 
-      {/* Stats Grid from real store */}
-      <div className="stats-grid">
+      {/* Stats Grid with alternating sizes, no redundant descriptors */}
+      <div className="stats-grid-alternating">
         <div className="stat-card">
           <div className="stat-label">Published Notices</div>
           <div className="stat-value">{publishedCount}</div>
-          <div className="stat-note positive">Live in student feeds</div>
         </div>
         <div className="stat-card">
           <div className="stat-label">Average Reach</div>
           <div className="stat-value">78%</div>
-          <div className="stat-note positive">+8% this month</div>
         </div>
         <div className="stat-card">
           <div className="stat-label">Pending Approval</div>
           <div className="stat-value">{pendingCount}</div>
-          <div className="stat-note">In admin review</div>
         </div>
         <div className="stat-card">
           <div className="stat-label">Scheduled</div>
           <div className="stat-value">{scheduledCount}</div>
-          <div className="stat-note">Upcoming dispatches</div>
         </div>
       </div>
 
-      {/* Analytics Chart & Read Status section */}
-      <section>
-        <div className="section-heading">
-          <h2>Recent performance</h2>
+      {/* Analytics Card with Views / Completion Tabs */}
+      <section className="panel-card" style={{ padding: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 12 }}>
+          <div style={{ display: 'flex', gap: 4 }}>
+            <button
+              type="button"
+              className={`chip filter ${analyticsTab === 'Views' ? 'active' : ''}`}
+              onClick={() => setAnalyticsTab('Views')}
+            >
+              Views
+            </button>
+            <button
+              type="button"
+              className={`chip filter ${analyticsTab === 'Completion' ? 'active' : ''}`}
+              onClick={() => setAnalyticsTab('Completion')}
+            >
+              Completion
+            </button>
+          </div>
+
           <Link
             href="/faculty/analytics"
-            style={{ fontSize: 12, color: 'var(--text-3)', textDecoration: 'none' }}
+            className="details-link"
           >
-            View full analytics <ArrowUpRight width={13} height={13} style={{ verticalAlign: 'middle' }} />
+            <span>Analytics</span>
+            <ArrowUpRight width={12} height={12} />
           </Link>
         </div>
 
-        <div className="analytics-layout">
-          <RealChart title="Department Views Across Updates" />
-
-          {/* Read Status breakdown */}
-          <section className="panel-card">
-            <h2 className="panel-title">Cohort Completion Rate</h2>
+        {analyticsTab === 'Views' ? (
+          <div>
+            <RealChart title="Notice Views" />
+          </div>
+        ) : (
+          <div style={{ padding: '8px 0' }}>
             <div className="progress-row">
               <span>Students</span>
               <div className="progress-track">
@@ -160,20 +147,20 @@ export function FacultyHomeView() {
 
             <div
               style={{
-                marginTop: 20,
-                paddingTop: 16,
+                marginTop: 18,
+                paddingTop: 14,
                 borderTop: '1px solid var(--border)',
                 color: 'var(--text-2)',
                 fontSize: 12,
               }}
             >
-              Best performing notice:{' '}
+              Top performing notice:{' '}
               <strong style={{ color: 'var(--text-1)', fontWeight: 500 }}>
                 {facultyUpdates[0]?.title || 'Mid-semester examination schedule'}
               </strong>
             </div>
-          </section>
-        </div>
+          </div>
+        )}
       </section>
     </div>
   )

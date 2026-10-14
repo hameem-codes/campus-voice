@@ -80,27 +80,23 @@ export function AdminAnalyticsView() {
         </Button>
       </div>
 
-      {/* 4 Stats Cards */}
-      <div className="stats-grid">
+      {/* 4 Stats Cards (alternating sizes) */}
+      <div className="stats-grid-alternating">
         <div className="stat-card">
           <div className="stat-label">Total Notices</div>
           <div className="stat-value">{totalNotices}</div>
-          <div className="stat-note positive">All categories active</div>
         </div>
         <div className="stat-card">
-          <div className="stat-label">Total Delivery Reach</div>
+          <div className="stat-label">Delivery Reach</div>
           <div className="stat-value">99.4%</div>
-          <div className="stat-note positive">0 delivery dropouts</div>
         </div>
         <div className="stat-card">
           <div className="stat-label">Total Views</div>
           <div className="stat-value">{totalViews.toLocaleString()}</div>
-          <div className="stat-note positive">Active campus engagement</div>
         </div>
         <div className="stat-card">
           <div className="stat-label">Verified Reads</div>
           <div className="stat-value">{totalReads.toLocaleString()}</div>
-          <div className="stat-note">Students & staff confirmed</div>
         </div>
       </div>
 

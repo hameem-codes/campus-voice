@@ -23,14 +23,7 @@ import { StatusChip } from '@/components/ui/StatusChip'
 import { Modal } from '@/components/ui/Modal'
 import { Attachment, Priority, UpdateStatus, UpdateItem } from '@/types'
 
-const steps = [
-  ['Details', 'Title and message'],
-  ['Classify', 'Category and priority'],
-  ['Audience', 'Who should see it'],
-  ['Assets', 'Attachments and files'],
-  ['Schedule', 'Publish timing'],
-  ['Preview', 'Review and submit'],
-]
+const steps = ['Content', 'Category', 'Audience', 'Files', 'Schedule', 'Review']
 
 export function FacultyCreateView() {
   const router = useRouter()
@@ -307,7 +300,7 @@ export function FacultyCreateView() {
     <div className="form-layout">
       {/* Left Stepper */}
       <div className="stepper">
-        {steps.map(([label, copy], index) => (
+        {steps.map((label, index) => (
           <button
             key={label}
             type="button"
@@ -323,7 +316,6 @@ export function FacultyCreateView() {
             </span>
             <span className="step-copy">
               <strong>{label}</strong>
-              <span>{copy}</span>
             </span>
           </button>
         ))}

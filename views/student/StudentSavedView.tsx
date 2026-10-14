@@ -155,11 +155,11 @@ export function StudentSavedView() {
             </div>
           ) : (
             <EmptyState
-              title={searchQuery ? 'No matching saved updates' : 'Your saved shelf is empty'}
+              title={searchQuery ? 'No matches' : 'Nothing saved yet'}
               description={
                 searchQuery
-                  ? 'Try searching with a different term.'
-                  : 'Click the bookmark icon on any notice to save it for quick reference.'
+                  ? 'Try a different search term.'
+                  : 'Bookmark notices you want to come back to.'
               }
               icon={Bookmark}
               actionLabel={searchQuery ? 'Clear search' : 'Browse updates'}

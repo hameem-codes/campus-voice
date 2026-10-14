@@ -8,6 +8,7 @@ import { ToastContainer } from '@/components/ui/ToastContainer'
 import { useStore } from '@/lib/store'
 import { AlertTriangle, X, ArrowUpRight } from 'lucide-react'
 import Link from 'next/link'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -61,36 +62,46 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <Sidebar />
 
       <main className="main-panel">
-        {/* Sticky Orange Urgent Banner for Students */}
-        {role === 'student' && activeUrgentUpdates.length > 0 && (
-          <div className="sticky-urgent-banner" role="alert">
-            <div className="urgent-banner-inner">
-              <div className="urgent-banner-left">
-                <AlertTriangle width={16} height={16} className="urgent-banner-icon" />
-                <span>
-                  <strong>Urgent Notice:</strong> {activeUrgentUpdates[0].title}
-                </span>
+        {/* Sticky Orange Urgent Banner for Students with exit animation */}
+        <AnimatePresence>
+          {role === 'student' && activeUrgentUpdates.length > 0 && (
+            <motion.div
+              key={activeUrgentUpdates[0].id}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.18 }}
+              className="sticky-urgent-banner"
+              role="alert"
+            >
+              <div className="urgent-banner-inner">
+                <div className="urgent-banner-left">
+                  <AlertTriangle width={16} height={16} className="urgent-banner-icon" />
+                  <span>
+                    <strong>Urgent Notice:</strong> {activeUrgentUpdates[0].title}
+                  </span>
+                </div>
+                <div className="urgent-banner-actions">
+                  <Link
+                    href={`/student/updates/${activeUrgentUpdates[0].id}`}
+                    className="urgent-banner-link"
+                  >
+                    <span>Review now</span>
+                    <ArrowUpRight width={12} height={12} />
+                  </Link>
+                  <button
+                    type="button"
+                    className="urgent-banner-dismiss"
+                    aria-label="Dismiss this urgent banner"
+                    onClick={() => dismissUrgent(activeUrgentUpdates[0].id)}
+                  >
+                    <X width={14} height={14} />
+                  </button>
+                </div>
               </div>
-              <div className="urgent-banner-actions">
-                <Link
-                  href={`/student/updates/${activeUrgentUpdates[0].id}`}
-                  className="urgent-banner-link"
-                >
-                  <span>Review now</span>
-                  <ArrowUpRight width={12} height={12} />
-                </Link>
-                <button
-                  type="button"
-                  className="urgent-banner-dismiss"
-                  aria-label="Dismiss this urgent banner"
-                  onClick={() => dismissUrgent(activeUrgentUpdates[0].id)}
-                >
-                  <X width={14} height={14} />
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="page">{children}</div>
       </main>

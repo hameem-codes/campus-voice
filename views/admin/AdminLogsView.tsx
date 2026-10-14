@@ -73,7 +73,7 @@ export function AdminLogsView() {
           onClick={() => setActiveTab('Logs')}
         >
           <ListFilter width={15} height={15} />
-          <span>System Audit Log</span>
+          <span>Audit log</span>
           <span className="tab-pill">{auditLogs.length}</span>
         </button>
         <button
@@ -82,7 +82,7 @@ export function AdminLogsView() {
           onClick={() => setActiveTab('Settings')}
         >
           <Sliders width={15} height={15} />
-          <span>Operational Rules & Delivery Settings</span>
+          <span>Settings</span>
         </button>
       </div>
 

@@ -11,8 +11,8 @@ export default function AdminUsersPage() {
     <RouteGuard allowedRoles={['admin']}>
       <AppShell>
         <PageHeader
-          title="Campus Directory & Access"
-          subtitle="Manage student, faculty, and administrator accounts and invitations."
+          title="People"
+          depth={2}
         />
         <AdminUsersView />
       </AppShell>

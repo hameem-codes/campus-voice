@@ -7,17 +7,21 @@ import { PageHeader } from '@/components/layout/Header'
 import { RouteGuard } from '@/components/layout/RouteGuard'
 import { StudentDetailView } from '@/views/student/StudentDetailView'
 
+import { useStore } from '@/lib/store'
+
 export default function UpdateDetailPage() {
   const params = useParams()
   const id = Array.isArray(params.id) ? params.id[0] : params.id || ''
+  const { updates } = useStore()
+  const item = updates.find((u) => u.id === id)
 
   return (
     <RouteGuard allowedRoles={['student', 'faculty', 'admin']}>
       <AppShell>
         <PageHeader
-          title="Notice Details"
-          subtitle="Complete official message and verified attachments."
-          breadcrumb="Student workspace / Updates"
+          title={item?.title || 'Notice'}
+          breadcrumb="Dashboard / Updates"
+          depth={3}
         />
         <StudentDetailView updateId={id} />
       </AppShell>

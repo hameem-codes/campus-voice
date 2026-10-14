@@ -395,7 +395,9 @@ export function AdminUsersView() {
             ) : (
               <tr>
                 <td colSpan={7} style={{ textAlign: 'center', padding: '36px 16px', color: 'var(--text-3)' }}>
-                  No users found matching your criteria.
+                  {searchQuery || roleFilter !== 'All'
+                    ? 'No matches. Try a different filter.'
+                    : 'No one here yet. Invite your first user to get started.'}
                 </td>
               </tr>
             )}

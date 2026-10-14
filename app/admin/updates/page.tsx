@@ -11,8 +11,8 @@ export default function AdminUpdatesPage() {
     <RouteGuard allowedRoles={['admin']}>
       <AppShell>
         <PageHeader
-          title="Campus Notices & Approvals"
-          subtitle="Review, approve, and audit announcements across all departments."
+          title="Notices"
+          depth={2}
         />
         <AdminUpdatesView />
       </AppShell>
