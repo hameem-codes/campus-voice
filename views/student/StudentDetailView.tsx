@@ -175,7 +175,7 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
         </div>
 
         {/* Title */}
-        <h1 style={{ margin: 0, fontSize: 28, lineHeight: '36px', fontWeight: 500, letterSpacing: '-0.02em' }}>
+        <h1 style={{ margin: 0, fontSize: 28, lineHeight: '36px', fontWeight: 900, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>
           {item.title}
         </h1>
 
@@ -185,10 +185,10 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '12px 16px',
-            background: 'var(--bg-muted)',
-            borderRadius: 'var(--radius-control)',
-            border: '1px solid var(--border)',
+            padding: '14px 18px',
+            background: 'var(--neo-secondary)',
+            border: '2.5px solid #000',
+            boxShadow: '2px 2px 0 0 #000',
             flexWrap: 'wrap',
             gap: 12,
           }}
@@ -196,29 +196,29 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <Avatar initials={item.publisher.name.split(' ').map((w) => w[0]).slice(0, 2).join('')} />
             <div>
-              <div style={{ fontWeight: 500, fontSize: 13, color: 'var(--text-1)' }}>
+              <div style={{ fontWeight: 900, fontSize: 13, color: '#000', textTransform: 'uppercase' }}>
                 {item.publisher.name}
               </div>
-              <div style={{ fontSize: 11, color: 'var(--text-3)' }}>
+              <div style={{ fontSize: 11, color: '#000', fontWeight: 700, textTransform: 'uppercase' }}>
                 {item.publisher.role} · {item.department}
               </div>
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 12, color: 'var(--text-2)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20, fontSize: 12, color: '#000' }}>
             <div>
-              <span style={{ color: 'var(--text-3)', fontSize: 10, textTransform: 'uppercase', display: 'block' }}>
+              <span style={{ color: '#000', fontSize: 10, textTransform: 'uppercase', display: 'block', fontWeight: 900, letterSpacing: '0.04em' }}>
                 Published on
               </span>
-              <strong>{formatDisplayDate(item.postedAt)}</strong>
+              <strong style={{ fontWeight: 900, color: '#000' }}>{formatDisplayDate(item.postedAt)}</strong>
             </div>
 
             {item.eventDate && (
               <div>
-                <span style={{ color: 'var(--text-3)', fontSize: 10, textTransform: 'uppercase', display: 'block' }}>
+                <span style={{ color: '#000', fontSize: 10, textTransform: 'uppercase', display: 'block', fontWeight: 900, letterSpacing: '0.04em' }}>
                   Event / Due Date
                 </span>
-                <strong style={{ color: 'var(--accent-blue)' }}>
+                <strong style={{ color: '#000', fontWeight: 900 }}>
                   {formatDisplayDate(item.eventDate)}
                 </strong>
               </div>

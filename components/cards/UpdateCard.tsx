@@ -55,35 +55,17 @@ export function UpdateCard({
       style={{ cursor: href ? 'pointer' : 'default' }}
       aria-labelledby={`update-title-${item.id}`}
     >
-      {/* Top Bar */}
+      {/* Top Bar: Publisher info on left, Bookmark & Unread on right */}
       <div className="update-top">
         <div className="publisher">
           <Avatar initials={initials} />
-          <div>
-            <div className="publisher-name">{item.publisher.name}</div>
+          <div className="publisher-info">
+            <div className="publisher-name" title={item.publisher.name}>{item.publisher.name}</div>
             <div className="publisher-role">{item.publisher.role}</div>
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-          {/* Category Chip */}
-          <StatusChip tone="neutral">{item.category}</StatusChip>
-
-          {/* Priority Chip if Urgent */}
-          {item.priority === 'Urgent' && (
-            <StatusChip tone="orange">Urgent</StatusChip>
-          )}
-
-          {/* Publishing Status ONLY for faculty and admin */}
-          {role !== 'student' && (
-            <StatusChip tone={toneForStatus(item.status)}>{item.status}</StatusChip>
-          )}
-
-          {/* Audience chip only for faculty/admin */}
-          {role !== 'student' && item.audience.label && (
-            <StatusChip tone="neutral">{item.audience.label}</StatusChip>
-          )}
-
+        <div className="update-top-actions">
           {/* Unread dot / badge */}
           {isUnread && (
             <span
@@ -99,15 +81,37 @@ export function UpdateCard({
               type="button"
               aria-label={isSaved ? `Remove ${item.title} from saved` : `Save ${item.title}`}
               className={`bookmark ${isSaved ? 'saved' : ''}`}
+              title={isSaved ? 'Saved notice' : 'Save notice'}
               onClick={(e) => {
                 e.stopPropagation()
                 toggleSave(item.id)
               }}
             >
-              <Bookmark fill={isSaved ? 'currentColor' : 'none'} width={16} height={16} />
+              <Bookmark fill={isSaved ? '#000000' : 'none'} width={15} height={15} strokeWidth={2.4} />
             </button>
           )}
         </div>
+      </div>
+
+      {/* Dedicated Tags Bar: Clean horizontal alignment for Category, Priority, and Status */}
+      <div className="card-tags-row">
+        {/* Category Chip */}
+        <StatusChip tone="neutral">{item.category}</StatusChip>
+
+        {/* Priority Chip if Urgent */}
+        {item.priority === 'Urgent' && (
+          <StatusChip tone="orange">Urgent</StatusChip>
+        )}
+
+        {/* Publishing Status ONLY for faculty and admin */}
+        {role !== 'student' && (
+          <StatusChip tone={toneForStatus(item.status)}>{item.status}</StatusChip>
+        )}
+
+        {/* Audience chip only for faculty/admin */}
+        {role !== 'student' && item.audience.label && (
+          <StatusChip tone="neutral">{item.audience.label}</StatusChip>
+        )}
       </div>
 
       {/* Main Content */}

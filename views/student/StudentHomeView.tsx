@@ -216,18 +216,16 @@ export function StudentHomeView() {
                     onClick={() => router.push(`/student/updates/${item.id}`)}
                     style={{ cursor: 'pointer' }}
                   >
-                    <div className="deadline-date">
-                      {month} {day}
+                    <div className="deadline-date-box">
+                      <span className="deadline-date-month">{month}</span>
+                      <span className="deadline-date-day">{day}</span>
                     </div>
-                    <div>
+                    <div className="deadline-info">
                       <div className="deadline-title">{item.title}</div>
                       <div className="deadline-meta">{item.meta}</div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <StatusChip tone={item.tone}>
-                        {formatDisplayDate(item.date)}
-                      </StatusChip>
-                      <ArrowUpRight width={14} height={14} style={{ color: 'var(--text-3)' }} />
+                    <div className="deadline-arrow-btn">
+                      <ArrowUpRight width={14} height={14} style={{ color: '#000' }} />
                     </div>
                   </div>
                 )

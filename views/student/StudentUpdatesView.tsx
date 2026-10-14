@@ -243,12 +243,15 @@ export function StudentUpdatesView() {
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
               style={{
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--radius-control)',
-                background: 'var(--bg-surface)',
-                color: 'var(--text-1)',
-                padding: '4px 8px',
+                border: '2px solid #000',
+                boxShadow: '2px 2px 0 0 #000',
+                background: '#fff',
+                color: '#000',
+                padding: '5px 10px',
                 fontSize: 12,
+                fontWeight: 800,
+                textTransform: 'uppercase',
+                outline: 'none',
               }}
             >
               <option value="newest">Newest posted</option>

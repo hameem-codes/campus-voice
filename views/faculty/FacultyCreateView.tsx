@@ -23,7 +23,14 @@ import { StatusChip } from '@/components/ui/StatusChip'
 import { Modal } from '@/components/ui/Modal'
 import { Attachment, Priority, UpdateStatus, UpdateItem } from '@/types'
 
-const steps = ['Content', 'Category', 'Audience', 'Files', 'Schedule', 'Review']
+const steps = [
+  { label: 'Content', title: 'Notice Content & Title', sub: 'Write the primary announcement copy' },
+  { label: 'Category', title: 'Category & Priority', sub: 'Select tags and urgency level' },
+  { label: 'Audience', title: 'Target Audience', sub: 'Specify departments, cohorts, or campus-wide' },
+  { label: 'Files', title: 'Attachments & Documents', sub: 'Upload PDFs or image attachments' },
+  { label: 'Schedule', title: 'Publishing Schedule', sub: 'Choose when this notice becomes visible' },
+  { label: 'Review', title: 'Review & Submit', sub: 'Verify notice details before sending for approval' },
+]
 
 export function FacultyCreateView() {
   const router = useRouter()
@@ -300,9 +307,9 @@ export function FacultyCreateView() {
     <div className="form-layout">
       {/* Left Stepper */}
       <div className="stepper">
-        {steps.map((label, index) => (
+        {steps.map((s, index) => (
           <button
-            key={label}
+            key={s.label}
             type="button"
             className={`step ${index === step ? 'active' : ''} ${index < step ? 'done' : ''}`}
             onClick={() => {
@@ -315,7 +322,7 @@ export function FacultyCreateView() {
               {index < step ? <Check width={12} height={12} /> : index + 1}
             </span>
             <span className="step-copy">
-              <strong>{label}</strong>
+              <strong>{s.label}</strong>
             </span>
           </button>
         ))}
@@ -342,9 +349,9 @@ export function FacultyCreateView() {
       <section className="form-card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
           <div>
-            <h2>{currentStep[0]}</h2>
+            <h2>{currentStep.title}</h2>
             <p style={{ margin: '4px 0 0', color: 'var(--text-2)', fontSize: 12 }}>
-              {currentStep[1]} · Step {step + 1} of {steps.length}
+              {currentStep.sub} · Step {step + 1} of {steps.length}
             </p>
           </div>
           <StatusChip tone={step === 5 ? 'green' : 'blue'}>
