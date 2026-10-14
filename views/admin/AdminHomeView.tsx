@@ -111,7 +111,7 @@ export function AdminHomeView() {
                 display: 'inline-block',
               }}
             />
-            <h2 style={{ margin: 0, fontSize: 16, fontWeight: 600 }}>Needs your attention</h2>
+            <h2 style={{ margin: 0, fontSize: 16, fontWeight: 900, textTransform: 'uppercase' }}>Needs your attention</h2>
           </div>
           <Link
             href="/admin/updates"

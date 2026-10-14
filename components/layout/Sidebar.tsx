@@ -239,6 +239,59 @@ export function Sidebar() {
       {/* Spacer */}
       <div className="sidebar-spacer" />
 
+      {/* Neo-brutalist Promo Sticker Card */}
+      {!sidebarCollapsed && role === 'student' && (
+        <div
+          style={{
+            background: 'var(--neo-secondary)',
+            border: '2.5px solid #000',
+            boxShadow: 'var(--shadow-sm)',
+            padding: '12px 14px',
+            marginBottom: '4px',
+            color: '#000',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+            <div
+              style={{
+                width: 24,
+                height: 24,
+                borderRadius: '50%',
+                background: '#000',
+                color: '#FFD93D',
+                display: 'grid',
+                placeItems: 'center',
+              }}
+            >
+              <Sparkles width={13} height={13} />
+            </div>
+            <strong style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.04em', fontWeight: 900 }}>
+              Instant Alerts
+            </strong>
+          </div>
+          <p style={{ margin: '0 0 10px', fontSize: 11, fontWeight: 700, lineHeight: '15px' }}>
+            Never miss urgent exam or fee deadlines.
+          </p>
+          <Link
+            href="/student/profile"
+            style={{
+              display: 'block',
+              textAlign: 'center',
+              background: '#000',
+              color: '#fff',
+              padding: '6px 10px',
+              fontSize: 11,
+              fontWeight: 900,
+              textTransform: 'uppercase',
+              textDecoration: 'none',
+              letterSpacing: '0.05em',
+            }}
+          >
+            Turn on alerts →
+          </Link>
+        </div>
+      )}
+
       {/* Role Switcher panel (3-way: Student, Faculty, Admin) */}
       <div className="role-panel">
         {!sidebarCollapsed && <div className="role-caption">Switch role</div>}

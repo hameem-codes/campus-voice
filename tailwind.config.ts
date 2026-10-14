@@ -1,10 +1,17 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
-  content: ['./app/**/*.{js,ts,jsx,tsx,mdx}'],
+  content: [
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './views/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
   theme: {
     extend: {
       colors: {
+        'neo-accent': '#FF6B6B',
+        'neo-secondary': '#FFD93D',
+        'neo-muted': '#C4B5FD',
         canvas: 'var(--bg-canvas)',
         surface: 'var(--bg-surface)',
         muted: 'var(--bg-muted)',
@@ -19,6 +26,12 @@ const config: Config = {
         'chip-green-fg': 'var(--chip-green-fg)',
         'chip-blue-bg': 'var(--chip-blue-bg)',
         'chip-blue-fg': 'var(--chip-blue-fg)'
+      },
+      boxShadow: {
+        'neo-sm': '3px 3px 0px 0px #000',
+        'neo-md': '5px 5px 0px 0px #000',
+        'neo-lg': '8px 8px 0px 0px #000',
+        'neo-xl': '12px 12px 0px 0px #000',
       },
       borderRadius: {
         panel: 'var(--radius-panel)',

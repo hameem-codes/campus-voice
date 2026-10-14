@@ -137,20 +137,20 @@ export function RealChart({
                   return (
                     <div
                       style={{
-                        background: 'var(--bg-surface)',
-                        border: '1px solid var(--border)',
-                        borderRadius: 'var(--radius-control)',
+                        background: '#FFFDF5',
+                        border: '2.5px solid #000',
+                        borderRadius: '0',
                         padding: '8px 12px',
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
+                        boxShadow: '4px 4px 0 0 #000',
                       }}
                     >
-                      <div style={{ fontSize: 11, fontWeight: 500, color: 'var(--text-1)' }}>
+                      <div style={{ fontSize: 11, fontWeight: 900, color: '#000', textTransform: 'uppercase' }}>
                         {item.label}
                       </div>
-                      <div style={{ fontSize: 12, color: 'var(--accent-blue)', marginTop: 4 }}>
+                      <div style={{ fontSize: 12, color: '#000', marginTop: 4, fontWeight: 700 }}>
                         Views: <strong>{item.views.toLocaleString()}</strong>
                       </div>
-                      <div style={{ fontSize: 11, color: 'var(--chip-green-fg)' }}>
+                      <div style={{ fontSize: 11, color: '#000', fontWeight: 700 }}>
                         Reads: <strong>{item.reads.toLocaleString()}</strong>
                       </div>
                     </div>
@@ -159,11 +159,11 @@ export function RealChart({
                 return null
               }}
             />
-            <Bar dataKey="views" radius={[4, 4, 0, 0]} fill="var(--chip-blue-bg)">
+            <Bar dataKey="views" radius={[0, 0, 0, 0]} stroke="#000" strokeWidth={2}>
               {data.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={index === data.length - 1 ? 'var(--accent-blue)' : '#C8DDF2'}
+                  fill={index === data.length - 1 ? '#FF6B6B' : '#FFD93D'}
                 />
               ))}
             </Bar>

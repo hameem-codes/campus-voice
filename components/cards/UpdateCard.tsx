@@ -136,7 +136,7 @@ export function UpdateCard({
         {item.eventDate && (
           <>
             <span className="dot">·</span>
-            <span style={{ color: 'var(--accent-indigo)', fontWeight: 500 }}>
+            <span style={{ color: '#000', fontWeight: 700 }}>
               {formatDisplayDate(item.eventDate)}
             </span>
           </>

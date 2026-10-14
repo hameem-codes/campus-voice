@@ -3,12 +3,12 @@
 import React from 'react'
 
 const AVATAR_PALETTES = [
-  { bg: '#ECEDFB', fg: '#474AB0', border: '#D7D9F8' }, // Indigo tint
-  { bg: '#FBF0EA', fg: '#A34F25', border: '#F8D8C8' }, // Warm amber tint
-  { bg: '#EBF7EE', fg: '#2C6C38', border: '#CFE9D6' }, // Sage green tint
-  { bg: '#EBF3FE', fg: '#2A5C9A', border: '#D0E3FA' }, // Soft blue tint
-  { bg: '#F5EFFB', fg: '#663B8B', border: '#E4D5F5' }, // Muted violet tint
-  { bg: '#F7F4EC', fg: '#6E5D30', border: '#E8E1CE' }, // Warm sand tint
+  { bg: '#FFD93D', fg: '#000000', border: '#000000' }, // Vivid Yellow
+  { bg: '#FF6B6B', fg: '#000000', border: '#000000' }, // Hot Red
+  { bg: '#C4B5FD', fg: '#000000', border: '#000000' }, // Soft Violet
+  { bg: '#9BCB8B', fg: '#000000', border: '#000000' }, // Sage Green
+  { bg: '#7FB7E6', fg: '#000000', border: '#000000' }, // Sky Blue
+  { bg: '#FFA07A', fg: '#000000', border: '#000000' }, // Tangerine
 ]
 
 function getAvatarPalette(seed: string) {

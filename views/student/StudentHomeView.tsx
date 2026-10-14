@@ -98,7 +98,7 @@ export function StudentHomeView() {
           <div>
             <div className="eyebrow">{todayStr}</div>
             <h2>{greeting}</h2>
-            <p style={{ fontSize: 12, color: 'var(--text-3)', margin: '4px 0 0' }}>
+            <p style={{ fontSize: 13, color: '#000', margin: '6px 0 0', fontWeight: 700 }}>
               {currentUser.department} · {currentUser.year || 'Undergraduate'} · Section {currentUser.section || 'A'}
             </p>
           </div>
@@ -132,8 +132,9 @@ export function StudentHomeView() {
                 alignItems: 'center',
                 gap: 6,
                 fontSize: 12,
-                fontWeight: 600,
-                color: 'var(--accent-orange)',
+                fontWeight: 900,
+                color: '#000',
+                textTransform: 'uppercase',
               }}
             >
               <span
@@ -141,7 +142,7 @@ export function StudentHomeView() {
                   width: 8,
                   height: 8,
                   borderRadius: '50%',
-                  background: 'var(--accent-orange)',
+                  background: '#000',
                   display: 'inline-block',
                 }}
               />
@@ -150,13 +151,13 @@ export function StudentHomeView() {
           </div>
 
           <div style={{ margin: '14px 0' }}>
-            <h3 style={{ margin: 0, fontSize: 18, fontWeight: 500, color: 'var(--text-1)' }}>
-              {attentionItems.length > 0 ? `${attentionItems.length} urgent` : '0 urgent'}
+            <h3 style={{ margin: 0, fontSize: 20, fontWeight: 900, color: '#000', textTransform: 'uppercase' }}>
+              {attentionItems.length > 0 ? `${attentionItems.length} Needs Attention` : '0 Needs Attention'}
             </h3>
           </div>
 
           <Button
-            variant="ghost"
+            variant="secondary"
             icon={ArrowUpRight}
             onClick={() => router.push('/student/updates?filter=attention')}
           >

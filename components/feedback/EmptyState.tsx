@@ -22,7 +22,7 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className="empty-state">
-      <Icon width={28} height={28} style={{ color: 'var(--text-3)' }} />
+      <Icon width={32} height={32} style={{ color: '#000', strokeWidth: 2.2 }} />
       <div>
         <h3>{title}</h3>
         {description && <p>{description}</p>}

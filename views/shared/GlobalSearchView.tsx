@@ -146,13 +146,13 @@ export function GlobalSearchView() {
           gap: 12,
           flexWrap: 'wrap',
           padding: '12px 16px',
-          background: 'var(--bg-muted)',
-          borderRadius: 'var(--radius-control)',
-          border: '1px solid var(--border)',
+          background: 'var(--neo-secondary)',
+          border: '2.5px solid var(--border)',
+          boxShadow: 'var(--shadow-sm)',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--text-2)' }}>
-          <Filter width={14} height={14} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#000', fontWeight: 900, textTransform: 'uppercase' }}>
+          <Filter width={15} height={15} strokeWidth={2.5} />
           <strong>Filters:</strong>
         </div>
 
@@ -161,11 +161,13 @@ export function GlobalSearchView() {
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
           style={{
-            border: '1px solid var(--border)',
-            borderRadius: 'var(--radius-control)',
+            border: '2px solid #000',
+            boxShadow: '2px 2px 0 0 #000',
             padding: '4px 8px',
             fontSize: 12,
-            background: 'var(--bg-surface)',
+            fontWeight: 700,
+            background: '#fff',
+            color: '#000',
           }}
         >
           <option value="All">All Categories</option>
@@ -181,11 +183,13 @@ export function GlobalSearchView() {
           value={selectedDepartment}
           onChange={(e) => setSelectedDepartment(e.target.value)}
           style={{
-            border: '1px solid var(--border)',
-            borderRadius: 'var(--radius-control)',
+            border: '2px solid #000',
+            boxShadow: '2px 2px 0 0 #000',
             padding: '4px 8px',
             fontSize: 12,
-            background: 'var(--bg-surface)',
+            fontWeight: 700,
+            background: '#fff',
+            color: '#000',
           }}
         >
           <option value="All">All Departments</option>
@@ -201,11 +205,13 @@ export function GlobalSearchView() {
           value={selectedPriority}
           onChange={(e) => setSelectedPriority(e.target.value as any)}
           style={{
-            border: '1px solid var(--border)',
-            borderRadius: 'var(--radius-control)',
+            border: '2px solid #000',
+            boxShadow: '2px 2px 0 0 #000',
             padding: '4px 8px',
             fontSize: 12,
-            background: 'var(--bg-surface)',
+            fontWeight: 700,
+            background: '#fff',
+            color: '#000',
           }}
         >
           <option value="All">All Priorities</option>
