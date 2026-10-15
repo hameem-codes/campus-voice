@@ -271,11 +271,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           document.documentElement.classList.remove('dark')
         }
 
-        // Locale (Phase 4.9)
-        const storedLocale = localStorage.getItem('cv_locale_v1') as Locale | null
-        if (storedLocale === 'en' || storedLocale === 'hi') {
-          setLocaleState(storedLocale)
+        // Locale
+        const storedLocale = localStorage.getItem('cv_locale_v1')
+        if (storedLocale && storedLocale !== 'en') {
+          localStorage.setItem('cv_locale_v1', 'en')
         }
+        setLocaleState('en')
 
         // Current user
         const storedRole = localStorage.getItem('cv_role_v1') as Role

@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { Bell, Search, Plus, Settings2, Sparkles } from 'lucide-react'
 import { Role } from '@/types'
 import { Button } from '@/components/ui/Button'
-import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { NotificationPopover } from './NotificationPopover'
 import { useStore } from '@/lib/store'
 
@@ -49,8 +48,6 @@ export function PageHeader({ title, subtitle, breadcrumb, action, depth }: PageH
       </div>
 
       <div className="header-actions">
-        {/* Language Switcher (Phase 4.9) */}
-        <LanguageSwitcher compact />
 
         {/* Notifications Bell */}
         <div className="bell-wrap">

@@ -24,7 +24,6 @@ import { useStore } from '@/lib/store'
 import { Avatar } from '@/components/ui/Avatar'
 import { Button } from '@/components/ui/Button'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import {
   getBrowserNotificationPermission,
   requestBrowserNotification,
@@ -520,15 +519,10 @@ export function StudentProfileView() {
             </Button>
           </form>
 
-          {/* Regional & Appearance */}
+          {/* Appearance & Theme */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div className="nav-section-label" style={{ padding: 0 }}>
-              Regional & Theme
-            </div>
-
-            <div className="field">
-              <label style={{ display: 'block', marginBottom: 6 }}>Interface Language</label>
-              <LanguageSwitcher />
+              Theme Settings
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 8 }}>

@@ -13,8 +13,7 @@
 - **Live Cross-Role Synchronization**: Features a `BroadcastChannel` event bus with `localStorage` fallback. When Faculty submits or Admin approves a notice, student windows instantly receive the banner, toast alert, and notification badge without reloading.
 - **Demo Tools Floating Drawer**: Built-in control panel (`DemoTools.tsx`) allowing judges to simulate urgent notices, switch roles instantly, jump dates forward, or reset demo data.
 - **Pre-Login Landing Page (`/`)**: Neo-brutalist public showcase explaining the problem of scattered announcements, the 3-role solution, interactive feature cards, and 1-click demo entry.
-- **Deterministic AI Summary**: "Summarize" trigger on long notices that extracts executive takeaways with honest "AI summary (demo)" labeling, isolated behind `api.getAiSummary()`.
-- **Bilingual Scaffolding (English & Hindi)**: Dynamic language toggle in the top header and student profile, localized across navigation and action buttons.
+- **Clean English UI & Accessible Typography**: Accessible Neo-brutalist layouts, high contrast typography, and unified labels across navigation and action buttons.
 - **Calendar Export**: Generates and downloads RFC-compliant `.ics` files for individual notices and entire monthly schedules.
 - **PWA Ready**: Web app manifest (`public/manifest.json`), touch icons, and theme color tags.
 
@@ -58,13 +57,13 @@ campusvoice/
 │   ├── charts/           # RealChart (Recharts with mathematical agreement)
 │   ├── demo/             # DemoTools floating widget (Simulate alert, Jump date)
 │   ├── layout/           # AppShell, Sidebar, Header, MobileBar, RouteGuard
-│   └── ui/               # Button (Next Link support), Modal, StatusChip, LanguageSwitcher
+│   └── ui/               # Button (Next Link support), Modal, StatusChip, ConfirmDialog
 ├── data/
 │   └── mockData.ts       # Seed notices with dynamic relative date math
 ├── lib/
 │   ├── api.ts            # Mock service layer isolating frontend from backend
 │   ├── date.ts           # Unified local-timezone date helpers & .ics generator
-│   ├── i18n.ts           # English & Hindi translation dictionaries
+│   ├── i18n.ts           # Centralized string and label translations dictionary
 │   ├── notifications.ts  # Browser Notification API integration
 │   ├── selectors.ts      # Single source of truth for all counts and filters
 │   └── store.tsx         # Unified Zustand/Context store with cross-tab broadcast
