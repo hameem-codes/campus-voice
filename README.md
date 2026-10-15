@@ -11,7 +11,6 @@
 - **Zero Count Discrepancies**: Every badge, counter, tab number, and chart total is computed from a centralized single source of truth (`lib/selectors.ts`). Home urgent counters, sidebar badges, and feed tabs agree with mathematical precision.
 - **Offline Self-Hosted Typography**: Self-hosts `@fontsource/space-grotesk` with zero runtime reliance on Google Fonts CDN. Builds and renders completely offline.
 - **Live Cross-Role Synchronization**: Features a `BroadcastChannel` event bus with `localStorage` fallback. When Faculty submits or Admin approves a notice, student windows instantly receive the banner, toast alert, and notification badge without reloading.
-- **Demo Tools Floating Drawer**: Built-in control panel (`DemoTools.tsx`) allowing judges to simulate urgent notices, switch roles instantly, jump dates forward, or reset demo data.
 - **Pre-Login Landing Page (`/`)**: Neo-brutalist public showcase explaining the problem of scattered announcements, the 3-role solution, interactive feature cards, and 1-click demo entry.
 - **Clean English UI & Accessible Typography**: Accessible Neo-brutalist layouts, high contrast typography, and unified labels across navigation and action buttons.
 - **Calendar Export**: Generates and downloads RFC-compliant `.ics` files for individual notices and entire monthly schedules.
@@ -55,7 +54,6 @@ campusvoice/
 ├── components/
 │   ├── cards/            # UpdateCard & dedicated AdminUpdateCard
 │   ├── charts/           # RealChart (Recharts with mathematical agreement)
-│   ├── demo/             # DemoTools floating widget (Simulate alert, Jump date)
 │   ├── layout/           # AppShell, Sidebar, Header, MobileBar, RouteGuard
 │   └── ui/               # Button (Next Link support), Modal, StatusChip, ConfirmDialog
 ├── data/

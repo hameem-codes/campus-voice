@@ -112,7 +112,6 @@ export function Sidebar() {
     toggleSidebar,
     theme,
     toggleTheme,
-    simulateNewUrgentUpdate,
     logout,
     addToast,
     t,

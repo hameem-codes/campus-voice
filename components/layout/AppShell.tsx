@@ -9,7 +9,6 @@ import { useStore } from '@/lib/store'
 import { AlertTriangle, X, ArrowUpRight } from 'lucide-react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { DemoTools } from '@/components/demo/DemoTools'
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -98,7 +97,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </main>
 
       <MobileBar />
-      <DemoTools />
     </div>
   )
 }
