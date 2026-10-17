@@ -958,11 +958,7 @@ export function StudentDashboardFeedView({
                 type="button"
                 onClick={() => {
                   setActiveNav('My Activity')
-                  addToast({
-                    type: 'info',
-                    title: 'My Activity Filter',
-                    message: 'Showing notices you have liked, RSVP’d to, or saved.',
-                  })
+                  router.push('/student/activity')
                 }}
                 style={{
                   width: '100%',

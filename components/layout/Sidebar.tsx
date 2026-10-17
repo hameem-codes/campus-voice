@@ -48,6 +48,7 @@ const roleNavMap: Record<Role, NavItemDef[]> = {
   student: [
     { href: '/student', label: 'Announcements', icon: Megaphone },
     { href: '/student/explore', label: 'Explore Campus', icon: Compass },
+    { href: '/student/activity', label: 'My Activity', icon: UserRound },
     { href: '/student/calendar', label: 'Calendar', icon: CalendarDays },
     { href: '/student/saved', label: 'Saved', icon: Bookmark, badgeKey: 'saved' },
     { href: '/student/profile', label: 'Profile', icon: UserRound },

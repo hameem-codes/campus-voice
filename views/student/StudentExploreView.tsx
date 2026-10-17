@@ -808,7 +808,7 @@ export function StudentExploreView() {
               {/* 3. My Activity */}
               <button
                 type="button"
-                onClick={() => router.push('/student')}
+                onClick={() => router.push('/student/activity')}
                 style={{
                   width: '100%',
                   display: 'flex',
