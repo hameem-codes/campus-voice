@@ -19,10 +19,11 @@ export function PinnedNoticeBar() {
       role="region"
       aria-label="Pinned notice reminder"
       style={{
-        background: '#FFD93D', // high-contrast neo-brutalist yellow (bg-yellow-300)
-        border: '2px solid #000000',
-        boxShadow: '3px 3px 0px 0px #000000',
-        padding: '10px 14px',
+        background: '#D5FF38', // Acid lime from Style Guide
+        border: '2px solid var(--border)',
+        borderRadius: 'var(--radius-pill)',
+        boxShadow: '2px 2px 0px 0px var(--border)',
+        padding: '10px 18px',
         marginBottom: '16px',
         display: 'flex',
         alignItems: 'center',

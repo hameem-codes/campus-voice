@@ -220,7 +220,7 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
       </div>
 
       {/* Main Notice Card */}
-      <article className="panel-card" style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <article className="panel-card" style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 24, borderRadius: 'var(--radius-card)', border: '2px solid var(--border)', boxShadow: 'var(--shadow-sm)', background: '#FFFFFF' }}>
         {/* Header tags */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
@@ -243,13 +243,13 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: 6,
-                  background: '#ffffff',
-                  border: '2px solid #000000',
-                  boxShadow: '2px 2px 0 0 #000000',
-                  padding: '3px 8px',
+                  background: 'var(--accent-lime)',
+                  border: '1.5px solid var(--border)',
+                  borderRadius: 'var(--radius-pill)',
+                  padding: '4px 10px',
                   fontSize: 11,
-                  fontWeight: 800,
-                  color: '#000000',
+                  fontWeight: 900,
+                  color: '#111111',
                   textTransform: 'uppercase',
                   letterSpacing: '0.02em',
                 }}
@@ -260,56 +260,58 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
             )}
           </div>
 
-          <div style={{ fontSize: 12, color: 'var(--text-3)' }}>
+          <div style={{ fontSize: 12, color: 'var(--text-3)', fontWeight: 600 }}>
             Posted {formatRelativeTime(item.postedAt)}
           </div>
         </div>
 
         {/* Title */}
-        <h1 style={{ margin: 0, fontSize: 28, lineHeight: '36px', fontWeight: 900, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>
+        <h1 style={{ margin: 0, fontSize: 32, lineHeight: '38px', fontWeight: 900, letterSpacing: '-0.02em', textTransform: 'uppercase', color: 'var(--text-1)' }}>
           {item.title}
         </h1>
 
-        {/* Publisher Info Banner */}
+        {/* Publisher Info Banner (Dark Pill Card from Style Guide) */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '14px 18px',
-            background: 'var(--neo-secondary)',
-            border: '2.5px solid #000',
-            boxShadow: '2px 2px 0 0 #000',
+            padding: '16px 20px',
+            background: '#111111',
+            borderRadius: 'var(--radius-control)',
+            border: '2px solid var(--border)',
+            boxShadow: 'var(--shadow-sm)',
             flexWrap: 'wrap',
             gap: 12,
+            color: '#FFFFFF',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <Avatar initials={item.publisher.name.split(' ').map((w) => w[0]).slice(0, 2).join('')} />
             <div>
-              <div style={{ fontWeight: 900, fontSize: 13, color: '#000', textTransform: 'uppercase' }}>
+              <div style={{ fontWeight: 800, fontSize: 13, color: '#FFFFFF', textTransform: 'uppercase' }}>
                 {item.publisher.name}
               </div>
-              <div style={{ fontSize: 11, color: '#000', fontWeight: 700, textTransform: 'uppercase' }}>
+              <div style={{ fontSize: 11, color: '#A3A3A3', fontWeight: 700, textTransform: 'uppercase' }}>
                 {item.publisher.role} · {item.department}
               </div>
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20, fontSize: 12, color: '#000' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20, fontSize: 12, color: '#FFFFFF' }}>
             <div>
-              <span style={{ color: '#000', fontSize: 10, textTransform: 'uppercase', display: 'block', fontWeight: 900, letterSpacing: '0.04em' }}>
+              <span style={{ color: '#A3A3A3', fontSize: 10, textTransform: 'uppercase', display: 'block', fontWeight: 800, letterSpacing: '0.04em' }}>
                 Published on
               </span>
-              <strong style={{ fontWeight: 900, color: '#000' }}>{formatDisplayDate(item.postedAt)}</strong>
+              <strong style={{ fontWeight: 900, color: 'var(--accent-lime)' }}>{formatDisplayDate(item.postedAt)}</strong>
             </div>
 
             {item.eventDate && (
               <div>
-                <span style={{ color: '#000', fontSize: 10, textTransform: 'uppercase', display: 'block', fontWeight: 900, letterSpacing: '0.04em' }}>
+                <span style={{ color: '#A3A3A3', fontSize: 10, textTransform: 'uppercase', display: 'block', fontWeight: 800, letterSpacing: '0.04em' }}>
                   Event / Due Date
                 </span>
-                <strong style={{ color: '#000', fontWeight: 900 }}>
+                <strong style={{ color: 'var(--accent-lime)', fontWeight: 900 }}>
                   {formatDisplayDate(item.eventDate)}
                 </strong>
               </div>
@@ -317,13 +319,14 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
           </div>
         </div>
 
-        {/* AI Executive Summary Box (Phase 4.8) */}
+        {/* AI Executive Summary Box (Acid Lime from Style Guide) */}
         {summaryData && (
           <div
             style={{
-              background: '#fef08a',
-              border: '3px solid #000',
-              boxShadow: '4px 4px 0 0 #000',
+              background: 'var(--accent-lime)',
+              border: '2px solid var(--border)',
+              borderRadius: 'var(--radius-control)',
+              boxShadow: '2px 2px 0 0 var(--border)',
               padding: '20px 24px',
               display: 'flex',
               flexDirection: 'column',

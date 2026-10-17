@@ -129,40 +129,102 @@ export function AdminUpdatesView() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {/* 1. Status Tabs */}
-      <div className="tabs">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      {/* Editorial Header - Panel 4 */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+        <div>
+          <h1
+            style={{
+              fontFamily: 'var(--font-heading)',
+              fontSize: 'clamp(26px, 3.2vw, 36px)',
+              fontWeight: 900,
+              letterSpacing: '-0.03em',
+              margin: '0 0 4px',
+              color: 'var(--text-1)',
+            }}
+          >
+            Approval Queue
+          </h1>
+          <p style={{ margin: 0, color: 'var(--text-2)', fontSize: 14 }}>
+            Review and approve pending notices across all campus departments.
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <button
+            type="button"
+            className="action-btn-primary"
+            style={{ fontSize: 13, padding: '10px 20px', display: 'flex', alignItems: 'center', gap: 8 }}
+            onClick={() => router.push('/admin/create')}
+          >
+            <Plus width={16} height={16} />
+            <span>Create Notice</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Pill Navigation Tabs */}
+      <div className="pill-nav-container" style={{ alignSelf: 'flex-start', margin: 0 }}>
         {(['Approval queue', 'Published', 'Scheduled', 'Archived', 'Rejected'] as const)
           .filter((tab) => tab === 'Approval queue' || tab === 'Published' || counts[tab] > 0)
           .map((tab) => (
             <button
               key={tab}
               type="button"
-              className={`tab ${activeTab === tab ? 'active' : ''}`}
+              className={`pill-nav-btn ${activeTab === tab ? 'active' : ''}`}
               onClick={() => {
                 setActiveTab(tab)
                 setSelectedIds([])
               }}
             >
-              {tab}
-              <span className={`tab-pill ${tab === 'Approval queue' && counts[tab] > 0 ? 'orange' : ''}`}>
+              <span>{tab}</span>
+              <span
+                style={{
+                  padding: '2px 8px',
+                  borderRadius: 9999,
+                  fontSize: 11,
+                  fontWeight: 900,
+                  background: activeTab === tab ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.2)',
+                  color: activeTab === tab ? '#111111' : '#ffffff',
+                }}
+              >
                 {counts[tab]}
               </span>
             </button>
           ))}
       </div>
 
-      {/* 2. Toolbar */}
-      <div className="toolbar">
-        <div className="toolbar-left">
-          <div className="toolbar-search">
-            <Search />
+      {/* Filter and Search Bar - Pill Controls */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 12,
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: '1 1 320px', maxWidth: 640 }}>
+          <div
+            style={{
+              position: 'relative',
+              flex: 1,
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <Search
+              width={16}
+              height={16}
+              style={{ position: 'absolute', left: 16, color: 'var(--text-3)', pointerEvents: 'none' }}
+            />
             <input
-              className="search-input"
+              className="pill-search-input"
               aria-label="Search notices"
-              placeholder="Search by title, publisher, or department"
+              placeholder="Search by title, author, or department..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              style={{ paddingLeft: 42, background: 'var(--bg-surface)' }}
             />
           </div>
 
@@ -171,11 +233,15 @@ export function AdminUpdatesView() {
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
             style={{
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-control)',
-              padding: '6px 10px',
-              fontSize: 12,
+              border: '2px solid var(--border)',
+              borderRadius: '9999px',
+              padding: '10px 16px',
+              fontSize: 13,
+              fontWeight: 700,
               background: 'var(--bg-surface)',
+              color: 'var(--text-1)',
+              cursor: 'pointer',
+              outline: 'none',
             }}
           >
             <option value="All">All Categories</option>
@@ -185,53 +251,84 @@ export function AdminUpdatesView() {
               </option>
             ))}
           </select>
-
-          {/* Bulk Action Buttons if rows selected */}
-          {selectedIds.length > 0 && activeTab === 'Approval queue' && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Button variant="primary" size="sm" icon={Check} onClick={handleBulkApprove}>
-                Approve ({selectedIds.length})
-              </Button>
-              <Button variant="danger" size="sm" icon={X} onClick={handleBulkReject}>
-                Reject
-              </Button>
-            </div>
-          )}
         </div>
 
-        <div className="toolbar-right">
-          <Button
-            variant="primary"
-            icon={Plus}
-            onClick={() => router.push('/admin/create')}
-          >
-            New notice
-          </Button>
-        </div>
+        {/* Bulk Action Controls */}
+        {selectedIds.length > 0 && activeTab === 'Approval queue' && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <button
+              type="button"
+              onClick={handleBulkApprove}
+              style={{
+                background: 'var(--accent-lime)',
+                color: '#111111',
+                border: '2px solid var(--border)',
+                borderRadius: '9999px',
+                padding: '8px 16px',
+                fontWeight: 800,
+                fontSize: 12,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+              }}
+            >
+              <Check width={14} height={14} />
+              <span>Approve ({selectedIds.length})</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleBulkReject}
+              style={{
+                background: '#ffffff',
+                color: 'var(--accent-pink)',
+                border: '2px solid var(--border)',
+                borderRadius: '9999px',
+                padding: '8px 16px',
+                fontWeight: 800,
+                fontSize: 12,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+              }}
+            >
+              <X width={14} height={14} />
+              <span>Reject Selected</span>
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* 3. Table */}
-      <div className="table-wrap">
-        <table className="data-table">
+      {/* Styled Neo-Brutalist Rounded Data Table */}
+      <div
+        style={{
+          background: 'var(--bg-surface)',
+          borderRadius: 24,
+          border: '2px solid var(--border)',
+          overflow: 'hidden',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
+        }}
+      >
+        <table className="data-table" style={{ margin: 0 }}>
           <thead>
-            <tr>
-              <th style={{ width: 40 }}>
+            <tr style={{ background: 'rgba(0,0,0,0.02)' }}>
+              <th style={{ width: 44, paddingLeft: 18 }}>
                 <input
                   type="checkbox"
-                  checked={
-                    filteredList.length > 0 && selectedIds.length === filteredList.length
-                  }
+                  checked={filteredList.length > 0 && selectedIds.length === filteredList.length}
                   onChange={toggleSelectAll}
                   aria-label="Select all"
+                  style={{ width: 16, height: 16, cursor: 'pointer', accentColor: '#111111' }}
                 />
               </th>
-              <th>Notice Title</th>
+              <th>Title</th>
+              <th>Author / Dept</th>
               <th>Category</th>
               <th>Audience</th>
+              <th>Submitted</th>
               <th>Status</th>
-              <th>Author / Dept</th>
-              <th>Date</th>
-              <th style={{ textAlign: 'right' }}>Actions</th>
+              <th style={{ textAlign: 'right', paddingRight: 18 }}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -240,70 +337,81 @@ export function AdminUpdatesView() {
                 const isSelected = selectedIds.includes(item.id)
 
                 return (
-                  <tr key={item.id} style={{ background: isSelected ? 'var(--bg-muted)' : undefined }}>
-                    <td>
+                  <tr key={item.id} style={{ background: isSelected ? 'rgba(213,255,56,0.1)' : undefined }}>
+                    <td style={{ paddingLeft: 18 }}>
                       <input
                         type="checkbox"
                         checked={isSelected}
                         onChange={() => toggleSelect(item.id)}
                         aria-label={`Select ${item.title}`}
+                        style={{ width: 16, height: 16, cursor: 'pointer', accentColor: '#111111' }}
                       />
                     </td>
                     <td>
-                      <strong>{item.title}</strong>
-                      <div style={{ color: 'var(--text-3)', fontSize: 11, marginTop: 2 }}>
-                        Priority: {item.priority}
-                      </div>
+                      <div style={{ fontWeight: 800, fontSize: 13, color: 'var(--text-1)' }}>{item.title}</div>
                       {item.rejectionReason && (
-                        <div style={{ color: 'var(--accent-red)', fontSize: 11, marginTop: 2 }}>
+                        <div style={{ color: 'var(--accent-pink)', fontSize: 11, marginTop: 2, fontWeight: 700 }}>
                           Reason: "{item.rejectionReason}"
                         </div>
                       )}
                     </td>
-                    <td>
-                      <span className="chip neutral">{item.category}</span>
+                    <td style={{ fontSize: 12 }}>
+                      <div style={{ fontWeight: 700 }}>{item.publisher.name}</div>
+                      <div style={{ color: 'var(--text-3)', fontSize: 11 }}>{item.department}</div>
                     </td>
-                    <td style={{ fontSize: 11 }}>
-                      {item.audience.isUniversal ? 'Campus-wide' : item.audience.label || 'Targeted'}
+                    <td>
+                      <span className="chip neutral" style={{ borderRadius: '9999px', fontSize: 11, fontWeight: 700 }}>
+                        {item.category}
+                      </span>
+                    </td>
+                    <td style={{ fontSize: 12, color: 'var(--text-2)' }}>
+                      {item.audience.isUniversal ? 'All Students' : item.audience.label || 'Targeted'}
+                    </td>
+                    <td style={{ fontSize: 12, color: 'var(--text-2)' }}>
+                      {formatDisplayDate(item.postedAt)}
                     </td>
                     <td>
                       <StatusChip tone={toneForStatus(item.status)}>{item.status}</StatusChip>
                     </td>
-                    <td style={{ fontSize: 11 }}>
-                      <div>{item.publisher.name}</div>
-                      <div style={{ color: 'var(--text-3)' }}>{item.department}</div>
-                    </td>
-                    <td style={{ fontSize: 11, color: 'var(--text-2)' }}>
-                      {formatDisplayDate(item.postedAt)}
-                    </td>
-                    <td>
-                      <div className="table-actions">
-                        {/* Approval buttons if Pending */}
+                    <td style={{ paddingRight: 18 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6 }}>
                         {item.status === 'Pending' && (
                           <>
                             <button
                               type="button"
-                              className="icon-button"
-                              style={{ color: 'var(--chip-green-fg)' }}
-                              aria-label={`Approve ${item.title}`}
                               onClick={() => approveUpdate(item.id)}
-                              title="Approve and Publish"
+                              style={{
+                                background: 'var(--accent-lime)',
+                                color: '#111111',
+                                border: '1.5px solid var(--border)',
+                                borderRadius: '9999px',
+                                padding: '4px 14px',
+                                fontWeight: 800,
+                                fontSize: 11,
+                                cursor: 'pointer',
+                              }}
                             >
-                              <Check width={15} height={15} />
+                              Approve
                             </button>
                             <button
                               type="button"
-                              className="icon-button"
-                              style={{ color: 'var(--accent-red)' }}
-                              aria-label={`Reject ${item.title}`}
                               onClick={() => {
                                 setRejectionTarget(item)
                                 setRejectionReason('')
                                 setRejectionError('')
                               }}
-                              title="Reject notice"
+                              style={{
+                                background: '#ffffff',
+                                color: 'var(--accent-pink)',
+                                border: '1.5px solid var(--border)',
+                                borderRadius: '9999px',
+                                padding: '4px 14px',
+                                fontWeight: 800,
+                                fontSize: 11,
+                                cursor: 'pointer',
+                              }}
                             >
-                              <X width={15} height={15} />
+                              Reject
                             </button>
                           </>
                         )}

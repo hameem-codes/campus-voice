@@ -1,7 +1,8 @@
 'use client'
 
 import React, { useState, useMemo, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
+import Link from 'next/link'
+import { useSearchParams, useRouter } from 'next/navigation'
 import {
   Search,
   Filter,
@@ -14,10 +15,10 @@ import {
 import { useStore } from '@/lib/store'
 import { UpdateCard } from '@/components/cards/UpdateCard'
 import { Button } from '@/components/ui/Button'
-import { matchesStudentAudience } from '@/lib/selectors'
 import { EmptyState } from '@/components/feedback/EmptyState'
 
 export function StudentUpdatesView() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const initialFilterParam = searchParams.get('filter')
   const {
@@ -119,7 +120,6 @@ export function StudentUpdatesView() {
     sortBy,
   ])
 
-  // Active filters count for chip row
   const activeFilters = useMemo(() => {
     const list: { key: string; label: string; onClear: () => void }[] = []
     if (selectedCategory !== 'All') {
@@ -170,127 +170,200 @@ export function StudentUpdatesView() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {/* 1. Status Tabs (All / Unread / Urgent) with active states and live badges */}
-      <div className="tabs">
-        <button
-          type="button"
-          className={`tab ${activeTab === 'All' ? 'active' : ''}`}
-          onClick={() => setActiveTab('All')}
-        >
-          All updates
-          <span className="tab-pill">{studentAllCount}</span>
-        </button>
-        <button
-          type="button"
-          className={`tab ${activeTab === 'Unread' ? 'active' : ''}`}
-          onClick={() => setActiveTab('Unread')}
-        >
-          Unread
-          {studentUnreadCount > 0 && <span className="tab-pill">{studentUnreadCount}</span>}
-        </button>
-        <button
-          type="button"
-          className={`tab ${activeTab === 'Urgent' ? 'active' : ''}`}
-          onClick={() => setActiveTab('Urgent')}
-        >
-          Urgent
-          {urgentUnreadCount > 0 && <span className="tab-pill orange">{urgentUnreadCount}</span>}
-        </button>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      {/* 1. Floating Pill Navigation Bar (from Style Guide) */}
+      <div style={{ display: 'flex', justifyContent: 'center', margin: '4px 0 12px' }}>
+        <nav className="pill-nav-container" aria-label="Student Navigation">
+          <Link
+            href="/student/updates"
+            className="pill-nav-btn active"
+          >
+            Announcements
+          </Link>
+          <Link
+            href="/student/calendar"
+            className="pill-nav-btn"
+          >
+            Explore Campus
+          </Link>
+          <Link
+            href="/student/saved"
+            className="pill-nav-btn"
+          >
+            My Activity
+          </Link>
+        </nav>
       </div>
 
-      {/* 2. Toolbar */}
-      <div className="toolbar">
-        <div className="toolbar-left">
-          <div className="toolbar-search">
-            <Search />
-            <input
-              className="search-input"
-              aria-label="Search updates"
-              placeholder="Search by title, department, or keyword"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
+      {/* 2. Editorial Page Heading (from Style Guide) */}
+      <div style={{ margin: '4px 0 8px' }}>
+        <h1
+          style={{
+            fontSize: 'clamp(32px, 5vw, 44px)',
+            lineHeight: 1.1,
+            fontWeight: 900,
+            letterSpacing: '-0.03em',
+            margin: '0 0 8px',
+            color: '#111111',
+          }}
+        >
+          What's the buzz on campus?
+        </h1>
+        <p
+          style={{
+            fontSize: '15px',
+            lineHeight: '22px',
+            color: 'var(--text-3)',
+            fontWeight: 600,
+            margin: 0,
+            maxWidth: 600,
+          }}
+        >
+          Fresh notices, all in one place. No more digging through group chats.
+        </p>
+      </div>
 
+      {/* 3. Full-Width Pill Search Input (from Style Guide) */}
+      <div className="pill-search-wrap">
+        <Search
+          width={18}
+          height={18}
+          style={{ position: 'absolute', left: 20, top: 17, color: 'var(--text-3)', strokeWidth: 2.4 }}
+        />
+        <input
+          className="pill-search-input"
+          aria-label="Search events, placements, announcements"
+          placeholder="Search events, placements, announcements..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        {searchQuery && (
+          <button
+            type="button"
+            onClick={() => setSearchQuery('')}
+            style={{
+              position: 'absolute',
+              right: 18,
+              top: 15,
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              color: 'var(--text-3)',
+              padding: 4,
+            }}
+            aria-label="Clear search query"
+          >
+            <X width={16} height={16} />
+          </button>
+        )}
+      </div>
+
+      {/* 4. Category Filter Chips (#all, #events, etc. from Style Guide) */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            className={`chip filter ${selectedCategory === 'All' ? 'active' : ''}`}
+            onClick={() => setSelectedCategory('All')}
+          >
+            #all
+          </button>
+          {(showAllCategories ? categories : categories.slice(0, 5)).map((c) => {
+            const tag = `#${c.name.toLowerCase()}`
+            const isActive = selectedCategory === c.name
+            return (
+              <button
+                key={c.id}
+                type="button"
+                className={`chip filter ${isActive ? 'active' : ''}`}
+                onClick={() => setSelectedCategory(c.name)}
+              >
+                {tag}
+              </button>
+            )
+          })}
+          {categories.length > 5 && (
+            <button
+              type="button"
+              className="chip filter"
+              onClick={() => setShowAllCategories((v) => !v)}
+              style={{ fontWeight: 700 }}
+            >
+              {showAllCategories ? 'Show less' : `+${categories.length - 5} more`}
+            </button>
+          )}
+        </div>
+
+        {/* Toolbar Right: Filter Drawer Toggle, Sort, View Switcher */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <Button
             variant={filterPanelOpen ? 'primary' : 'secondary'}
             icon={Filter}
             onClick={() => setFilterPanelOpen((v) => !v)}
             aria-expanded={filterPanelOpen}
+            size="sm"
           >
             Filters
             {activeFilters.length > 0 && ` (${activeFilters.length})`}
           </Button>
 
-          <Button
-            variant="ghost"
-            icon={CheckCheck}
-            onClick={markAllUpdatesRead}
-            title="Mark all targeted updates as read"
-          >
-            Mark all read
-          </Button>
-        </div>
-
-        <div className="toolbar-right">
           {/* Sort Dropdown */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ fontSize: 11, color: 'var(--text-3)' }}>Sort:</span>
-            <select
-              aria-label="Sort updates"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
-              style={{
-                border: '2px solid #000',
-                boxShadow: '2px 2px 0 0 #000',
-                background: '#fff',
-                color: '#000',
-                padding: '5px 10px',
-                fontSize: 12,
-                fontWeight: 800,
-                textTransform: 'uppercase',
-                outline: 'none',
-              }}
-            >
-              <option value="newest">Newest posted</option>
-              <option value="priority">Urgent priority first</option>
-              <option value="eventDate">Event / Deadline date</option>
-            </select>
-          </div>
-
-          <span style={{ color: 'var(--text-3)', fontSize: 12 }}>
-            {filteredUpdates.length} notice{filteredUpdates.length === 1 ? '' : 's'}
-          </span>
+          <select
+            aria-label="Sort updates"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as any)}
+            style={{
+              border: '2px solid var(--border)',
+              borderRadius: 'var(--radius-pill)',
+              background: '#FFFFFF',
+              color: '#111111',
+              padding: '6px 14px',
+              fontSize: '12px',
+              fontWeight: 800,
+              outline: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            <option value="newest">Newest</option>
+            <option value="priority">Urgent first</option>
+            <option value="eventDate">Event Date</option>
+          </select>
 
           {/* Grid / List toggle */}
-          <div className="toggle-group">
+          <div className="toggle-group" style={{ display: 'flex', gap: 4 }}>
             <button
               type="button"
               className={`icon-button ${viewMode === 'grid' ? 'active' : ''}`}
               aria-label="Grid view"
               onClick={() => setAndPersistViewMode('grid')}
+              style={{
+                borderRadius: 'var(--radius-control)',
+                background: viewMode === 'grid' ? 'var(--accent-lime)' : '#FFFFFF',
+              }}
             >
-              <Grid2X2 />
+              <Grid2X2 width={15} height={15} />
             </button>
             <button
               type="button"
               className={`icon-button ${viewMode === 'list' ? 'active' : ''}`}
               aria-label="List view"
               onClick={() => setAndPersistViewMode('list')}
+              style={{
+                borderRadius: 'var(--radius-control)',
+                background: viewMode === 'list' ? 'var(--accent-lime)' : '#FFFFFF',
+              }}
             >
-              <LayoutList />
+              <LayoutList width={15} height={15} />
             </button>
           </div>
         </div>
       </div>
 
-      {/* 3. Filter Drawer / Panel */}
+      {/* 5. Filter Drawer / Panel */}
       {filterPanelOpen && (
         <div
-          className="panel-card"
+          className="styleguide-panel"
           style={{
-            background: 'var(--bg-muted)',
             display: 'flex',
             flexDirection: 'column',
             gap: 16,
@@ -309,27 +382,12 @@ export function StudentUpdatesView() {
 
           <div className="form-grid">
             <div className="field">
-              <label htmlFor="filter-category">Category</label>
-              <select
-                id="filter-category"
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-              >
-                <option value="All">All Categories</option>
-                {categories.map((c) => (
-                  <option key={c.id} value={c.name}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="field">
               <label htmlFor="filter-department">Department</label>
               <select
                 id="filter-department"
                 value={selectedDepartment}
                 onChange={(e) => setSelectedDepartment(e.target.value)}
+                style={{ borderRadius: 'var(--radius-control)', border: '2px solid var(--border)', padding: '8px 12px' }}
               >
                 <option value="All">All Departments</option>
                 {departments.map((d) => (
@@ -346,6 +404,7 @@ export function StudentUpdatesView() {
                 id="filter-priority"
                 value={selectedPriority}
                 onChange={(e) => setSelectedPriority(e.target.value as any)}
+                style={{ borderRadius: 'var(--radius-control)', border: '2px solid var(--border)', padding: '8px 12px' }}
               >
                 <option value="All">All Priorities</option>
                 <option value="Urgent">Urgent Only</option>
@@ -369,21 +428,21 @@ export function StudentUpdatesView() {
         </div>
       )}
 
-      {/* 4. Active filter chips */}
+      {/* 6. Active Filter Pills */}
       {activeFilters.length > 0 && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 11, color: 'var(--text-3)' }}>Active filters:</span>
+          <span style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 700 }}>Active:</span>
           {activeFilters.map((af) => (
             <span
               key={af.key}
               className="chip filter active"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
             >
               <span>{af.label}</span>
               <button
                 type="button"
                 onClick={af.onClear}
-                style={{ border: 0, background: 'transparent', padding: 0, cursor: 'pointer', display: 'grid' }}
+                style={{ border: 0, background: 'transparent', padding: 0, cursor: 'pointer', display: 'grid', color: 'inherit' }}
                 aria-label={`Remove filter ${af.label}`}
               >
                 <X width={12} height={12} />
@@ -396,52 +455,61 @@ export function StudentUpdatesView() {
         </div>
       )}
 
-      {/* Category quick bar (max 5 with overflow) */}
-      <div className="filter-row" style={{ alignItems: 'center', flexWrap: 'wrap' }}>
-        <button
-          type="button"
-          className={`chip filter ${selectedCategory === 'All' ? 'active' : ''}`}
-          onClick={() => setSelectedCategory('All')}
-        >
-          All
-        </button>
-        {(showAllCategories ? categories : categories.slice(0, 5)).map((c) => (
-          <button
-            key={c.id}
-            type="button"
-            className={`chip filter ${selectedCategory === c.name ? 'active' : ''}`}
-            onClick={() => setSelectedCategory(c.name)}
-          >
-            {c.name}
-          </button>
-        ))}
-        {categories.length > 5 && (
-          <button
-            type="button"
-            className="chip filter"
-            onClick={() => setShowAllCategories((v) => !v)}
-            style={{ color: 'var(--accent-indigo)', fontWeight: 500 }}
-          >
-            {showAllCategories ? 'Show less' : `+ ${categories.length - 5} more`}
-          </button>
-        )}
-      </div>
-
-      {/* 5. Updates Grid / List */}
+      {/* 7. Asymmetric Bento Grid / List View */}
       {filteredUpdates.length > 0 ? (
-        <div className={viewMode === 'grid' ? 'card-grid' : 'update-list'}>
-          {filteredUpdates.map((item) => (
-            <UpdateCard
-              key={item.id}
-              item={item}
-              compact={viewMode === 'list'}
-            />
-          ))}
-        </div>
+        viewMode === 'grid' ? (
+          <div>
+            {filteredUpdates.length >= 4 ? (
+              <>
+                {/* Asymmetric Row 1: Large Black Card (1.3fr) + Black Card (1fr) */}
+                <div className="asymmetric-feed-grid">
+                  <UpdateCard item={filteredUpdates[0]} variant="black" />
+                  <UpdateCard item={filteredUpdates[1]} variant="black" />
+                </div>
+
+                {/* Asymmetric Row 2: Electric Blue Card (1fr) + Acid Lime Card (1.3fr) */}
+                <div
+                  className="asymmetric-feed-grid"
+                  style={{ gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.3fr)' }}
+                >
+                  <UpdateCard item={filteredUpdates[2]} variant="blue" />
+                  <UpdateCard item={filteredUpdates[3]} variant="lime" />
+                </div>
+
+                {/* Row 3+: Remaining cards in 3-column responsive grid */}
+                {filteredUpdates.length > 4 && (
+                  <div className="card-grid">
+                    {filteredUpdates.slice(4).map((item, index) => {
+                      // Alternate variants intentionally for visual rhythm
+                      const v = index % 3 === 0 ? 'white' : index % 3 === 1 ? 'black' : 'blue'
+                      return <UpdateCard key={item.id} item={item} variant={v} />
+                    })}
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="card-grid">
+                {filteredUpdates.map((item, idx) => (
+                  <UpdateCard
+                    key={item.id}
+                    item={item}
+                    variant={idx === 1 ? 'blue' : idx === 2 ? 'lime' : 'black'}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="update-list" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {filteredUpdates.map((item) => (
+              <UpdateCard key={item.id} item={item} compact />
+            ))}
+          </div>
+        )
       ) : (
         <EmptyState
-          title="No matches"
-          description="Try a different filter."
+          title="No notices found"
+          description="Try adjusting your category or search query."
           actionLabel="Reset filters"
           onAction={clearAllFilters}
         />

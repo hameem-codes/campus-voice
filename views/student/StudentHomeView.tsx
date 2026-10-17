@@ -75,38 +75,66 @@ export function StudentHomeView() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {/* 1. Hero Grid */}
+      {/* 1. Floating Pill Navigation Bar (from Style Guide) */}
+      <div style={{ display: 'flex', justifyContent: 'center', margin: '4px 0 8px' }}>
+        <nav className="pill-nav-container" aria-label="Student Navigation">
+          <Link
+            href="/student/updates"
+            className="pill-nav-btn active"
+          >
+            Announcements
+          </Link>
+          <Link
+            href="/student/calendar"
+            className="pill-nav-btn"
+          >
+            Explore Campus
+          </Link>
+          <Link
+            href="/student/saved"
+            className="pill-nav-btn"
+          >
+            My Activity
+          </Link>
+        </nav>
+      </div>
+
+      {/* 2. Hero Grid */}
       <div className="hero-grid">
-        <section className="hero-card">
+        <section className="hero-card" style={{ background: 'var(--accent-lime)', borderRadius: 'var(--radius-card)', border: '2px solid var(--border)' }}>
           <div>
-            <div className="eyebrow">{todayStr}</div>
-            <h2>{greeting}</h2>
-            <p style={{ fontSize: 13, color: '#000', margin: '6px 0 0', fontWeight: 700 }}>
+            <div className="eyebrow" style={{ color: '#111111' }}>{todayStr}</div>
+            <h2 style={{ fontSize: '32px', fontWeight: 900, letterSpacing: '-0.03em', color: '#111111', margin: '8px 0 0' }}>{greeting}</h2>
+            <p style={{ fontSize: 13, color: '#111111', margin: '6px 0 0', fontWeight: 700 }}>
               {currentUser.department} · {currentUser.year || 'Undergraduate'} · Section {currentUser.section || 'A'}
             </p>
           </div>
-          <div className="hero-actions">
-            <Button
-              variant="primary"
-              icon={Inbox}
+          <div className="hero-actions" style={{ display: 'flex', gap: 8, marginTop: 20 }}>
+            <button
+              type="button"
+              className="btn"
               onClick={() => router.push('/student/updates')}
+              style={{ background: '#111111', color: '#FFFFFF', borderColor: '#111111', borderRadius: 'var(--radius-control)' }}
             >
-              View all updates
-            </Button>
-            <Button
-              variant="secondary"
-              icon={CalendarDays}
+              <Inbox width={16} height={16} />
+              <span>View all updates</span>
+            </button>
+            <button
+              type="button"
+              className="btn secondary"
               onClick={() => router.push('/student/calendar')}
+              style={{ borderRadius: 'var(--radius-control)' }}
             >
-              Open calendar
-            </Button>
+              <CalendarDays width={16} height={16} />
+              <span>Open calendar</span>
+            </button>
           </div>
         </section>
 
-        {/* Attention Summary Card (Resolves 1.2, 2.3, 2.4) */}
-        <section className="urgent-card">
+        {/* Attention Summary Card (Bubblegum Pink from Style Guide) */}
+        <section className="urgent-card" style={{ background: 'var(--accent-pink)', borderRadius: 'var(--radius-card)', border: '2px solid var(--border)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div className="urgent-icon">
+            <div className="urgent-icon" style={{ borderRadius: '50%', background: '#FFFFFF', border: '2px solid var(--border)' }}>
               {attentionItems.length > 0 ? <CircleAlert /> : <CheckCircle2 />}
             </div>
             <span
@@ -116,13 +144,14 @@ export function StudentHomeView() {
                 gap: 6,
                 fontSize: 11,
                 fontWeight: 900,
-                color: '#000',
+                color: '#111111',
                 textTransform: 'uppercase',
                 letterSpacing: '0.06em',
                 background: '#fff',
-                padding: '2px 8px',
-                border: '1.5px solid #000',
-                boxShadow: '2px 2px 0 0 #000',
+                padding: '3px 10px',
+                borderRadius: 'var(--radius-pill)',
+                border: '1.5px solid var(--border)',
+                boxShadow: '1.5px 1.5px 0 0 var(--border)',
               }}
             >
               <span
@@ -130,8 +159,8 @@ export function StudentHomeView() {
                   width: 8,
                   height: 8,
                   borderRadius: '50%',
-                  background: urgentUnreadCount > 0 ? 'var(--neo-accent)' : 'var(--accent-green)',
-                  border: '1px solid #000',
+                  background: urgentUnreadCount > 0 ? '#FF4757' : 'var(--accent-lime)',
+                  border: '1px solid var(--border)',
                   display: 'inline-block',
                 }}
               />
@@ -140,10 +169,10 @@ export function StudentHomeView() {
           </div>
 
           <div style={{ margin: '14px 0' }}>
-            <h3 style={{ margin: 0, fontSize: 18, fontWeight: 900, color: '#000', textTransform: 'uppercase' }}>
+            <h3 style={{ margin: 0, fontSize: 18, fontWeight: 900, color: '#111111', textTransform: 'uppercase' }}>
               {formatAttentionHeadline(attentionItems.length)}
             </h3>
-            <p style={{ margin: '6px 0 0', fontSize: 12, lineHeight: '16px', fontWeight: 700, color: '#000' }}>
+            <p style={{ margin: '6px 0 0', fontSize: 12, lineHeight: '17px', fontWeight: 600, color: '#111111' }}>
               {attentionItems.length > 0
                 ? `${formatPlural(urgentUnreadCount, 'urgent notice')} unread · ${formatPlural(
                     attentionItems.length - urgentUnreadCount,
@@ -153,13 +182,15 @@ export function StudentHomeView() {
             </p>
           </div>
 
-          <Button
-            variant="secondary"
-            icon={ArrowUpRight}
+          <button
+            type="button"
+            className="btn secondary"
             onClick={() => router.push('/student/updates?filter=attention')}
+            style={{ borderRadius: 'var(--radius-control)' }}
           >
-            Review attention list
-          </Button>
+            <ArrowUpRight width={16} height={16} />
+            <span>Review attention list</span>
+          </button>
         </section>
       </div>
 
@@ -174,9 +205,10 @@ export function StudentHomeView() {
         <div
           style={{
             background: 'var(--bg-surface)',
-            border: '2.5px solid var(--border)',
+            border: '2px solid var(--border)',
+            borderRadius: 'var(--radius-card)',
             boxShadow: 'var(--shadow-sm)',
-            padding: '14px 18px',
+            padding: '16px 20px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -186,22 +218,24 @@ export function StudentHomeView() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div
               style={{
-                width: 38,
-                height: 38,
-                background: 'var(--neo-secondary)',
-                border: '2px solid #000',
+                width: 40,
+                height: 40,
+                borderRadius: '50%',
+                background: 'var(--accent-lime)',
+                border: '2px solid var(--border)',
                 display: 'grid',
                 placeItems: 'center',
-                boxShadow: '2px 2px 0 0 #000',
+                boxShadow: '1.5px 1.5px 0 0 var(--border)',
+                color: '#111111',
               }}
             >
               <BellRing width={18} height={18} />
             </div>
             <div>
-              <div style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 900, textTransform: 'uppercase' }}>
+              <div style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 800, textTransform: 'uppercase' }}>
                 Since you last visited
               </div>
-              <div style={{ fontSize: 13, fontWeight: 900, color: '#000', marginTop: 2, textTransform: 'uppercase' }}>
+              <div style={{ fontSize: 13, fontWeight: 900, color: 'var(--text-1)', marginTop: 2, textTransform: 'uppercase' }}>
                 {unreadFeedCount} new · {urgentUnreadCount} urgent · {upcomingDeadlines.length} due soon
               </div>
             </div>
@@ -210,7 +244,7 @@ export function StudentHomeView() {
           <Link
             href="/student/updates?filter=unread"
             className="details-link"
-            style={{ fontSize: 11 }}
+            style={{ fontSize: 11, borderRadius: 'var(--radius-pill)' }}
           >
             <span>Catch up</span>
             <ArrowUpRight width={12} height={12} />
@@ -220,9 +254,10 @@ export function StudentHomeView() {
         <div
           style={{
             background: 'var(--bg-surface)',
-            border: '2.5px solid var(--border)',
+            border: '2px solid var(--border)',
+            borderRadius: 'var(--radius-card)',
             boxShadow: 'var(--shadow-sm)',
-            padding: '14px 18px',
+            padding: '16px 20px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -232,22 +267,24 @@ export function StudentHomeView() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div
               style={{
-                width: 38,
-                height: 38,
-                background: 'var(--accent-green)',
-                border: '2px solid #000',
+                width: 40,
+                height: 40,
+                borderRadius: '50%',
+                background: 'var(--accent-pink)',
+                border: '2px solid var(--border)',
                 display: 'grid',
                 placeItems: 'center',
-                boxShadow: '2px 2px 0 0 #000',
+                boxShadow: '1.5px 1.5px 0 0 var(--border)',
+                color: '#111111',
               }}
             >
               <Flame width={18} height={18} />
             </div>
             <div>
-              <div style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 900, textTransform: 'uppercase' }}>
+              <div style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 800, textTransform: 'uppercase' }}>
                 Weekly Read Streak
               </div>
-              <div style={{ fontSize: 13, fontWeight: 900, color: '#000', marginTop: 2, textTransform: 'uppercase' }}>
+              <div style={{ fontSize: 13, fontWeight: 900, color: 'var(--text-1)', marginTop: 2, textTransform: 'uppercase' }}>
                 {streakReadCount} of {streakTotalGoal} read this week
               </div>
             </div>
@@ -257,10 +294,12 @@ export function StudentHomeView() {
             style={{
               fontSize: 11,
               fontWeight: 900,
-              background: 'var(--neo-secondary)',
-              padding: '2px 8px',
-              border: '1.5px solid #000',
-              boxShadow: '1.5px 1.5px 0 0 #000',
+              background: 'var(--accent-lime)',
+              color: '#111111',
+              padding: '3px 10px',
+              borderRadius: 'var(--radius-pill)',
+              border: '1.5px solid var(--border)',
+              boxShadow: '1.5px 1.5px 0 0 var(--border)',
               textTransform: 'uppercase',
             }}
           >

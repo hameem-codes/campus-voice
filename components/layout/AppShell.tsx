@@ -66,10 +66,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             >
               <div className="urgent-banner-inner">
                 <div className="urgent-banner-left">
-                  <AlertTriangle width={16} height={16} className="urgent-banner-icon" />
-                  <span>
-                    <strong>Urgent Notice:</strong> {urgentUnreadUpdates[0].title}
+                  <span className="urgent-tag">
+                    <AlertTriangle width={15} height={15} className="urgent-banner-icon" />
+                    <span>⚠️ URGENT &gt;</span>
                   </span>
+                  <span>{urgentUnreadUpdates[0].title}</span>
                 </div>
                 <div className="urgent-banner-actions">
                   <Link

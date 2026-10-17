@@ -98,50 +98,85 @@ export function StudentSavedView() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {/* Tabs: Updates and Documents */}
-      <div className="tabs">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      {/* Header */}
+      <div>
+        <h1
+          style={{
+            fontFamily: 'var(--font-heading)',
+            fontSize: 'clamp(26px, 3.2vw, 36px)',
+            fontWeight: 900,
+            letterSpacing: '-0.03em',
+            margin: '0 0 4px',
+            color: 'var(--text-1)',
+          }}
+        >
+          Saved Shelf
+        </h1>
+        <p style={{ margin: 0, color: 'var(--text-2)', fontSize: 14 }}>
+          Access your bookmarked circulars, examination timetables, and download attachments.
+        </p>
+      </div>
+
+      {/* Pill Navigation Tabs */}
+      <div className="pill-nav-container" style={{ alignSelf: 'flex-start', margin: 0 }}>
         <button
           type="button"
-          className={`tab ${activeTab === 'Updates' ? 'active' : ''}`}
+          className={`pill-nav-btn ${activeTab === 'Updates' ? 'active' : ''}`}
           onClick={() => setActiveTab('Updates')}
         >
-          <Bookmark width={16} height={16} />
+          <Bookmark width={14} height={14} />
           <span>Saved Updates</span>
-          <span className="tab-pill">{savedUpdates.length}</span>
+          <span
+            style={{
+              padding: '2px 8px',
+              borderRadius: 9999,
+              fontSize: 11,
+              fontWeight: 900,
+              background: activeTab === 'Updates' ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.2)',
+              color: activeTab === 'Updates' ? '#111111' : '#ffffff',
+            }}
+          >
+            {savedUpdates.length}
+          </span>
         </button>
         <button
           type="button"
-          className={`tab ${activeTab === 'Documents' ? 'active' : ''}`}
+          className={`pill-nav-btn ${activeTab === 'Documents' ? 'active' : ''}`}
           onClick={() => setActiveTab('Documents')}
         >
-          <FileText width={16} height={16} />
+          <FileText width={14} height={14} />
           <span>Saved Documents</span>
-          <span className="tab-pill">{savedDocuments.length}</span>
+          <span
+            style={{
+              padding: '2px 8px',
+              borderRadius: 9999,
+              fontSize: 11,
+              fontWeight: 900,
+              background: activeTab === 'Documents' ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.2)',
+              color: activeTab === 'Documents' ? '#111111' : '#ffffff',
+            }}
+          >
+            {savedDocuments.length}
+          </span>
         </button>
       </div>
 
-      {/* Toolbar: Search within saved */}
-      <div className="toolbar">
-        <div className="toolbar-left">
-          <div className="toolbar-search">
-            <Search />
-            <input
-              className="search-input"
-              aria-label="Search within saved"
-              placeholder={`Search ${activeTab.toLowerCase()}...`}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="toolbar-right">
-          <span style={{ fontSize: 12, color: 'var(--text-3)' }}>
-            {activeTab === 'Updates'
-              ? `${filteredUpdates.length} saved notice${filteredUpdates.length === 1 ? '' : 's'}`
-              : `${savedDocuments.length} attached file${savedDocuments.length === 1 ? '' : 's'}`}
-          </span>
-        </div>
+      {/* Pill Search Input */}
+      <div style={{ position: 'relative', maxWidth: 480 }}>
+        <Search
+          width={16}
+          height={16}
+          style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-3)', pointerEvents: 'none' }}
+        />
+        <input
+          className="pill-search-input"
+          aria-label="Search within saved"
+          placeholder={`Search ${activeTab.toLowerCase()}...`}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{ paddingLeft: 42, background: 'var(--bg-surface)' }}
+        />
       </div>
 
       {/* Tab 1: Updates */}
