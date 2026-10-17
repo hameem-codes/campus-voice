@@ -115,21 +115,23 @@ export function StudentHomeView() {
                 alignItems: 'center',
                 gap: 6,
                 fontSize: 11,
-                fontWeight: 600,
-                color: 'var(--chip-urgent-fg)',
-                background: '#ffffff',
-                padding: '3px 8px',
-                border: '1px solid var(--chip-urgent-border)',
-                borderRadius: 'var(--radius-chip)',
-                boxShadow: 'var(--shadow-sm)',
+                fontWeight: 900,
+                color: '#000',
+                textTransform: 'uppercase',
+                letterSpacing: '0.06em',
+                background: '#fff',
+                padding: '2px 8px',
+                border: '1.5px solid #000',
+                boxShadow: '2px 2px 0 0 #000',
               }}
             >
               <span
                 style={{
-                  width: 7,
-                  height: 7,
+                  width: 8,
+                  height: 8,
                   borderRadius: '50%',
-                  background: urgentUnreadCount > 0 ? 'var(--urgent)' : 'var(--accent-green)',
+                  background: urgentUnreadCount > 0 ? 'var(--neo-accent)' : 'var(--accent-green)',
+                  border: '1px solid #000',
                   display: 'inline-block',
                 }}
               />
@@ -138,10 +140,10 @@ export function StudentHomeView() {
           </div>
 
           <div style={{ margin: '14px 0' }}>
-            <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: 'var(--chip-urgent-fg)' }}>
+            <h3 style={{ margin: 0, fontSize: 18, fontWeight: 900, color: '#000', textTransform: 'uppercase' }}>
               {formatAttentionHeadline(attentionItems.length)}
             </h3>
-            <p style={{ margin: '6px 0 0', fontSize: 12, lineHeight: '17px', fontWeight: 400, color: 'var(--chip-urgent-fg)' }}>
+            <p style={{ margin: '6px 0 0', fontSize: 12, lineHeight: '16px', fontWeight: 700, color: '#000' }}>
               {attentionItems.length > 0
                 ? `${formatPlural(urgentUnreadCount, 'urgent notice')} unread · ${formatPlural(
                     attentionItems.length - urgentUnreadCount,
@@ -172,10 +174,9 @@ export function StudentHomeView() {
         <div
           style={{
             background: 'var(--bg-surface)',
-            border: '1px solid var(--border)',
-            borderRadius: 'var(--radius-card)',
+            border: '2.5px solid var(--border)',
             boxShadow: 'var(--shadow-sm)',
-            padding: '16px 18px',
+            padding: '14px 18px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -185,23 +186,22 @@ export function StudentHomeView() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div
               style={{
-                width: 36,
-                height: 36,
-                background: 'var(--bg-muted)',
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--radius-control)',
+                width: 38,
+                height: 38,
+                background: 'var(--neo-secondary)',
+                border: '2px solid #000',
                 display: 'grid',
                 placeItems: 'center',
-                color: 'var(--text-1)',
+                boxShadow: '2px 2px 0 0 #000',
               }}
             >
               <BellRing width={18} height={18} />
             </div>
             <div>
-              <div style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 600 }}>
+              <div style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 900, textTransform: 'uppercase' }}>
                 Since you last visited
               </div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-1)', marginTop: 2 }}>
+              <div style={{ fontSize: 13, fontWeight: 900, color: '#000', marginTop: 2, textTransform: 'uppercase' }}>
                 {unreadFeedCount} new · {urgentUnreadCount} urgent · {upcomingDeadlines.length} due soon
               </div>
             </div>
@@ -220,10 +220,9 @@ export function StudentHomeView() {
         <div
           style={{
             background: 'var(--bg-surface)',
-            border: '1px solid var(--border)',
-            borderRadius: 'var(--radius-card)',
+            border: '2.5px solid var(--border)',
             boxShadow: 'var(--shadow-sm)',
-            padding: '16px 18px',
+            padding: '14px 18px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -233,23 +232,22 @@ export function StudentHomeView() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div
               style={{
-                width: 36,
-                height: 36,
-                background: 'var(--chip-green-bg)',
-                border: '1px solid var(--chip-green-border)',
-                borderRadius: 'var(--radius-control)',
+                width: 38,
+                height: 38,
+                background: 'var(--accent-green)',
+                border: '2px solid #000',
                 display: 'grid',
                 placeItems: 'center',
-                color: 'var(--chip-green-fg)',
+                boxShadow: '2px 2px 0 0 #000',
               }}
             >
               <Flame width={18} height={18} />
             </div>
             <div>
-              <div style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 600 }}>
+              <div style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 900, textTransform: 'uppercase' }}>
                 Weekly Read Streak
               </div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-1)', marginTop: 2 }}>
+              <div style={{ fontSize: 13, fontWeight: 900, color: '#000', marginTop: 2, textTransform: 'uppercase' }}>
                 {streakReadCount} of {streakTotalGoal} read this week
               </div>
             </div>
@@ -258,12 +256,12 @@ export function StudentHomeView() {
           <div
             style={{
               fontSize: 11,
-              fontWeight: 600,
-              background: 'var(--chip-green-bg)',
-              color: 'var(--chip-green-fg)',
-              padding: '3px 8px',
-              border: '1px solid var(--chip-green-border)',
-              borderRadius: 'var(--radius-chip)',
+              fontWeight: 900,
+              background: 'var(--neo-secondary)',
+              padding: '2px 8px',
+              border: '1.5px solid #000',
+              boxShadow: '1.5px 1.5px 0 0 #000',
+              textTransform: 'uppercase',
             }}
           >
             🔥 On track

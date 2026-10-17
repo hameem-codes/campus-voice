@@ -6,7 +6,7 @@ import './globals.css'
 import { StoreProvider } from '@/lib/store'
 
 export const viewport: Viewport = {
-  themeColor: '#0f172a',
+  themeColor: '#FFD93D',
   width: 'device-width',
   initialScale: 1,
 }
