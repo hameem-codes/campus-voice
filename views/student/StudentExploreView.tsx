@@ -885,7 +885,7 @@ export function StudentExploreView() {
               {/* 6. Academic */}
               <button
                 type="button"
-                onClick={() => setActiveCategory('Academic')}
+                onClick={() => router.push('/student/academic')}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -894,8 +894,8 @@ export function StudentExploreView() {
                   padding: '10px 16px',
                   borderRadius: 14,
                   border: 'none',
-                  backgroundColor: activeCategory === 'Academic' ? '#D5FF38' : 'transparent',
-                  color: activeCategory === 'Academic' ? '#111111' : '#9CA3AF',
+                  backgroundColor: 'transparent',
+                  color: '#9CA3AF',
                   fontWeight: 700,
                   fontSize: 13,
                   cursor: 'pointer',

@@ -844,10 +844,7 @@ export function StudentActivityView() {
               {/* 6. Academic */}
               <button
                 type="button"
-                onClick={() => {
-                  setActiveTab('Academic')
-                  addToast({ type: 'info', title: 'Academic Filter', message: 'Showing your academic updates history.' })
-                }}
+                onClick={() => router.push('/student/academic')}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -856,8 +853,8 @@ export function StudentActivityView() {
                   padding: '10px 16px',
                   borderRadius: 14,
                   border: 'none',
-                  backgroundColor: activeTab === 'Academic' ? '#D5FF38' : 'transparent',
-                  color: activeTab === 'Academic' ? '#111111' : '#9CA3AF',
+                  backgroundColor: 'transparent',
+                  color: '#9CA3AF',
                   fontWeight: 700,
                   fontSize: 13,
                   cursor: 'pointer',

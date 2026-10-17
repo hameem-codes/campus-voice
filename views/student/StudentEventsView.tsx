@@ -849,7 +849,7 @@ export function StudentEventsView() {
               {/* 6. Academic */}
               <button
                 type="button"
-                onClick={() => router.push('/student')}
+                onClick={() => router.push('/student/academic')}
                 style={{
                   width: '100%',
                   display: 'flex',
