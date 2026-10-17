@@ -874,7 +874,7 @@ export function StudentEventsView() {
               {/* 7. General */}
               <button
                 type="button"
-                onClick={() => router.push('/student')}
+                onClick={() => router.push('/student/general')}
                 style={{
                   width: '100%',
                   display: 'flex',

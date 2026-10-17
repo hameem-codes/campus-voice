@@ -1061,10 +1061,7 @@ export function StudentDashboardFeedView({
               {/* 7. General */}
               <button
                 type="button"
-                onClick={() => {
-                  setActiveNav('General')
-                  setActiveFilter('#general')
-                }}
+                onClick={() => router.push('/student/general')}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -1073,8 +1070,8 @@ export function StudentDashboardFeedView({
                   padding: '10px 16px',
                   borderRadius: 14,
                   border: 'none',
-                  backgroundColor: activeNav === 'General' ? '#D5FF38' : 'transparent',
-                  color: activeNav === 'General' ? '#111111' : '#9CA3AF',
+                  backgroundColor: 'transparent',
+                  color: '#9CA3AF',
                   fontWeight: 700,
                   fontSize: 13,
                   cursor: 'pointer',

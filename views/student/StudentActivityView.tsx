@@ -869,9 +869,7 @@ export function StudentActivityView() {
               {/* 7. General */}
               <button
                 type="button"
-                onClick={() => {
-                  setActiveTab('Overview')
-                }}
+                onClick={() => router.push('/student/general')}
                 style={{
                   width: '100%',
                   display: 'flex',

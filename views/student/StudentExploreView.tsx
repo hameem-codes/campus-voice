@@ -910,7 +910,7 @@ export function StudentExploreView() {
               {/* 7. General */}
               <button
                 type="button"
-                onClick={() => setActiveCategory('General')}
+                onClick={() => router.push('/student/general')}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -919,8 +919,8 @@ export function StudentExploreView() {
                   padding: '10px 16px',
                   borderRadius: 14,
                   border: 'none',
-                  backgroundColor: activeCategory === 'General' ? '#D5FF38' : 'transparent',
-                  color: activeCategory === 'General' ? '#111111' : '#9CA3AF',
+                  backgroundColor: 'transparent',
+                  color: '#9CA3AF',
                   fontWeight: 700,
                   fontSize: 13,
                   cursor: 'pointer',
