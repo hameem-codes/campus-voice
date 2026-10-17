@@ -26,6 +26,8 @@ import {
   Sun,
   Moon,
   LogOut,
+  Compass,
+  Megaphone,
 } from 'lucide-react'
 import { Role } from '@/types'
 import { useStore } from '@/lib/store'
@@ -44,8 +46,8 @@ interface NavItemDef {
 
 const roleNavMap: Record<Role, NavItemDef[]> = {
   student: [
-    { href: '/student', label: 'Home', icon: Home },
-    { href: '/student/updates', label: 'Updates', icon: Inbox, badgeKey: 'updates' },
+    { href: '/student', label: 'Announcements', icon: Megaphone },
+    { href: '/student/explore', label: 'Explore Campus', icon: Compass },
     { href: '/student/calendar', label: 'Calendar', icon: CalendarDays },
     { href: '/student/saved', label: 'Saved', icon: Bookmark, badgeKey: 'saved' },
     { href: '/student/profile', label: 'Profile', icon: UserRound },
@@ -140,6 +142,7 @@ export function Sidebar() {
   const getNavLabel = (item: NavItemDef) => {
     switch (item.href) {
       case '/student':
+        return 'Announcements'
       case '/faculty':
         return t('navHome')
       case '/student/updates':

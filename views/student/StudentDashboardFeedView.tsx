@@ -930,7 +930,7 @@ export function StudentDashboardFeedView({
                 type="button"
                 onClick={() => {
                   setActiveNav('Explore Campus')
-                  router.push('/search')
+                  router.push('/student/explore')
                 }}
                 style={{
                   width: '100%',
