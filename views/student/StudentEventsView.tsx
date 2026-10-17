@@ -824,10 +824,7 @@ export function StudentEventsView() {
               {/* 5. Placements */}
               <button
                 type="button"
-                onClick={() => {
-                  setActiveCategory('Placement')
-                  addToast({ type: 'info', title: 'Placement Drives', message: 'Showing upcoming recruitment drives.' })
-                }}
+                onClick={() => router.push('/student/placements')}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -836,8 +833,8 @@ export function StudentEventsView() {
                   padding: '10px 16px',
                   borderRadius: 14,
                   border: 'none',
-                  backgroundColor: activeCategory === 'Placement' ? '#D5FF38' : 'transparent',
-                  color: activeCategory === 'Placement' ? '#111111' : '#9CA3AF',
+                  backgroundColor: 'transparent',
+                  color: '#9CA3AF',
                   fontWeight: 700,
                   fontSize: 13,
                   cursor: 'pointer',

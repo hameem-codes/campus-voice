@@ -28,6 +28,7 @@ import {
   LogOut,
   Compass,
   Megaphone,
+  Briefcase,
 } from 'lucide-react'
 import { Role } from '@/types'
 import { useStore } from '@/lib/store'
@@ -50,6 +51,7 @@ const roleNavMap: Record<Role, NavItemDef[]> = {
     { href: '/student/explore', label: 'Explore Campus', icon: Compass },
     { href: '/student/activity', label: 'My Activity', icon: UserRound },
     { href: '/student/calendar', label: 'Events', icon: CalendarDays },
+    { href: '/student/placements', label: 'Placements', icon: Briefcase },
     { href: '/student/saved', label: 'Saved', icon: Bookmark, badgeKey: 'saved' },
     { href: '/student/profile', label: 'Profile', icon: UserRound },
   ],

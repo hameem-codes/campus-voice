@@ -860,7 +860,7 @@ export function StudentExploreView() {
               {/* 5. Placements */}
               <button
                 type="button"
-                onClick={() => setActiveCategory('Placements')}
+                onClick={() => router.push('/student/placements')}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -869,8 +869,8 @@ export function StudentExploreView() {
                   padding: '10px 16px',
                   borderRadius: 14,
                   border: 'none',
-                  backgroundColor: activeCategory === 'Placements' ? '#D5FF38' : 'transparent',
-                  color: activeCategory === 'Placements' ? '#111111' : '#9CA3AF',
+                  backgroundColor: 'transparent',
+                  color: '#9CA3AF',
                   fontWeight: 700,
                   fontSize: 13,
                   cursor: 'pointer',

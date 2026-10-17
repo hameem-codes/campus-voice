@@ -819,10 +819,7 @@ export function StudentActivityView() {
               {/* 5. Placements */}
               <button
                 type="button"
-                onClick={() => {
-                  setActiveTab('Placements')
-                  addToast({ type: 'info', title: 'Placements Filter', message: 'Showing your placement activity.' })
-                }}
+                onClick={() => router.push('/student/placements')}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -831,8 +828,8 @@ export function StudentActivityView() {
                   padding: '10px 16px',
                   borderRadius: 14,
                   border: 'none',
-                  backgroundColor: activeTab === 'Placements' ? '#D5FF38' : 'transparent',
-                  color: activeTab === 'Placements' ? '#111111' : '#9CA3AF',
+                  backgroundColor: 'transparent',
+                  color: '#9CA3AF',
                   fontWeight: 700,
                   fontSize: 13,
                   cursor: 'pointer',
@@ -2002,7 +1999,7 @@ export function StudentActivityView() {
 
                 <button
                   type="button"
-                  onClick={() => router.push('/student')}
+                  onClick={() => router.push('/student/placements')}
                   style={{
                     backgroundColor: '#FA78B9',
                     color: '#111111',
