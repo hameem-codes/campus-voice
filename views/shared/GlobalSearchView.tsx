@@ -147,12 +147,13 @@ export function GlobalSearchView() {
           flexWrap: 'wrap',
           padding: '12px 16px',
           background: 'var(--neo-secondary)',
-          border: '2.5px solid var(--border)',
+          border: '1px solid var(--border)',
+          borderRadius: 'var(--radius-card)',
           boxShadow: 'var(--shadow-sm)',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#000', fontWeight: 900, textTransform: 'uppercase' }}>
-          <Filter width={15} height={15} strokeWidth={2.5} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--text-1)', fontWeight: 600 }}>
+          <Filter width={15} height={15} strokeWidth={2} />
           <strong>Filters:</strong>
         </div>
 
@@ -161,13 +162,15 @@ export function GlobalSearchView() {
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
           style={{
-            border: '2px solid #000',
-            boxShadow: '2px 2px 0 0 #000',
-            padding: '4px 8px',
+            border: '1px solid var(--border)',
+            borderRadius: 'var(--radius-control)',
+            boxShadow: 'var(--shadow-sm)',
+            padding: '5px 10px',
             fontSize: 12,
-            fontWeight: 700,
-            background: '#fff',
-            color: '#000',
+            fontWeight: 500,
+            background: 'var(--bg-surface)',
+            color: 'var(--text-1)',
+            outline: 'none',
           }}
         >
           <option value="All">All Categories</option>
@@ -183,13 +186,15 @@ export function GlobalSearchView() {
           value={selectedDepartment}
           onChange={(e) => setSelectedDepartment(e.target.value)}
           style={{
-            border: '2px solid #000',
-            boxShadow: '2px 2px 0 0 #000',
-            padding: '4px 8px',
+            border: '1px solid var(--border)',
+            borderRadius: 'var(--radius-control)',
+            boxShadow: 'var(--shadow-sm)',
+            padding: '5px 10px',
             fontSize: 12,
-            fontWeight: 700,
-            background: '#fff',
-            color: '#000',
+            fontWeight: 500,
+            background: 'var(--bg-surface)',
+            color: 'var(--text-1)',
+            outline: 'none',
           }}
         >
           <option value="All">All Departments</option>
@@ -205,13 +210,15 @@ export function GlobalSearchView() {
           value={selectedPriority}
           onChange={(e) => setSelectedPriority(e.target.value as any)}
           style={{
-            border: '2px solid #000',
-            boxShadow: '2px 2px 0 0 #000',
-            padding: '4px 8px',
+            border: '1px solid var(--border)',
+            borderRadius: 'var(--radius-control)',
+            boxShadow: 'var(--shadow-sm)',
+            padding: '5px 10px',
             fontSize: 12,
-            fontWeight: 700,
-            background: '#fff',
-            color: '#000',
+            fontWeight: 500,
+            background: 'var(--bg-surface)',
+            color: 'var(--text-1)',
+            outline: 'none',
           }}
         >
           <option value="All">All Priorities</option>

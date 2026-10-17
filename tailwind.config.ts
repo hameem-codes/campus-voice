@@ -9,35 +9,45 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'neo-accent': '#FF6B6B',
-        'neo-secondary': '#FFD93D',
-        'neo-muted': '#C4B5FD',
         canvas: 'var(--bg-canvas)',
         surface: 'var(--bg-surface)',
         muted: 'var(--bg-muted)',
         border: 'var(--border)',
+        'border-strong': 'var(--border-strong)',
         ink: 'var(--text-1)',
         copy: 'var(--text-2)',
         faint: 'var(--text-3)',
         action: 'var(--action)',
-        'chip-orange-bg': 'var(--chip-orange-bg)',
-        'chip-orange-fg': 'var(--chip-orange-fg)',
+        'action-hover': 'var(--action-hover)',
+        'action-fg': 'var(--action-fg)',
+        'chip-neutral-bg': 'var(--chip-neutral-bg)',
+        'chip-neutral-fg': 'var(--chip-neutral-fg)',
+        'chip-neutral-border': 'var(--chip-neutral-border)',
+        'chip-urgent-bg': 'var(--chip-urgent-bg)',
+        'chip-urgent-fg': 'var(--chip-urgent-fg)',
+        'chip-urgent-border': 'var(--chip-urgent-border)',
+        'chip-accent-bg': 'var(--chip-accent-bg)',
+        'chip-accent-fg': 'var(--chip-accent-fg)',
+        'chip-accent-border': 'var(--chip-accent-border)',
         'chip-green-bg': 'var(--chip-green-bg)',
         'chip-green-fg': 'var(--chip-green-fg)',
-        'chip-blue-bg': 'var(--chip-blue-bg)',
-        'chip-blue-fg': 'var(--chip-blue-fg)'
+        'chip-green-border': 'var(--chip-green-border)',
       },
       boxShadow: {
-        'neo-sm': '3px 3px 0px 0px #000',
-        'neo-md': '5px 5px 0px 0px #000',
-        'neo-lg': '8px 8px 0px 0px #000',
-        'neo-xl': '12px 12px 0px 0px #000',
+        sm: 'var(--shadow-sm)',
+        md: 'var(--shadow-md)',
+        lg: 'var(--shadow-lg)',
+        xl: 'var(--shadow-xl)',
+        'neo-sm': 'var(--shadow-sm)',
+        'neo-md': 'var(--shadow-md)',
+        'neo-lg': 'var(--shadow-lg)',
+        'neo-xl': 'var(--shadow-xl)',
       },
       borderRadius: {
         panel: 'var(--radius-panel)',
         card: 'var(--radius-card)',
         control: 'var(--radius-control)',
-        chip: 'var(--radius-chip)'
+        chip: 'var(--radius-chip)',
       },
       spacing: {
         1: 'var(--space-1)',
@@ -45,11 +55,11 @@ const config: Config = {
         3: 'var(--space-3)',
         4: 'var(--space-4)',
         6: 'var(--space-6)',
-        8: 'var(--space-8)'
-      }
-    }
+        8: 'var(--space-8)',
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 }
 
 export default config

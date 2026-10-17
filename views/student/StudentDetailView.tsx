@@ -221,9 +221,10 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '14px 18px',
-            background: 'var(--neo-secondary)',
-            border: '2.5px solid #000',
-            boxShadow: '2px 2px 0 0 #000',
+            background: 'var(--bg-muted)',
+            border: '1px solid var(--border)',
+            borderRadius: 'var(--radius-card)',
+            boxShadow: 'var(--shadow-sm)',
             flexWrap: 'wrap',
             gap: 12,
           }}
@@ -231,29 +232,29 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <Avatar initials={item.publisher.name.split(' ').map((w) => w[0]).slice(0, 2).join('')} />
             <div>
-              <div style={{ fontWeight: 900, fontSize: 13, color: '#000', textTransform: 'uppercase' }}>
+              <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--text-1)' }}>
                 {item.publisher.name}
               </div>
-              <div style={{ fontSize: 11, color: '#000', fontWeight: 700, textTransform: 'uppercase' }}>
+              <div style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 500 }}>
                 {item.publisher.role} · {item.department}
               </div>
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20, fontSize: 12, color: '#000' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20, fontSize: 12, color: 'var(--text-2)' }}>
             <div>
-              <span style={{ color: '#000', fontSize: 10, textTransform: 'uppercase', display: 'block', fontWeight: 900, letterSpacing: '0.04em' }}>
+              <span style={{ color: 'var(--text-3)', fontSize: 10, textTransform: 'uppercase', display: 'block', fontWeight: 600, letterSpacing: '0.04em' }}>
                 Published on
               </span>
-              <strong style={{ fontWeight: 900, color: '#000' }}>{formatDisplayDate(item.postedAt)}</strong>
+              <strong style={{ fontWeight: 600, color: 'var(--text-1)' }}>{formatDisplayDate(item.postedAt)}</strong>
             </div>
 
             {item.eventDate && (
               <div>
-                <span style={{ color: '#000', fontSize: 10, textTransform: 'uppercase', display: 'block', fontWeight: 900, letterSpacing: '0.04em' }}>
+                <span style={{ color: 'var(--text-3)', fontSize: 10, textTransform: 'uppercase', display: 'block', fontWeight: 600, letterSpacing: '0.04em' }}>
                   Event / Due Date
                 </span>
-                <strong style={{ color: '#000', fontWeight: 900 }}>
+                <strong style={{ color: 'var(--text-1)', fontWeight: 600 }}>
                   {formatDisplayDate(item.eventDate)}
                 </strong>
               </div>
@@ -265,10 +266,11 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
         {summaryData && (
           <div
             style={{
-              background: '#fef08a',
-              border: '3px solid #000',
-              boxShadow: '4px 4px 0 0 #000',
-              padding: '20px 24px',
+              background: 'var(--chip-accent-bg)',
+              border: '1px solid var(--chip-accent-border)',
+              borderRadius: 'var(--radius-card)',
+              boxShadow: 'var(--shadow-sm)',
+              padding: '18px 20px',
               display: 'flex',
               flexDirection: 'column',
               gap: 12,
@@ -276,21 +278,20 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Sparkles width={18} height={18} style={{ color: '#000' }} />
-                <span style={{ fontWeight: 900, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#000' }}>
+                <Sparkles width={18} height={18} style={{ color: 'var(--chip-accent-fg)' }} />
+                <span style={{ fontWeight: 600, fontSize: 13, letterSpacing: '-0.01em', color: 'var(--chip-accent-fg)' }}>
                   Executive Takeaways
                 </span>
               </div>
               <span
                 style={{
-                  background: '#000',
+                  background: 'var(--chip-accent-fg)',
                   color: '#fff',
                   fontSize: 10,
-                  fontWeight: 900,
-                  textTransform: 'uppercase',
-                  padding: '3px 8px',
-                  border: '1.5px solid #000',
-                  letterSpacing: '0.05em',
+                  fontWeight: 600,
+                  padding: '2px 8px',
+                  borderRadius: 'var(--radius-chip)',
+                  letterSpacing: '0.02em',
                 }}
               >
                 AI summary (demo)
@@ -304,9 +305,9 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 8,
-                color: '#000',
+                color: 'var(--text-2)',
                 fontSize: 13,
-                fontWeight: 700,
+                fontWeight: 400,
                 lineHeight: '20px',
               }}
             >
@@ -318,9 +319,9 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
             <div
               style={{
                 fontSize: 11,
-                color: '#000',
-                fontWeight: 700,
-                borderTop: '1.5px dashed rgba(0,0,0,0.3)',
+                color: 'var(--text-3)',
+                fontWeight: 400,
+                borderTop: '1px solid var(--chip-accent-border)',
                 paddingTop: 8,
               }}
             >
