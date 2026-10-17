@@ -97,6 +97,10 @@ interface StoreContextType {
   // Student specific state
   savedIds: string[]
   dismissedUrgentIds: string[]
+  pinnedNoticeId: string | null
+  pinnedNotice: UpdateItem | null
+  togglePinNotice: (updateId: string) => void
+  dismissPinnedNotice: () => void
   toggleSave: (updateId: string) => void
   markAsRead: (updateId: string) => void
   markAsUnread: (updateId: string) => void
@@ -199,6 +203,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   const [savedIds, setSavedIds] = useState<string[]>(['placement', 'result', 'critique'])
   const [dismissedUrgentIds, setDismissedUrgentIds] = useState<string[]>([])
+  const [pinnedNoticeId, setPinnedNoticeId] = useState<string | null>(null)
   const [recentSearches, setRecentSearches] = useState<string[]>(['Exams', 'Fee deadline', 'Design critique'])
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false)
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
@@ -253,6 +258,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         // Dismissed IDs
         const dismissed = localStorage.getItem('cv_dismissed_urgent_ids_v1')
         if (dismissed) setDismissedUrgentIds(JSON.parse(dismissed))
+
+        // Pinned notice
+        const pinned = localStorage.getItem('campusvoice_pinned_notice_id') || localStorage.getItem('cv_pinned_notice_id')
+        if (pinned) setPinnedNoticeId(pinned)
 
         // Recent searches
         const searches = localStorage.getItem('cv_recent_searches_v1')
@@ -405,6 +414,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     () => getAdminMetrics(updates),
     [updates]
   )
+  const pinnedNotice = useMemo(() => {
+    if (!pinnedNoticeId) return null
+    return updates.find((u) => u.id === pinnedNoticeId) || null
+  }, [updates, pinnedNoticeId])
 
   // Live Cross-Tab Synchronization (BroadcastChannel + storage event fallback)
   useEffect(() => {
@@ -496,6 +509,47 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     },
     [savedIds, addToast]
   )
+
+  const togglePinNotice = useCallback(
+    (updateId: string) => {
+      setPinnedNoticeId((prev) => {
+        const next = prev === updateId ? null : updateId
+        if (typeof window !== 'undefined') {
+          if (next) {
+            localStorage.setItem('campusvoice_pinned_notice_id', next)
+          } else {
+            localStorage.removeItem('campusvoice_pinned_notice_id')
+          }
+        }
+        const item = updates.find((u) => u.id === updateId)
+        if (next) {
+          addToast({
+            type: 'success',
+            title: 'Pinned notice to dashboard',
+            message: item ? `"${item.title}" will stay docked at the top of your student dashboard.` : undefined,
+          })
+        } else {
+          addToast({
+            type: 'info',
+            title: 'Notice unpinned',
+          })
+        }
+        return next
+      })
+    },
+    [updates, addToast]
+  )
+
+  const dismissPinnedNotice = useCallback(() => {
+    setPinnedNoticeId(null)
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('campusvoice_pinned_notice_id')
+    }
+    addToast({
+      type: 'info',
+      title: 'Pinned reminder dismissed',
+    })
+  }, [addToast])
 
   // Read status
   const markAsRead = useCallback(
@@ -1364,6 +1418,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       adminMetrics,
       savedIds,
       dismissedUrgentIds,
+      pinnedNoticeId,
+      pinnedNotice,
+      togglePinNotice,
+      dismissPinnedNotice,
       toggleSave,
       markAsRead,
       markAsUnread,
@@ -1447,6 +1505,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       adminMetrics,
       savedIds,
       dismissedUrgentIds,
+      pinnedNoticeId,
+      pinnedNotice,
+      togglePinNotice,
+      dismissPinnedNotice,
       toggleSave,
       markAsRead,
       markAsUnread,

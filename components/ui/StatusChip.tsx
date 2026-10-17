@@ -6,8 +6,6 @@ import { ChipTone } from '@/types'
 export function toneForStatus(status: string): ChipTone {
   const s = status.toLowerCase()
   if (s === 'urgent' || s === 'rejected') return 'orange'
-  if (s === 'published' || s === 'active') return 'green'
-  if (s === 'scheduled' || s === 'pending') return 'blue'
   return 'neutral'
 }
 

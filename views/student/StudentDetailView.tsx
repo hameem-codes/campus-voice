@@ -27,6 +27,7 @@ import { Avatar } from '@/components/ui/Avatar'
 import { Modal } from '@/components/ui/Modal'
 import { formatRelativeTime, formatDisplayDate, downloadICS } from '@/lib/date'
 import { Attachment } from '@/types'
+import { copyWhatsAppSummary } from '@/lib/share'
 
 export function StudentDetailView({ updateId }: { updateId: string }) {
   const router = useRouter()
@@ -36,6 +37,9 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
     toggleSave,
     markAsRead,
     markAsUnread,
+    pinnedNoticeId,
+    togglePinNotice,
+    currentUser,
     addToast,
   } = useStore()
 
@@ -62,6 +66,7 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
 
   const item = updates.find((u) => u.id === updateId)
   const isSaved = item ? savedIds.includes(item.id) : false
+  const isPinned = item ? pinnedNoticeId === item.id : false
 
   if (!item) {
     return (
@@ -74,6 +79,16 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
         </Button>
       </div>
     )
+  }
+
+  const handleCopyWhatsApp = () => {
+    copyWhatsAppSummary(item, () => {
+      addToast({
+        type: 'success',
+        title: 'Copied group chat summary!',
+        message: 'Formatted summary is now ready to paste into WhatsApp.',
+      })
+    })
   }
 
   const handleShare = () => {
@@ -131,7 +146,7 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
           Back to updates
         </Button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
           {/* Read Toggle */}
           <Button
             variant="secondary"
@@ -139,6 +154,21 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
             onClick={() => (item.read ? markAsUnread(item.id) : markAsRead(item.id))}
           >
             {item.read ? 'Mark unread' : 'Mark as read'}
+          </Button>
+
+          {/* Pin to Top */}
+          <Button
+            variant={isPinned ? 'primary' : 'secondary'}
+            onClick={() => togglePinNotice(item.id)}
+            title={isPinned ? 'Pinned to top (click to unpin)' : 'Pin to top reminder'}
+            style={{
+              background: isPinned ? 'var(--neo-secondary)' : undefined,
+              color: '#000',
+              fontWeight: 800,
+            }}
+          >
+            <span style={{ marginRight: 6 }}>📌</span>
+            {isPinned ? 'Pinned' : 'Pin to top'}
           </Button>
 
           {/* Bookmark */}
@@ -177,9 +207,14 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
             {loadingSummary ? 'Summarizing...' : summaryData ? 'Hide AI summary' : 'Summarize'}
           </Button>
 
-          {/* Share */}
-          <Button variant="secondary" icon={Share2} onClick={handleShare}>
-            Share
+          {/* Copy for WhatsApp */}
+          <Button
+            variant="secondary"
+            icon={Share2}
+            onClick={handleCopyWhatsApp}
+            title="Copy formatted summary for WhatsApp group chat"
+          >
+            Copy for WhatsApp
           </Button>
         </div>
       </div>
@@ -201,6 +236,27 @@ export function StudentDetailView({ updateId }: { updateId: string }) {
                 <History width={11} height={11} />
                 <span>Updated ({item.editHistory.length - 1})</span>
               </button>
+            )}
+            {item.read && (
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  background: '#ffffff',
+                  border: '2px solid #000000',
+                  boxShadow: '2px 2px 0 0 #000000',
+                  padding: '3px 8px',
+                  fontSize: 11,
+                  fontWeight: 800,
+                  color: '#000000',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.02em',
+                }}
+              >
+                <span style={{ fontWeight: 900 }}>✓</span>
+                <span>84 / 120 students in Section {currentUser.section || 'D2'} acknowledged</span>
+              </div>
             )}
           </div>
 

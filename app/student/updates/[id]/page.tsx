@@ -6,6 +6,7 @@ import { AppShell } from '@/components/layout/AppShell'
 import { PageHeader } from '@/components/layout/Header'
 import { RouteGuard } from '@/components/layout/RouteGuard'
 import { StudentDetailView } from '@/views/student/StudentDetailView'
+import { PinnedNoticeBar } from '@/components/cards/PinnedNoticeBar'
 
 import { useStore } from '@/lib/store'
 
@@ -23,6 +24,7 @@ export default function UpdateDetailPage() {
           breadcrumb="Dashboard / Updates"
           depth={3}
         />
+        <PinnedNoticeBar />
         <StudentDetailView updateId={id} />
       </AppShell>
     </RouteGuard>
