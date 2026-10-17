@@ -14,15 +14,10 @@ import {
   Radio,
   FileCheck2,
   Lock,
-  Pin,
-  Heart,
-  MessageSquare,
-  CheckCircle2,
 } from 'lucide-react'
 import { useStore } from '@/lib/store'
 import { Button } from '@/components/ui/Button'
 import { Role } from '@/types'
-import { BrandLogo } from '@/components/ui/BrandLogo'
 
 export default function RootPage() {
   const router = useRouter()
@@ -41,15 +36,15 @@ export default function RootPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-canvas)', color: 'var(--text-1)' }}>
-      {/* Top Navigation - Panel 1 */}
+      {/* Top Navigation */}
       <header
         style={{
-          borderBottom: '2px solid var(--border)',
+          borderBottom: '3px solid var(--border)',
           background: 'var(--bg-surface)',
-          padding: '14px 28px',
+          padding: '16px 24px',
           position: 'sticky',
           top: 0,
-          zIndex: 50,
+          zIndex: 40,
         }}
       >
         <div
@@ -62,469 +57,147 @@ export default function RootPage() {
             gap: 16,
           }}
         >
-          <BrandLogo subtitle="Verified Updates. A Stronger Campus." />
-
-          {/* Center Nav Links */}
-          <nav
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 28,
-            }}
-            className="hidden-mobile"
-          >
-            <a href="#hero" style={{ textDecoration: 'none', color: '#111111', fontWeight: 700, fontSize: 14 }}>
-              Home
-            </a>
-            <a href="#features" style={{ textDecoration: 'none', color: '#737373', fontWeight: 600, fontSize: 14 }}>
-              Features
-            </a>
-            <a href="#roles" style={{ textDecoration: 'none', color: '#737373', fontWeight: 600, fontSize: 14 }}>
-              Roles
-            </a>
-            <a href="#architecture" style={{ textDecoration: 'none', color: '#737373', fontWeight: 600, fontSize: 14 }}>
-              Architecture
-            </a>
-          </nav>
-
-          {/* Right Action */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div
+              style={{
+                width: 36,
+                height: 36,
+                background: 'var(--neo-secondary)',
+                border: '2.5px solid var(--border)',
+                boxShadow: 'var(--shadow-sm)',
+                display: 'grid',
+                placeItems: 'center',
+                fontWeight: 900,
+                fontSize: 16,
+              }}
+            >
+              CV
+            </div>
+            <div>
+              <div style={{ fontWeight: 900, fontSize: 16, textTransform: 'uppercase', letterSpacing: '-0.02em' }}>
+                Campus Voice
+              </div>
+              <div style={{ fontSize: 10, color: 'var(--text-3)', fontWeight: 700, textTransform: 'uppercase' }}>
+                Verified Campus Updates
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <Link
               href="/login"
               style={{
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: 700,
+                textTransform: 'uppercase',
                 color: 'var(--text-1)',
                 textDecoration: 'none',
-                padding: '8px 14px',
+                padding: '8px 12px',
               }}
             >
               Sign In
             </Link>
-            <button
-              type="button"
+            <Button
+              variant="primary"
+              size="sm"
+              iconRight={ArrowUpRight}
               onClick={() => handleQuickLogin('student')}
-              style={{
-                background: 'var(--accent-lime)',
-                color: '#111111',
-                border: '2px solid var(--border)',
-                borderRadius: '9999px',
-                padding: '10px 22px',
-                fontWeight: 800,
-                fontSize: 13,
-                cursor: 'pointer',
-                transition: 'transform 0.15s ease',
-              }}
             >
-              Get Started
-            </button>
+              Try the Demo
+            </Button>
           </div>
         </div>
       </header>
 
-      {/* Main Container */}
-      <main style={{ maxWidth: 1280, margin: '0 auto', padding: '56px 24px 80px' }}>
-        {/* Hero Section - Split Layout matching Panel 1 */}
-        <section
-          id="hero"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: 48,
-            alignItems: 'center',
-            marginBottom: 64,
-          }}
-        >
-          {/* Left Column: Oversized typography & CTAs */}
-          <div>
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 8,
-                background: '#ffffff',
-                border: '2px solid var(--border)',
-                borderRadius: '9999px',
-                padding: '6px 16px',
-                fontSize: 12,
-                fontWeight: 800,
-                color: '#111111',
-                marginBottom: 24,
-              }}
-            >
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-lime)', border: '1px solid #111111' }} />
-              <span>Verified Campus Intelligence · Live 2026</span>
-            </div>
-
-            <h1
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: 'clamp(40px, 5.5vw, 68px)',
-                lineHeight: 1.02,
-                fontWeight: 900,
-                letterSpacing: '-0.04em',
-                color: '#111111',
-                margin: '0 0 20px',
-              }}
-            >
-              Important<br />
-              campus updates.<br />
-              Verified.
-            </h1>
-
-            <p
-              style={{
-                fontSize: 'clamp(16px, 1.8vw, 19px)',
-                lineHeight: 1.5,
-                color: 'var(--text-2)',
-                margin: '0 0 32px',
-                maxWidth: 480,
-                fontWeight: 500,
-              }}
-            >
-              Stay informed with verified announcements, events and notices — all in one place.
-            </p>
-
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, alignItems: 'center' }}>
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('student')}
-                style={{
-                  background: 'var(--accent-lime)',
-                  color: '#111111',
-                  border: '2px solid var(--border)',
-                  borderRadius: '9999px',
-                  padding: '14px 32px',
-                  fontWeight: 900,
-                  fontSize: 15,
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 12px rgba(213,255,56,0.3)',
-                }}
-              >
-                Get Started
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('student')}
-                style={{
-                  background: '#ffffff',
-                  color: '#111111',
-                  border: '2px solid var(--border)',
-                  borderRadius: '9999px',
-                  padding: '14px 28px',
-                  fontWeight: 800,
-                  fontSize: 15,
-                  cursor: 'pointer',
-                }}
-              >
-                Watch Demo
-              </button>
-            </div>
-          </div>
-
-          {/* Right Column: Floating Dark Card Mockup - Panel 1 */}
-          <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
-            {/* Floating Pills around the card */}
-            <div
-              style={{
-                position: 'absolute',
-                top: -16,
-                right: 32,
-                background: 'var(--accent-blue)',
-                color: '#ffffff',
-                border: '2px solid var(--border)',
-                borderRadius: '9999px',
-                padding: '6px 16px',
-                fontSize: 12,
-                fontWeight: 900,
-                zIndex: 3,
-                boxShadow: '0 4px 12px rgba(60,91,255,0.25)',
-              }}
-            >
-              ⚡ Events
-            </div>
-
-            <div
-              style={{
-                position: 'absolute',
-                top: 48,
-                right: -10,
-                background: 'var(--accent-pink)',
-                color: '#111111',
-                border: '2px solid var(--border)',
-                borderRadius: '9999px',
-                padding: '6px 16px',
-                fontSize: 12,
-                fontWeight: 900,
-                zIndex: 3,
-                boxShadow: '0 4px 12px rgba(250,120,185,0.25)',
-              }}
-            >
-              🎓 Placements
-            </div>
-
-            {/* Main Black Container Card */}
-            <div
-              style={{
-                background: 'var(--bg-dark)',
-                color: '#ffffff',
-                border: '2px solid var(--border)',
-                borderRadius: 28,
-                padding: '24px 24px 32px',
-                width: '100%',
-                maxWidth: 420,
-                boxShadow: '0 20px 40px rgba(0,0,0,0.25)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 16,
-              }}
-            >
-              {/* Card Header */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <BrandLogo compact subtitle="" />
-                <span
-                  style={{
-                    background: 'rgba(213,255,56,0.15)',
-                    color: 'var(--accent-lime)',
-                    border: '1.5px solid var(--accent-lime)',
-                    borderRadius: '9999px',
-                    padding: '2px 10px',
-                    fontSize: 11,
-                    fontWeight: 800,
-                  }}
-                >
-                  LIVE FEED
-                </span>
-              </div>
-
-              {/* Notice 1 inside mockup */}
-              <div
-                style={{
-                  background: '#1A1A1A',
-                  border: '1.5px solid #282828',
-                  borderRadius: 20,
-                  padding: 18,
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                  <span
-                    style={{
-                      background: '#ffffff',
-                      color: '#111111',
-                      borderRadius: '9999px',
-                      padding: '2px 10px',
-                      fontSize: 10,
-                      fontWeight: 800,
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    General
-                  </span>
-                  <span style={{ color: 'var(--accent-lime)', fontSize: 11, fontWeight: 700 }}>
-                    📌 Pinned
-                  </span>
-                </div>
-                <h3 style={{ margin: '0 0 4px', fontSize: 16, fontWeight: 900, color: '#ffffff' }}>
-                  Annual Cultural Fest
-                </h3>
-                <div style={{ fontSize: 12, color: '#A0A0A0' }}>
-                  Oct 14 · 12:00 PM
-                </div>
-              </div>
-
-              {/* Notice 2 inside mockup */}
-              <div
-                style={{
-                  background: '#1A1A1A',
-                  border: '1.5px solid #282828',
-                  borderRadius: 20,
-                  padding: 18,
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                  <span
-                    style={{
-                      background: 'var(--accent-pink)',
-                      color: '#111111',
-                      borderRadius: '9999px',
-                      padding: '2px 10px',
-                      fontSize: 10,
-                      fontWeight: 800,
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    Placement
-                  </span>
-                </div>
-                <h3 style={{ margin: '0 0 4px', fontSize: 16, fontWeight: 900, color: '#ffffff' }}>
-                  Placement Drive
-                </h3>
-                <div style={{ fontSize: 12, color: '#A0A0A0' }}>
-                  Oct 15 · 10:00 AM
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 3 Role Bento Cards - Style Guide Panel 1 Bottom Row */}
-        <section
-          id="roles"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: 20,
-            marginBottom: 72,
-          }}
-        >
-          {/* Card 1: Acid Lime - For Students */}
+      {/* Hero Section */}
+      <main style={{ maxWidth: 1280, margin: '0 auto', padding: '48px 24px 80px' }}>
+        <div style={{ maxWidth: 860, margin: '0 auto', textAlign: 'center' }}>
           <div
             style={{
-              background: 'var(--accent-lime)',
-              color: '#111111',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              background: 'var(--neo-secondary)',
               border: '2px solid var(--border)',
-              borderRadius: 26,
-              padding: '28px 24px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              minHeight: 180,
-              boxShadow: '0 6px 16px rgba(0,0,0,0.06)',
+              boxShadow: 'var(--shadow-sm)',
+              padding: '6px 14px',
+              fontSize: 12,
+              fontWeight: 900,
+              textTransform: 'uppercase',
+              marginBottom: 20,
             }}
           >
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                <GraduationCap width={20} height={20} />
-                <h3 style={{ margin: 0, fontSize: 20, fontWeight: 900, letterSpacing: '-0.02em' }}>
-                  For Students
-                </h3>
-              </div>
-              <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: 'rgba(0,0,0,0.8)', lineHeight: 1.4 }}>
-                Get the latest updates, events and opportunities.
-              </p>
-            </div>
-            <button
-              type="button"
+            <Sparkles width={14} height={14} />
+            <span>Noise-Free Academic Communication</span>
+          </div>
+
+          <h1
+            style={{
+              fontSize: 'clamp(32px, 5vw, 56px)',
+              lineHeight: 1.05,
+              fontWeight: 900,
+              textTransform: 'uppercase',
+              letterSpacing: '-0.03em',
+              margin: '0 0 20px',
+            }}
+          >
+            Stop Losing Important Campus Notices in WhatsApp Noise.
+          </h1>
+
+          <p
+            style={{
+              fontSize: 'clamp(15px, 2vw, 18px)',
+              lineHeight: 1.5,
+              color: 'var(--text-2)',
+              margin: '0 auto 32px',
+              maxWidth: 720,
+              fontWeight: 500,
+            }}
+          >
+            Updates are scattered across unverified WhatsApp groups, crowded physical notice boards, and unread email threads.
+            Campus Voice delivers a single, verified, role-tailored channel for students, faculty, and administration.
+          </p>
+
+          {/* Quick Demo Access Bar */}
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 12,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Button
+              variant="primary"
+              size="lg"
+              icon={GraduationCap}
               onClick={() => handleQuickLogin('student')}
-              style={{
-                marginTop: 20,
-                alignSelf: 'flex-start',
-                background: 'none',
-                border: 'none',
-                padding: 0,
-                fontWeight: 900,
-                fontSize: 14,
-                color: '#111111',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 4,
-                textDecoration: 'underline',
-              }}
             >
-              Enter as Student →
-            </button>
-          </div>
-
-          {/* Card 2: Bubblegum Pink - For Faculty */}
-          <div
-            style={{
-              background: 'var(--accent-pink)',
-              color: '#111111',
-              border: '2px solid var(--border)',
-              borderRadius: 26,
-              padding: '28px 24px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              minHeight: 180,
-              boxShadow: '0 6px 16px rgba(0,0,0,0.06)',
-            }}
-          >
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                <FileCheck2 width={20} height={20} />
-                <h3 style={{ margin: 0, fontSize: 20, fontWeight: 900, letterSpacing: '-0.02em' }}>
-                  For Faculty
-                </h3>
-              </div>
-              <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: 'rgba(0,0,0,0.8)', lineHeight: 1.4 }}>
-                Publish notices, reach students and track engagement.
-              </p>
-            </div>
-            <button
-              type="button"
+              Launch Student Feed
+            </Button>
+            <Button
+              variant="secondary"
+              size="lg"
+              icon={FileCheck2}
               onClick={() => handleQuickLogin('faculty')}
-              style={{
-                marginTop: 20,
-                alignSelf: 'flex-start',
-                background: 'none',
-                border: 'none',
-                padding: 0,
-                fontWeight: 900,
-                fontSize: 14,
-                color: '#111111',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 4,
-                textDecoration: 'underline',
-              }}
             >
-              Enter as Faculty →
-            </button>
+              Enter Faculty Office
+            </Button>
+            <Button
+              variant="secondary"
+              size="lg"
+              icon={ShieldCheck}
+              onClick={() => handleQuickLogin('admin')}
+            >
+              Open Admin Console
+            </Button>
           </div>
 
-          {/* Card 3: Electric Blue - For Administrators */}
-          <div
-            style={{
-              background: 'var(--accent-blue)',
-              color: '#ffffff',
-              border: '2px solid var(--border)',
-              borderRadius: 26,
-              padding: '28px 24px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              minHeight: 180,
-              boxShadow: '0 6px 16px rgba(0,0,0,0.06)',
-            }}
-          >
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                <ShieldCheck width={20} height={20} />
-                <h3 style={{ margin: 0, fontSize: 20, fontWeight: 900, letterSpacing: '-0.02em', color: '#ffffff' }}>
-                  For Administrators
-                </h3>
-              </div>
-              <p style={{ margin: 0, fontSize: 14, fontWeight: 500, color: 'rgba(255,255,255,0.9)', lineHeight: 1.4 }}>
-                Review, approve and manage campus communications.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('admin')}
-              style={{
-                marginTop: 20,
-                alignSelf: 'flex-start',
-                background: 'none',
-                border: 'none',
-                padding: 0,
-                fontWeight: 900,
-                fontSize: 14,
-                color: '#ffffff',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 4,
-                textDecoration: 'underline',
-              }}
-            >
-              Enter as Admin →
-            </button>
+          <div style={{ marginTop: 14, fontSize: 11, color: 'var(--text-3)', fontWeight: 700, textTransform: 'uppercase' }}>
+            ⚡ Instant one-click demo access · No sign-up required · Live cross-tab sync enabled
           </div>
-        </section>
+        </div>
 
         {/* The Problem vs The Solution Cards */}
         <section style={{ marginTop: 64, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24 }}>

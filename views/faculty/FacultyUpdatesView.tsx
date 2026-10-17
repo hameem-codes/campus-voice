@@ -143,148 +143,83 @@ export function FacultyUpdatesView() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-      {/* Editorial Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
-        <div>
-          <h1
-            style={{
-              fontFamily: 'var(--font-heading)',
-              fontSize: 'clamp(26px, 3.2vw, 36px)',
-              fontWeight: 900,
-              letterSpacing: '-0.03em',
-              margin: '0 0 4px',
-              color: 'var(--text-1)',
-            }}
-          >
-            My Notices
-          </h1>
-          <p style={{ margin: 0, color: 'var(--text-2)', fontSize: 14 }}>
-            Track notice status, revise drafts, and monitor student engagement reach.
-          </p>
-        </div>
-
-        <button
-          type="button"
-          className="action-btn-primary"
-          style={{ fontSize: 13, padding: '10px 20px', display: 'flex', alignItems: 'center', gap: 8 }}
-          onClick={() => router.push('/faculty/create')}
-        >
-          <Plus width={16} height={16} />
-          <span>New Notice</span>
-        </button>
-      </div>
-
-      {/* Pill Navigation Tabs */}
-      <div className="pill-nav-container" style={{ alignSelf: 'flex-start', margin: 0 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      {/* 1. Status Tabs with accurate live counts */}
+      {/* 1. Status Tabs (only show tabs with counts > 0) */}
+      <div className="tabs">
         {['All', 'Draft', 'Pending', 'Published', 'Rejected', 'Scheduled', 'Archived']
           .filter((status) => status === 'All' || (tabCounts[status] || 0) > 0)
           .map((status) => (
             <button
               key={status}
               type="button"
-              className={`pill-nav-btn ${activeTab === status ? 'active' : ''}`}
+              className={`tab ${activeTab === status ? 'active' : ''}`}
               onClick={() => {
                 setActiveTab(status)
                 setSelectedIds([])
               }}
             >
-              <span>{status}</span>
-              <span
-                style={{
-                  padding: '2px 8px',
-                  borderRadius: 9999,
-                  fontSize: 11,
-                  fontWeight: 900,
-                  background: activeTab === status ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.2)',
-                  color: activeTab === status ? '#111111' : '#ffffff',
-                }}
-              >
+              {status}
+              <span className={`tab-pill ${status === 'Pending' && tabCounts[status] > 0 ? 'orange' : ''}`}>
                 {tabCounts[status] || 0}
               </span>
             </button>
           ))}
       </div>
 
-      {/* Search and Bulk Actions */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
-        <div style={{ position: 'relative', flex: '1 1 300px', maxWidth: 500 }}>
-          <Search
-            width={16}
-            height={16}
-            style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-3)', pointerEvents: 'none' }}
-          />
-          <input
-            className="pill-search-input"
-            aria-label="Search my updates"
-            placeholder="Search by title, keyword, or category..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ paddingLeft: 42, background: 'var(--bg-surface)' }}
-          />
+      {/* 2. Toolbar */}
+      <div className="toolbar">
+        <div className="toolbar-left">
+          <div className="toolbar-search">
+            <Search />
+            <input
+              className="search-input"
+              aria-label="Search my updates"
+              placeholder="Search by title, keyword, or category"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          {selectedIds.length > 0 && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 12, fontWeight: 500 }}>
+                {selectedIds.length} selected
+              </span>
+              <Button variant="secondary" size="sm" icon={Archive} onClick={handleBulkArchive}>
+                Archive
+              </Button>
+              <Button variant="danger" size="sm" icon={Trash2} onClick={handleBulkDelete}>
+                Delete
+              </Button>
+            </div>
+          )}
         </div>
 
-        {selectedIds.length > 0 && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 12, fontWeight: 700 }}>
-              {selectedIds.length} selected
-            </span>
-            <button
-              type="button"
-              onClick={handleBulkArchive}
-              style={{
-                background: '#ffffff',
-                color: '#111111',
-                border: '1.5px solid var(--border)',
-                borderRadius: '9999px',
-                padding: '6px 14px',
-                fontWeight: 800,
-                fontSize: 12,
-                cursor: 'pointer',
-              }}
-            >
-              Archive
-            </button>
-            <button
-              type="button"
-              onClick={handleBulkDelete}
-              style={{
-                background: '#ffffff',
-                color: 'var(--accent-pink)',
-                border: '1.5px solid var(--border)',
-                borderRadius: '9999px',
-                padding: '6px 14px',
-                fontWeight: 800,
-                fontSize: 12,
-                cursor: 'pointer',
-              }}
-            >
-              Delete
-            </button>
-          </div>
-        )}
+        <div className="toolbar-right">
+          <Button
+            variant="primary"
+            icon={Plus}
+            onClick={() => router.push('/faculty/create')}
+          >
+            New notice
+          </Button>
+        </div>
       </div>
 
-      {/* Styled Neo-Brutalist Rounded Data Table */}
-      <div
-        style={{
-          background: 'var(--bg-surface)',
-          borderRadius: 24,
-          border: '2px solid var(--border)',
-          overflow: 'hidden',
-          boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
-        }}
-      >
-        <table className="data-table" style={{ margin: 0 }}>
+      {/* 3. Table Wrap */}
+      <div className="table-wrap">
+        <table className="data-table">
           <thead>
-            <tr style={{ background: 'rgba(0,0,0,0.02)' }}>
-              <th style={{ width: 44, paddingLeft: 18 }}>
+            <tr>
+              <th style={{ width: 40 }}>
                 <input
                   type="checkbox"
-                  checked={filteredList.length > 0 && selectedIds.length === filteredList.length}
+                  checked={
+                    filteredList.length > 0 && selectedIds.length === filteredList.length
+                  }
                   onChange={toggleSelectAll}
-                  aria-label="Select all"
-                  style={{ width: 16, height: 16, cursor: 'pointer', accentColor: '#111111' }}
+                  aria-label="Select all rows"
                 />
               </th>
               <th>Notice</th>

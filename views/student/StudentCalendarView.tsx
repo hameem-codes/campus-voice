@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useMemo, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import {
   ChevronLeft,
   ChevronRight,
@@ -17,7 +16,6 @@ import { downloadICS, downloadMonthICS, formatDisplayDate, isSameDay, isToday } 
 import { UpdateItem } from '@/types'
 
 export function StudentCalendarView() {
-  const router = useRouter()
   const { updates, categories } = useStore()
 
   // Calendar View Mode: Month, Week, Agenda (default to Agenda on mobile)
@@ -252,213 +250,48 @@ export function StudentCalendarView() {
         })}
       </div>
 
-      {/* View Mode 1: Month True Grid with Event Details & Upcoming Panel (Panel 6) */}
+      {/* View Mode 1: Month True Grid */}
       {viewMode === 'Month' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 24, alignItems: 'start' }}>
-          {/* Left Column: Month Calendar */}
-          <div
-            style={{
-              background: 'var(--bg-surface)',
-              border: '2px solid var(--border)',
-              borderRadius: 26,
-              padding: 24,
-              boxShadow: '0 4px 16px rgba(0,0,0,0.03)',
-            }}
-          >
-            <div className="month-calendar-wrap" style={{ border: 'none', margin: 0 }}>
-              <div className="month-grid-header">
-                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((d) => (
-                  <div key={d} className="month-grid-header-cell">
-                    {d}
-                  </div>
-                ))}
+        <div className="month-calendar-wrap">
+          <div className="month-grid-header">
+            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((d) => (
+              <div key={d} className="month-grid-header-cell">
+                {d}
               </div>
-
-              <div className="month-grid-body">
-                {monthDays.map((cell, idx) => {
-                  const currentCellIsToday = isToday(cell.date)
-                  const hasEvents = cell.events.length > 0
-
-                  return (
-                    <div
-                      key={idx}
-                      className={`month-cell ${!cell.isCurrentMonth ? 'month-cell-outside' : ''} ${currentCellIsToday ? 'month-cell-today' : ''}`}
-                      onClick={() => {
-                        if (hasEvents) {
-                          setSelectedEvent(cell.events[0])
-                        }
-                      }}
-                      style={{ cursor: hasEvents ? 'pointer' : 'default', minHeight: 68 }}
-                    >
-                      <div className="month-cell-date" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span className={`date-badge ${currentCellIsToday ? 'active' : ''}`}>
-                          {cell.date.getDate()}
-                        </span>
-                        {hasEvents && (
-                          <span
-                            style={{
-                              width: 8,
-                              height: 8,
-                              borderRadius: '50%',
-                              background: 'var(--accent-lime)',
-                              border: '1.5px solid #111111',
-                              display: 'inline-block',
-                            }}
-                          />
-                        )}
-                      </div>
-
-                      <div className="month-cell-events">
-                        {cell.events.slice(0, 1).map((ev) => (
-                          <button
-                            key={ev.id}
-                            type="button"
-                            className={`month-event-pill ${ev.priority === 'Urgent' ? 'orange' : 'blue'}`}
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              setSelectedEvent(ev)
-                            }}
-                            title={ev.title}
-                          >
-                            <span className="event-pill-text">{ev.title}</span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
+            ))}
           </div>
 
-          {/* Right Column: Event Details Card & Upcoming Events List (Panel 6) */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-            {/* Event Details Card */}
-            {(() => {
-              const active = selectedEvent || calendarEvents[0] || null
+          <div className="month-grid-body">
+            {monthDays.map((cell, idx) => {
+              const currentCellIsToday = isToday(cell.date)
+
               return (
                 <div
-                  style={{
-                    background: 'var(--bg-surface)',
-                    border: '2px solid var(--border)',
-                    borderRadius: 26,
-                    padding: 24,
-                    boxShadow: '0 4px 16px rgba(0,0,0,0.03)',
-                  }}
+                  key={idx}
+                  className={`month-cell ${!cell.isCurrentMonth ? 'month-cell-outside' : ''} ${currentCellIsToday ? 'month-cell-today' : ''}`}
                 >
-                  <div style={{ fontSize: 11, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-3)', marginBottom: 8 }}>
-                    Event Details
+                  <div className="month-cell-date">
+                    <span className={`date-badge ${currentCellIsToday ? 'active' : ''}`}>
+                      {cell.date.getDate()}
+                    </span>
                   </div>
-                  <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 24, fontWeight: 900, margin: '0 0 10px', color: '#111111', letterSpacing: '-0.02em' }}>
-                    {active ? active.title : 'Select an Event'}
-                  </h2>
-                  {active ? (
-                    <>
-                      <div style={{ fontSize: 13, color: 'var(--text-2)', marginBottom: 4, fontWeight: 600 }}>
-                        📅 {formatDisplayDate(active.eventDate || active.deadlineDate)}
-                      </div>
-                      <div style={{ fontSize: 13, color: 'var(--text-3)', marginBottom: 20, fontWeight: 500 }}>
-                        📍 {active.department} · {active.category}
-                      </div>
 
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-                        <button
-                          type="button"
-                          onClick={() => router.push(`/student/${active.id}`)}
-                          style={{
-                            background: 'var(--accent-lime)',
-                            color: '#111111',
-                            border: '2px solid var(--border)',
-                            borderRadius: '9999px',
-                            padding: '10px 22px',
-                            fontWeight: 900,
-                            fontSize: 13,
-                            cursor: 'pointer',
-                          }}
-                        >
-                          View Details
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => downloadICS({
-                            title: active.title,
-                            description: active.excerpt,
-                            location: active.department,
-                            startDate: (active.eventDate || active.deadlineDate)!,
-                          })}
-                          style={{
-                            background: '#ffffff',
-                            color: '#111111',
-                            border: '2px solid var(--border)',
-                            borderRadius: '9999px',
-                            padding: '10px 20px',
-                            fontWeight: 800,
-                            fontSize: 13,
-                            cursor: 'pointer',
-                          }}
-                        >
-                          + Add to Calendar
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    <p style={{ color: 'var(--text-3)', fontSize: 13, margin: 0 }}>
-                      Click on any highlighted day in the calendar to inspect its details.
-                    </p>
-                  )}
+                  <div className="month-cell-events">
+                    {cell.events.map((ev) => (
+                      <button
+                        key={ev.id}
+                        type="button"
+                        className={`month-event-pill ${ev.priority === 'Urgent' ? 'orange' : 'blue'}`}
+                        onClick={() => setSelectedEvent(ev)}
+                        title={ev.title}
+                      >
+                        <span className="event-pill-text">{ev.title}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )
-            })()}
-
-            {/* Upcoming Events List */}
-            <div
-              style={{
-                background: 'var(--bg-surface)',
-                border: '2px solid var(--border)',
-                borderRadius: 26,
-                padding: 24,
-                boxShadow: '0 4px 16px rgba(0,0,0,0.03)',
-              }}
-            >
-              <div style={{ fontSize: 16, fontWeight: 900, fontFamily: 'var(--font-heading)', marginBottom: 16, color: '#111111', letterSpacing: '-0.02em' }}>
-                Upcoming Events
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {calendarEvents.slice(0, 4).map((ev, i) => {
-                  const colors = ['var(--accent-blue)', 'var(--accent-pink)', 'var(--accent-lime)', '#111111']
-                  const dotColor = colors[i % colors.length]
-                  const isSelected = (selectedEvent?.id || calendarEvents[0]?.id) === ev.id
-
-                  return (
-                    <div
-                      key={ev.id}
-                      onClick={() => setSelectedEvent(ev)}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: '10px 16px',
-                        background: isSelected ? 'rgba(213,255,56,0.18)' : 'rgba(0,0,0,0.02)',
-                        border: '1.5px solid var(--border)',
-                        borderRadius: '9999px',
-                        cursor: 'pointer',
-                        transition: 'background 0.15s ease',
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
-                        <span style={{ width: 10, height: 10, borderRadius: '50%', background: dotColor, border: '1.5px solid #111111', flexShrink: 0 }} />
-                        <span style={{ fontSize: 13, fontWeight: 800, color: '#111111', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          {ev.title}
-                        </span>
-                      </div>
-                      <span style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 700, flexShrink: 0, marginLeft: 12 }}>
-                        {formatDisplayDate(ev.eventDate || ev.deadlineDate)}
-                      </span>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
+            })}
           </div>
         </div>
       )}

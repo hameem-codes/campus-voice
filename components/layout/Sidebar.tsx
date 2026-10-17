@@ -29,7 +29,6 @@ import {
 } from 'lucide-react'
 import { Role } from '@/types'
 import { useStore } from '@/lib/store'
-import { BrandLogo } from '@/components/ui/BrandLogo'
 import {
   getBrowserNotificationPermission,
   requestBrowserNotification,
@@ -196,29 +195,20 @@ export function Sidebar() {
       aria-label="Main sidebar"
     >
       {/* Brand & collapse */}
-      <div className="workspace" style={{ padding: '4px 6px', marginBottom: 4 }}>
+      <div className="workspace">
         <Link
           href={currentRoleCfg.defaultRoute}
           className="brand-link"
           style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: 'inherit' }}
         >
-          {sidebarCollapsed ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 3, padding: '4px 2px' }} title="CampusVoice">
-              {[14, 22, 18, 12].map((h, i) => (
-                <span
-                  key={i}
-                  style={{
-                    width: 4,
-                    height: h,
-                    backgroundColor: '#D5FF38',
-                    borderRadius: 9999,
-                    display: 'inline-block',
-                  }}
-                />
-              ))}
+          <div className="brand-mark">
+            <MessageSquareText />
+          </div>
+          {!sidebarCollapsed && (
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div className="brand-name" style={{ whiteSpace: 'nowrap' }}>Campus Voice</div>
+              <div className="brand-subtitle" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Design Institute</div>
             </div>
-          ) : (
-            <BrandLogo inverted size="sm" />
           )}
         </Link>
         <button
@@ -226,13 +216,7 @@ export function Sidebar() {
           className="icon-button"
           aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           onClick={toggleSidebar}
-          style={{
-            marginLeft: 'auto',
-            background: 'rgba(255, 255, 255, 0.08)',
-            color: '#FFFFFF',
-            borderColor: 'rgba(255, 255, 255, 0.2)',
-            borderRadius: 'var(--radius-control)',
-          }}
+          style={{ marginLeft: 'auto' }}
         >
           {sidebarCollapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
         </button>
@@ -241,31 +225,14 @@ export function Sidebar() {
       {/* Global search */}
       {!sidebarCollapsed ? (
         <form onSubmit={handleSearchSubmit} className="sidebar-search">
-          <Search style={{ color: '#A3A3A3' }} />
+          <Search />
           <input
             aria-label="Search workspace"
-            placeholder="Search..."
+            placeholder="Search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{
-              background: 'rgba(255, 255, 255, 0.08)',
-              color: '#FFFFFF',
-              borderColor: 'rgba(255, 255, 255, 0.2)',
-              borderRadius: 'var(--radius-pill)',
-            }}
           />
-          <span
-            className="shortcut"
-            style={{
-              background: 'var(--accent-lime)',
-              color: '#111111',
-              borderRadius: '6px',
-              border: 'none',
-              fontWeight: 800,
-            }}
-          >
-            ⌘ F
-          </span>
+          <span className="shortcut">⌘ F</span>
         </form>
       ) : (
         <button
@@ -273,12 +240,6 @@ export function Sidebar() {
           className="icon-button sidebar-collapsed-btn"
           aria-label="Global search"
           onClick={() => router.push('/search')}
-          style={{
-            background: 'rgba(255, 255, 255, 0.08)',
-            color: '#FFFFFF',
-            borderColor: 'rgba(255, 255, 255, 0.2)',
-            borderRadius: 'var(--radius-control)',
-          }}
         >
           <Search />
         </button>

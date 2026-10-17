@@ -37,86 +37,96 @@ export function AdminHomeView() {
   const deliveryReach = adminMetrics.averageReach > 0 ? `${adminMetrics.averageReach}%` : '94%'
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {/* Editorial Dashboard Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      {/* Dense Header: factual summary + inline KPIs + actions */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 16,
+          padding: '16px 20px',
+          background: 'var(--bg-surface)',
+          border: '3px solid var(--border)',
+          boxShadow: 'var(--shadow-sm)',
+        }}
+      >
         <div>
-          <h1
-            style={{
-              fontFamily: 'var(--font-heading)',
-              fontSize: 'clamp(28px, 3.5vw, 40px)',
-              fontWeight: 900,
-              letterSpacing: '-0.03em',
-              margin: '0 0 6px',
-              color: 'var(--text-1)',
-            }}
-          >
-            Admin Dashboard
-          </h1>
-          <p style={{ margin: 0, color: 'var(--text-2)', fontSize: 15 }}>
-            Review campus operations, manage notices, and coordinate student approvals.
-          </p>
+          <h2 style={{ margin: 0, fontSize: 18, fontWeight: 900, textTransform: 'uppercase', color: 'var(--text-1)' }}>
+            {publishedCount} published, {pendingCount} pending review
+          </h2>
+          <div style={{ marginTop: 4 }}>
+            <Link
+              href="/admin/setup"
+              className="details-link"
+              style={{ fontSize: 11 }}
+            >
+              <span>Manage audiences →</span>
+            </Link>
+          </div>
         </div>
 
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          <button
-            type="button"
-            className="action-btn-secondary"
-            style={{ fontSize: 13, padding: '10px 18px', display: 'flex', alignItems: 'center', gap: 6 }}
+        {/* Inline KPI stats linked to filtered views (Phase 4.7) */}
+        <div className="admin-header-kpis">
+          <Link
+            href="/admin/updates?status=Published"
+            className="admin-kpi-item"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+            title="View published notices"
+          >
+            <span>Published:</span>
+            <strong>{publishedCount}</strong>
+          </Link>
+          <Link
+            href="/admin/updates?status=Pending"
+            className="admin-kpi-item"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+            title="Review pending submissions"
+          >
+            <span>Pending:</span>
+            <strong style={{ color: pendingCount > 0 ? 'var(--neo-accent)' : 'inherit' }}>
+              {pendingCount}
+            </strong>
+          </Link>
+          <Link
+            href="/admin/users"
+            className="admin-kpi-item"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+            title="View enrolled campus users"
+          >
+            <span>Users:</span>
+            <strong>{totalUsers.toLocaleString()}</strong>
+          </Link>
+          <Link
+            href="/admin/analytics"
+            className="admin-kpi-item"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+            title="View delivery reach analytics"
+          >
+            <span>Delivery:</span>
+            <strong>{deliveryReach}</strong>
+          </Link>
+        </div>
+
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <Button
+            variant="secondary"
+            size="sm"
+            icon={Inbox}
             onClick={() => router.push('/admin/updates')}
           >
-            <Inbox width={16} height={16} />
-            <span>Review Queue</span>
-          </button>
-          <button
-            type="button"
-            className="action-btn-primary"
-            style={{ fontSize: 13, padding: '10px 20px', display: 'flex', alignItems: 'center', gap: 6 }}
+            Review queue
+          </Button>
+          <Button
+            variant="primary"
+            size="sm"
+            icon={Plus}
             onClick={() => router.push('/admin/create')}
           >
-            <Plus width={16} height={16} />
-            <span>Create Notice</span>
-          </button>
+            New notice
+          </Button>
         </div>
-      </div>
-
-      {/* KPI Bento Grid - Matching Style Guide */}
-      <div className="kpi-bento-grid">
-        <Link
-          href="/admin/updates?status=Published"
-          className="kpi-card lime"
-          style={{ textDecoration: 'none', color: '#111111' }}
-        >
-          <div className="kpi-label">Published Notices</div>
-          <div className="kpi-value">{publishedCount}</div>
-        </Link>
-
-        <Link
-          href="/admin/users"
-          className="kpi-card white"
-          style={{ textDecoration: 'none', color: '#111111' }}
-        >
-          <div className="kpi-label">Enrolled Users</div>
-          <div className="kpi-value">{totalUsers.toLocaleString()}</div>
-        </Link>
-
-        <Link
-          href="/admin/updates?status=Pending"
-          className="kpi-card pink"
-          style={{ textDecoration: 'none', color: '#111111' }}
-        >
-          <div className="kpi-label">Pending Approval</div>
-          <div className="kpi-value">{pendingCount}</div>
-        </Link>
-
-        <Link
-          href="/admin/analytics"
-          className="kpi-card blue"
-          style={{ textDecoration: 'none', color: '#ffffff' }}
-        >
-          <div className="kpi-label">Delivery Reach</div>
-          <div className="kpi-value">{deliveryReach}</div>
-        </Link>
       </div>
 
       {/* Needs your attention: Amber left border & tinted bg */}

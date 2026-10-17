@@ -815,54 +815,30 @@ export function FacultyCreateView() {
         )}
 
         {/* Form Footer */}
-        <div className="form-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 24, paddingTop: 16, borderTop: '2px solid var(--border)' }}>
-          <button
-            type="button"
-            className="action-btn-secondary"
+        <div className="form-footer">
+          <Button
+            variant="secondary"
             disabled={step === 0}
             onClick={() => setStep((s) => Math.max(0, s - 1))}
-            style={{ opacity: step === 0 ? 0.4 : 1, cursor: step === 0 ? 'not-allowed' : 'pointer', fontSize: 13, padding: '10px 20px' }}
           >
             Back
-          </button>
+          </Button>
 
           {step < steps.length - 1 ? (
-            <button
-              type="button"
-              className="action-btn-primary"
-              onClick={handleNext}
-              style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, padding: '10px 22px' }}
-            >
-              <span>Continue</span>
-              <ArrowUpRight width={16} height={16} />
-            </button>
+            <Button variant="primary" iconRight={ArrowUpRight} onClick={handleNext}>
+              Continue
+            </Button>
           ) : (
-            <button
-              type="button"
-              className="action-btn-primary"
-              onClick={handleSubmit}
-              style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, padding: '10px 24px' }}
-            >
-              <Send width={16} height={16} />
-              <span>Submit for Approval</span>
-            </button>
+            <Button variant="primary" icon={Send} onClick={handleSubmit}>
+              Submit for Admin Approval
+            </Button>
           )}
         </div>
       </section>
 
       {/* Live Student Preview Panel (Task 4.6 & 3.6) */}
-      <aside className="preview-panel" style={{ width: 360, flexShrink: 0 }}>
-        <div
-          style={{
-            background: 'var(--bg-surface)',
-            padding: 20,
-            border: '2px solid var(--border)',
-            borderRadius: 26,
-            boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
-            position: 'sticky',
-            top: 80,
-          }}
-        >
+      <aside className="preview-panel" style={{ width: 340, flexShrink: 0 }}>
+        <div className="panel-card" style={{ padding: 18, border: '3px solid var(--border)', boxShadow: 'var(--shadow-sm)', position: 'sticky', top: 80 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <Eye width={15} height={15} />
@@ -871,19 +847,11 @@ export function FacultyCreateView() {
             <StatusChip tone="neutral">Live</StatusChip>
           </div>
 
-          <div
-            style={{
-              background: 'var(--bg-muted)',
-              padding: '12px 14px',
-              border: '2px solid var(--border)',
-              borderRadius: 18,
-              marginBottom: 16,
-            }}
-          >
+          <div style={{ background: 'var(--bg-muted)', padding: '10px 12px', border: '2px solid var(--border)', marginBottom: 14 }}>
             <div style={{ fontSize: 10, fontWeight: 900, textTransform: 'uppercase', color: 'var(--text-3)' }}>
               🎯 Estimated Cohort Reach
             </div>
-            <div style={{ fontSize: 22, fontWeight: 900, color: 'var(--text-1)', marginTop: 2 }}>
+            <div style={{ fontSize: 20, fontWeight: 900, color: 'var(--text-1)', marginTop: 2 }}>
               {estimatedReach.toLocaleString()} <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-3)' }}>/ 2,412 students</span>
             </div>
             <div style={{ fontSize: 11, color: 'var(--text-2)', marginTop: 2, fontWeight: 700 }}>
