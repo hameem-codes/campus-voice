@@ -1460,4 +1460,27 @@ html.dark .role-dropdown-item:hover, html.dark .role-dropdown-item.selected {
   color: #000000;
 }
 
+/* Screen 2 Student Dashboard Feed Responsive Layout */
+@media (max-width: 1140px) {
+  .dashboard-columns {
+    grid-template-columns: 220px minmax(0, 1fr) !important;
+  }
+  .dashboard-columns > aside:last-child {
+    grid-column: 1 / -1;
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 820px) {
+  .dashboard-columns {
+    grid-template-columns: 1fr !important;
+  }
+  .dashboard-columns > aside:first-child {
+    min-height: auto !important;
+  }
+}
+
+
 
