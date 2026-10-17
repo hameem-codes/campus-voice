@@ -55,7 +55,7 @@ const roleNavMap: Record<Role, NavItemDef[]> = {
     { href: '/student/placements', label: 'Placements', icon: Briefcase },
     { href: '/student/academic', label: 'Academic', icon: GraduationCap },
     { href: '/student/general', label: 'General', icon: Folder },
-    { href: '/student/saved', label: 'Saved', icon: Bookmark, badgeKey: 'saved' },
+    { href: '/student/saved', label: 'Bookmarked', icon: Bookmark, badgeKey: 'saved' },
     { href: '/student/profile', label: 'Profile', icon: UserRound },
   ],
   faculty: [
