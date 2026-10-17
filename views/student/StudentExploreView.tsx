@@ -835,7 +835,7 @@ export function StudentExploreView() {
               {/* 4. Events */}
               <button
                 type="button"
-                onClick={() => setActiveCategory('Events')}
+                onClick={() => router.push('/student/calendar')}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -844,8 +844,8 @@ export function StudentExploreView() {
                   padding: '10px 16px',
                   borderRadius: 14,
                   border: 'none',
-                  backgroundColor: activeCategory === 'Events' ? '#D5FF38' : 'transparent',
-                  color: activeCategory === 'Events' ? '#111111' : '#9CA3AF',
+                  backgroundColor: 'transparent',
+                  color: '#9CA3AF',
                   fontWeight: 700,
                   fontSize: 13,
                   cursor: 'pointer',

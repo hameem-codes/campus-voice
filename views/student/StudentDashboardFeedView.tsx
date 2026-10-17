@@ -986,10 +986,7 @@ export function StudentDashboardFeedView({
               {/* 4. Events */}
               <button
                 type="button"
-                onClick={() => {
-                  setActiveNav('Events')
-                  setActiveFilter('#event')
-                }}
+                onClick={() => router.push('/student/calendar')}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -998,8 +995,8 @@ export function StudentDashboardFeedView({
                   padding: '10px 16px',
                   borderRadius: 14,
                   border: 'none',
-                  backgroundColor: activeNav === 'Events' ? '#D5FF38' : 'transparent',
-                  color: activeNav === 'Events' ? '#111111' : '#9CA3AF',
+                  backgroundColor: 'transparent',
+                  color: '#9CA3AF',
                   fontWeight: 700,
                   fontSize: 13,
                   cursor: 'pointer',
