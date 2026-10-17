@@ -1128,7 +1128,7 @@ export function StudentDashboardFeedView({
               {/* 9. Reading Streak */}
               <button
                 type="button"
-                onClick={() => setReadingStreakModalOpen(true)}
+                onClick={() => router.push('/student/streak')}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -1153,7 +1153,7 @@ export function StudentDashboardFeedView({
 
             {/* Bottom 7 Day Streak Card */}
             <div
-              onClick={() => setReadingStreakModalOpen(true)}
+              onClick={() => router.push('/student/streak')}
               style={{
                 marginTop: 'auto',
                 backgroundColor: '#1C1C1E',

@@ -934,7 +934,7 @@ export function StudentActivityView() {
               {/* 9. Reading Streak */}
               <button
                 type="button"
-                onClick={() => setStreakModalOpen(true)}
+                onClick={() => router.push('/student/streak')}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -959,7 +959,7 @@ export function StudentActivityView() {
 
             {/* Bottom 7 Day Streak Card */}
             <div
-              onClick={() => setStreakModalOpen(true)}
+              onClick={() => router.push('/student/streak')}
               style={{
                 marginTop: 'auto',
                 backgroundColor: '#1C1C1E',

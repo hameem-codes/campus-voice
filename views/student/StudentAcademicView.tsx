@@ -918,7 +918,7 @@ export function StudentAcademicView() {
               {/* 9. Reading Streak */}
               <button
                 type="button"
-                onClick={() => router.push('/student/activity')}
+                onClick={() => router.push('/student/streak')}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -954,7 +954,7 @@ export function StudentAcademicView() {
               cursor: 'pointer',
               boxShadow: '0 4px 14px rgba(0,0,0,0.12)',
             }}
-            onClick={() => router.push('/student/activity')}
+            onClick={() => router.push('/student/streak')}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div

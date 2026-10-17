@@ -30,6 +30,7 @@ import {
   Megaphone,
   Briefcase,
   Folder,
+  Timer,
 } from 'lucide-react'
 import { Role } from '@/types'
 import { useStore } from '@/lib/store'
@@ -56,7 +57,7 @@ const roleNavMap: Record<Role, NavItemDef[]> = {
     { href: '/student/academic', label: 'Academic', icon: GraduationCap },
     { href: '/student/general', label: 'General', icon: Folder },
     { href: '/student/saved', label: 'Bookmarked', icon: Bookmark, badgeKey: 'saved' },
-    { href: '/student/profile', label: 'Profile', icon: UserRound },
+    { href: '/student/streak', label: 'Reading Streak', icon: Timer },
   ],
   faculty: [
     { href: '/faculty', label: 'Home', icon: Home },
