@@ -157,6 +157,15 @@ export interface AuditLogItem {
   details: string
   timestamp: string
   updateId?: string
+  module?: string
+  ipAddress?: string
+  severity?: 'Low' | 'Medium' | 'High'
+  userAvatar?: string
+  userEmail?: string
+  userId?: string
+  device?: string
+  location?: string
+  status?: string
 }
 
 export interface AppSettings {
