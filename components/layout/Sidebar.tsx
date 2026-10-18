@@ -32,6 +32,7 @@ import {
   Folder,
   Timer,
   Bell,
+  LayoutGrid,
 } from 'lucide-react'
 import { Role } from '@/types'
 import { useStore } from '@/lib/store'
@@ -64,6 +65,7 @@ const roleNavMap: Record<Role, NavItemDef[]> = {
   faculty: [
     { href: '/faculty', label: 'Home', icon: Home },
     { href: '/faculty/create', label: 'New notice', icon: FilePlus2 },
+    { href: '/faculty/templates', label: 'Notice Templates', icon: LayoutGrid },
     { href: '/faculty/updates', label: 'My notices', icon: Inbox, badgeKey: 'updates' },
     { href: '/faculty/analytics', label: 'Analytics', icon: LineChart },
   ],

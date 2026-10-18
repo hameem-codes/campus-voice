@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -87,6 +87,17 @@ export function FacultyCreateView() {
   // Top bar search and menus
   const [searchQuery, setSearchQuery] = useState('')
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
+
+  // Pre-fill from URL query parameters (e.g. from Notice Templates)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const paramTitle = params.get('title')
+      const paramCat = params.get('category')
+      if (paramTitle) setTitle(paramTitle)
+      if (paramCat) setSelectedCategory(paramCat)
+    }
+  }, [])
 
   // Formatting helpers for rich text description
   const handleFormatText = (prefix: string, suffix: string = '') => {
