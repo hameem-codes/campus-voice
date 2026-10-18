@@ -1481,5 +1481,12 @@ html.dark .role-dropdown-item:hover, html.dark .role-dropdown-item.selected {
   }
 }
 
+@media (max-width: 900px) {
+  .hidden-mobile {
+    display: none !important;
+  }
+}
+
+
 
 

@@ -75,10 +75,102 @@ export default function RootPage() {
         backgroundColor: '#F5F5F7',
         color: '#111111',
         fontFamily: '"Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        overflowX: 'hidden',
+        width: '100%',
       }}
     >
+      <style>{`
+        @media (max-width: 900px) {
+          .hidden-mobile {
+            display: none !important;
+          }
+          .page-container {
+            padding: 16px 16px 48px !important;
+          }
+          .header-root {
+            margin-bottom: 24px !important;
+          }
+          .header-brand-title {
+            font-size: 19px !important;
+          }
+          .header-actions {
+            gap: 8px !important;
+          }
+          .header-sign-in {
+            padding: 7px 14px !important;
+            font-size: 13px !important;
+          }
+          .header-get-started {
+            padding: 7px 14px !important;
+            font-size: 13px !important;
+          }
+          .hero-section {
+            grid-template-columns: 1fr !important;
+            gap: 36px !important;
+            margin-bottom: 40px !important;
+          }
+          .hero-badge {
+            font-size: 10px !important;
+            padding: 5px 12px !important;
+            letter-spacing: 0.04em !important;
+          }
+          .hero-title {
+            font-size: clamp(34px, 8.5vw, 44px) !important;
+            line-height: 1.05 !important;
+            margin-bottom: 14px !important;
+          }
+          .hero-subtitle {
+            font-size: 15px !important;
+            line-height: 1.5 !important;
+            margin-bottom: 24px !important;
+          }
+          .hero-cta-buttons {
+            margin-bottom: 28px !important;
+            gap: 10px !important;
+          }
+          .hero-cta-buttons button {
+            padding: 12px 20px !important;
+            font-size: 14.5px !important;
+          }
+          .hero-stats-row {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+            width: 100% !important;
+          }
+          .mockup-wrapper {
+            max-width: 100% !important;
+            overflow: hidden !important;
+            padding: 0 2px !important;
+          }
+          .mockup-black-card {
+            padding: 18px 14px 28px !important;
+            border-radius: 22px !important;
+          }
+          .mockup-inner-grid {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+          }
+          .floating-cards-container {
+            grid-template-columns: 1fr !important;
+            margin-top: -30px !important;
+            gap: 14px !important;
+            padding: 0 !important;
+          }
+          .features-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+          }
+          .feature-card {
+            padding: 20px !important;
+            border-radius: 22px !important;
+          }
+        }
+      `}</style>
+
       {/* Container */}
       <div
+        className="page-container"
         style={{
           maxWidth: 1360,
           margin: '0 auto',
@@ -87,6 +179,7 @@ export default function RootPage() {
       >
         {/* Top Navigation Bar */}
         <header
+          className="header-root"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -128,6 +221,7 @@ export default function RootPage() {
 
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <span
+                className="header-brand-title"
                 style={{
                   fontSize: 22,
                   fontWeight: 900,
@@ -228,9 +322,10 @@ export default function RootPage() {
           </nav>
 
           {/* Right Action Buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div className="header-actions" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <Link
               href="/login"
+              className="header-sign-in"
               style={{
                 backgroundColor: '#FFFFFF',
                 color: '#111111',
@@ -249,6 +344,7 @@ export default function RootPage() {
 
             <button
               type="button"
+              className="header-get-started"
               onClick={() => handleQuickLogin('student')}
               style={{
                 backgroundColor: '#D5FF38',
@@ -275,6 +371,7 @@ export default function RootPage() {
         {/* Hero Section: Split 2-Column Layout */}
         <section
           id="home"
+          className="hero-section"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
@@ -287,6 +384,7 @@ export default function RootPage() {
           <div>
             {/* Top Tag Badge */}
             <div
+              className="hero-badge"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -308,6 +406,7 @@ export default function RootPage() {
 
             {/* Bold Oversized Headline */}
             <h1
+              className="hero-title"
               style={{
                 fontSize: 'clamp(44px, 5.2vw, 68px)',
                 fontWeight: 900,
@@ -324,6 +423,7 @@ export default function RootPage() {
 
             {/* Subtitle */}
             <p
+              className="hero-subtitle"
               style={{
                 fontSize: 17,
                 lineHeight: 1.55,
@@ -338,6 +438,7 @@ export default function RootPage() {
 
             {/* Action Buttons */}
             <div
+              className="hero-cta-buttons"
               style={{
                 display: 'flex',
                 flexWrap: 'wrap',
@@ -394,6 +495,7 @@ export default function RootPage() {
 
             {/* 4 Mini Stats in Horizontal Row */}
             <div
+              className="hero-stats-row"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -496,7 +598,7 @@ export default function RootPage() {
           </div>
 
           {/* Right Column: Interactive Feed Mockup with Overlapping Floating Cards */}
-          <div style={{ position: 'relative', width: '100%', maxWidth: 570, margin: '0 auto' }}>
+          <div className="mockup-wrapper" style={{ position: 'relative', width: '100%', maxWidth: 570, margin: '0 auto' }}>
             {/* Playful Doodles & Arrows */}
             {/* Top Doodle: CAMPUS UPDATES MADE SIMPLE with curved arrow */}
             <div
@@ -531,6 +633,7 @@ export default function RootPage() {
 
             {/* Pink Brush Stroke on Top-Right */}
             <div
+              className="hidden-mobile"
               style={{
                 position: 'absolute',
                 top: 8,
@@ -568,6 +671,7 @@ export default function RootPage() {
 
             {/* Main Black Card Mockup */}
             <div
+              className="mockup-black-card"
               style={{
                 backgroundColor: '#111111',
                 color: '#FFFFFF',
@@ -625,6 +729,7 @@ export default function RootPage() {
                     Announcements
                   </span>
                   <span
+                    className="hidden-mobile"
                     style={{
                       fontSize: 11,
                       color: '#9CA3AF',
@@ -638,6 +743,7 @@ export default function RootPage() {
                     <span>Explore Campus</span>
                   </span>
                   <span
+                    className="hidden-mobile"
                     style={{
                       fontSize: 11,
                       color: '#9CA3AF',
@@ -707,6 +813,7 @@ export default function RootPage() {
 
               {/* 2 Notices Grid inside Mockup */}
               <div
+                className="mockup-inner-grid"
                 style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -942,8 +1049,8 @@ export default function RootPage() {
             </div>
 
             {/* Overlapping Floating Bento Cards at the Bottom */}
-            {/* Overlapping Floating Bento Cards at the Bottom */}
             <div
+              className="floating-cards-container"
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
@@ -956,6 +1063,7 @@ export default function RootPage() {
             >
               {/* Pink Brush Stroke behind Bottom-Left Blue Card */}
               <div
+                className="hidden-mobile"
                 style={{
                   position: 'absolute',
                   bottom: 14,
@@ -1181,6 +1289,7 @@ export default function RootPage() {
         {/* Bottom Row — 3 Bento Feature Cards */}
         <section
           id="features"
+          className="features-grid"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
@@ -1189,6 +1298,7 @@ export default function RootPage() {
         >
           {/* Card 1: For Students (Black #111111) */}
           <div
+            className="feature-card"
             onClick={() => handleQuickLogin('student')}
             style={{
               backgroundColor: '#111111',
@@ -1279,6 +1389,7 @@ export default function RootPage() {
 
           {/* Card 2: For Faculty (White #FFFFFF) */}
           <div
+            className="feature-card"
             onClick={() => handleQuickLogin('faculty')}
             style={{
               backgroundColor: '#FFFFFF',
@@ -1371,6 +1482,7 @@ export default function RootPage() {
 
           {/* Card 3: For Administrators (Electric Blue #2563EB) */}
           <div
+            className="feature-card"
             onClick={() => handleQuickLogin('admin')}
             style={{
               backgroundColor: '#2563EB',
