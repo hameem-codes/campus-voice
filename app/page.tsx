@@ -21,6 +21,7 @@ import {
   Play,
   ArrowRight,
   Pin,
+  Clock,
   Sparkles,
 } from 'lucide-react'
 import { useStore } from '@/lib/store'
@@ -73,7 +74,7 @@ export default function RootPage() {
         minHeight: '100vh',
         backgroundColor: '#F5F5F7',
         color: '#111111',
-        fontFamily: 'var(--font-space-grotesk), "Space Grotesk", sans-serif',
+        fontFamily: '"Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       }}
     >
       {/* Container */}
@@ -395,13 +396,13 @@ export default function RootPage() {
             <div
               style={{
                 display: 'flex',
-                flexWrap: 'wrap',
-                gap: 20,
                 alignItems: 'center',
+                gap: 14,
+                flexWrap: 'nowrap',
               }}
             >
               {/* Stat 1: 10K+ Students */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
                 <div
                   style={{
                     width: 38,
@@ -424,7 +425,7 @@ export default function RootPage() {
               </div>
 
               {/* Stat 2: 500+ Announcements */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
                 <div
                   style={{
                     width: 38,
@@ -447,13 +448,13 @@ export default function RootPage() {
               </div>
 
               {/* Stat 3: 200+ Events */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
                 <div
                   style={{
                     width: 38,
                     height: 38,
                     borderRadius: 10,
-                    backgroundColor: '#3C5BFF',
+                    backgroundColor: '#2563EB',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -470,7 +471,7 @@ export default function RootPage() {
               </div>
 
               {/* Stat 4: 50+ Faculty */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
                 <div
                   style={{
                     width: 38,
@@ -495,31 +496,36 @@ export default function RootPage() {
           </div>
 
           {/* Right Column: Interactive Feed Mockup with Overlapping Floating Cards */}
-          <div style={{ position: 'relative', width: '100%', maxWidth: 580, margin: '0 auto' }}>
+          <div style={{ position: 'relative', width: '100%', maxWidth: 570, margin: '0 auto' }}>
             {/* Playful Doodles & Arrows */}
             {/* Top Doodle: CAMPUS UPDATES MADE SIMPLE with curved arrow */}
             <div
               style={{
                 position: 'absolute',
-                top: -50,
-                left: -20,
+                top: 26,
+                left: -135,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 zIndex: 6,
                 pointerEvents: 'none',
+                transform: 'rotate(-4deg)',
               }}
               className="hidden-mobile"
             >
-              <div style={{ fontSize: 12, fontWeight: 900, letterSpacing: '0.04em', color: '#111111', lineHeight: 1.2, textAlign: 'center' }}>
-                <span style={{ fontSize: 10, display: 'block', marginBottom: 2 }}>\ | /</span>
+              <div style={{ fontSize: 12.5, fontWeight: 900, letterSpacing: '0.03em', color: '#111111', lineHeight: 1.15, textAlign: 'center' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: 4, marginBottom: 2 }}>
+                  <span style={{ transform: 'rotate(-25deg)', display: 'inline-block', fontWeight: 900, fontSize: 11 }}>\</span>
+                  <span style={{ display: 'inline-block', fontWeight: 900, fontSize: 11 }}>'</span>
+                  <span style={{ transform: 'rotate(25deg)', display: 'inline-block', fontWeight: 900, fontSize: 11 }}>/</span>
+                </div>
                 CAMPUS<br />
                 UPDATES<br />
                 MADE SIMPLE
               </div>
-              <svg width="45" height="35" viewBox="0 0 45 35" fill="none" style={{ marginTop: 2, transform: 'rotate(10deg)' }}>
-                <path d="M 38 4 Q 15 10 12 28" stroke="#111111" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-                <path d="M 6 22 L 12 29 L 19 23" stroke="#111111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+              <svg width="68" height="42" viewBox="0 0 68 42" fill="none" style={{ marginTop: 2 }}>
+                <path d="M 22 2 C 2 8, 4 30, 48 30" stroke="#111111" strokeWidth="2.3" strokeLinecap="round" fill="none" />
+                <path d="M 38 23 L 48 30 L 39 37" stroke="#111111" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
               </svg>
             </div>
 
@@ -527,31 +533,14 @@ export default function RootPage() {
             <div
               style={{
                 position: 'absolute',
-                top: -12,
-                right: -16,
-                width: 90,
-                height: 40,
+                top: 8,
+                right: -24,
+                width: 96,
+                height: 42,
                 backgroundColor: '#FA78B9',
-                transform: 'rotate(-18deg)',
-                borderRadius: 12,
+                transform: 'rotate(-20deg)',
+                borderRadius: 14,
                 zIndex: 1,
-                opacity: 0.95,
-              }}
-            />
-
-            {/* Pink Brush Stroke behind Bottom-Left Blue Card */}
-            <div
-              style={{
-                position: 'absolute',
-                bottom: 24,
-                left: -22,
-                width: 80,
-                height: 36,
-                backgroundColor: '#FA78B9',
-                transform: 'rotate(-28deg)',
-                borderRadius: 12,
-                zIndex: 2,
-                opacity: 0.95,
               }}
             />
 
@@ -559,18 +548,22 @@ export default function RootPage() {
             <div
               style={{
                 position: 'absolute',
-                top: '40%',
-                right: -24,
+                top: '44%',
+                right: -28,
+                display: 'flex',
+                gap: 4,
                 fontSize: 16,
                 fontWeight: 900,
                 color: '#111111',
-                transform: 'rotate(15deg)',
+                transform: 'rotate(12deg)',
                 zIndex: 5,
                 userSelect: 'none',
               }}
               className="hidden-mobile"
             >
-              \ | /
+              <span style={{ transform: 'rotate(-20deg)', display: 'inline-block' }}>\</span>
+              <span style={{ display: 'inline-block' }}>|</span>
+              <span style={{ transform: 'rotate(20deg)', display: 'inline-block' }}>/</span>
             </div>
 
             {/* Main Black Card Mockup */}
@@ -580,7 +573,7 @@ export default function RootPage() {
                 color: '#FFFFFF',
                 borderRadius: 28,
                 border: '2px solid #282828',
-                padding: '22px 22px 30px',
+                padding: '22px 22px 28px',
                 boxShadow: '0 24px 50px -10px rgba(0,0,0,0.22)',
                 position: 'relative',
                 zIndex: 3,
@@ -748,8 +741,9 @@ export default function RootPage() {
                       >
                         GENERAL
                       </span>
-                      <span style={{ color: '#FA78B9', fontSize: 11, fontWeight: 800 }}>
-                        📌 Pinned
+                      <span style={{ color: '#FA78B9', fontSize: 11, fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+                        <Pin width={11} height={11} fill="#FA78B9" />
+                        <span>Pinned</span>
                       </span>
                     </div>
 
@@ -761,8 +755,9 @@ export default function RootPage() {
                       Dr AIT welcomes all the students for the garba-26. Dress code: garba outfit Not allowed : shorts and torn jeans Location : College Ground date : 25/10/2026 Time : 7:00PM-9:00PM Dinner is arranged (Location is pinned Taj West End,MG...
                     </p>
 
-                    <div style={{ fontSize: 10, color: '#6B7280', marginBottom: 6 }}>
-                      🕒 15 October 2026 · 11:55 AM
+                    <div style={{ fontSize: 10, color: '#9CA3AF', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <Clock width={10} height={10} />
+                      <span>15 October 2026 · 11:55 AM</span>
                     </div>
 
                     <a
@@ -852,8 +847,9 @@ export default function RootPage() {
                       >
                         EVENT
                       </span>
-                      <span style={{ color: '#FA78B9', fontSize: 11, fontWeight: 800 }}>
-                        📌 Pinned
+                      <span style={{ color: '#FA78B9', fontSize: 11, fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+                        <Pin width={11} height={11} fill="#FA78B9" />
+                        <span>Pinned</span>
                       </span>
                     </div>
 
@@ -865,8 +861,9 @@ export default function RootPage() {
                       Placement drive for pre final and final year students
                     </p>
 
-                    <div style={{ fontSize: 10, color: '#6B7280' }}>
-                      🕒 15 October 2026 · 11:46 AM
+                    <div style={{ fontSize: 10, color: '#9CA3AF', display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <Clock width={10} height={10} />
+                      <span>15 October 2026 · 11:46 AM</span>
                     </div>
                   </div>
 
@@ -945,38 +942,53 @@ export default function RootPage() {
             </div>
 
             {/* Overlapping Floating Bento Cards at the Bottom */}
+            {/* Overlapping Floating Bento Cards at the Bottom */}
             <div
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-                gap: 16,
-                marginTop: -44,
+                gap: 14,
+                marginTop: -92,
                 position: 'relative',
                 zIndex: 4,
-                padding: '0 10px',
+                padding: '0 6px',
               }}
             >
-              {/* Floating Card 1: Electric Blue (#3C5BFF) - Annual Cultural Fest */}
+              {/* Pink Brush Stroke behind Bottom-Left Blue Card */}
               <div
                 style={{
-                  backgroundColor: '#3C5BFF',
+                  position: 'absolute',
+                  bottom: 14,
+                  left: -22,
+                  width: 92,
+                  height: 40,
+                  backgroundColor: '#FA78B9',
+                  transform: 'rotate(-32deg)',
+                  borderRadius: 14,
+                  zIndex: -1,
+                }}
+              />
+
+              {/* Floating Card 1: Electric Blue (#2563EB) - Annual Cultural Fest */}
+              <div
+                style={{
+                  backgroundColor: '#2563EB',
                   color: '#FFFFFF',
                   borderRadius: 22,
-                  padding: 18,
-                  boxShadow: '0 16px 36px rgba(60,91,255,0.35)',
+                  padding: '18px 20px 16px',
+                  boxShadow: '0 18px 36px rgba(37,99,235,0.3)',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
-                  border: '2px solid rgba(255,255,255,0.2)',
                 }}
               >
                 <div>
                   <span
                     style={{
                       backgroundColor: '#FFFFFF',
-                      color: '#3C5BFF',
+                      color: '#2563EB',
                       borderRadius: 9999,
-                      padding: '2px 8px',
+                      padding: '2px 9px',
                       fontSize: 10,
                       fontWeight: 900,
                       textTransform: 'uppercase',
@@ -991,12 +1003,13 @@ export default function RootPage() {
                     Annual Cultural Fest
                   </h4>
 
-                  <p style={{ margin: '0 0 8px', fontSize: 12, color: 'rgba(255,255,255,0.9)', lineHeight: 1.4 }}>
+                  <p style={{ margin: '0 0 8px', fontSize: 12, color: 'rgba(255,255,255,0.92)', lineHeight: 1.4 }}>
                     Buckle up! The annual cultural fest - MAITRI 2026 is about to arrive in style
                   </p>
 
-                  <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.75)' }}>
-                    🕒 14 October 2026 · 12:11 PM
+                  <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.85)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <Clock width={11} height={11} />
+                    <span>14 October 2026 · 12:11 PM</span>
                   </div>
                 </div>
 
@@ -1012,7 +1025,7 @@ export default function RootPage() {
                       color: '#111111',
                       border: 'none',
                       borderRadius: 9999,
-                      padding: '4px 10px',
+                      padding: '4px 11px',
                       fontSize: 11,
                       fontWeight: 800,
                       cursor: 'pointer',
@@ -1033,7 +1046,7 @@ export default function RootPage() {
                       color: '#111111',
                       border: 'none',
                       borderRadius: 9999,
-                      padding: '4px 10px',
+                      padding: '4px 11px',
                       fontSize: 11,
                       fontWeight: 800,
                       cursor: 'pointer',
@@ -1057,7 +1070,7 @@ export default function RootPage() {
                       color: '#111111',
                       border: 'none',
                       borderRadius: 9999,
-                      padding: '4px 10px',
+                      padding: '4px 11px',
                       fontSize: 11,
                       fontWeight: 800,
                       cursor: 'pointer',
@@ -1074,12 +1087,12 @@ export default function RootPage() {
                   backgroundColor: '#D5FF38',
                   color: '#111111',
                   borderRadius: 22,
-                  padding: 18,
+                  padding: '18px 20px 16px',
                   boxShadow: '0 16px 36px rgba(0,0,0,0.12)',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
-                  border: '2px solid #111111',
+                  border: '1.5px solid #111111',
                 }}
               >
                 <div>
@@ -1088,7 +1101,7 @@ export default function RootPage() {
                       backgroundColor: '#FFFFFF',
                       color: '#111111',
                       borderRadius: 9999,
-                      padding: '2px 8px',
+                      padding: '2px 9px',
                       fontSize: 10,
                       fontWeight: 900,
                       textTransform: 'uppercase',
@@ -1108,8 +1121,9 @@ export default function RootPage() {
                     Final-year students can register for the upcoming recruitment drive at the placement cell.
                   </p>
 
-                  <div style={{ fontSize: 11, color: '#4B5563', fontWeight: 600 }}>
-                    🕒 12 October 2026 · 11:00 AM
+                  <div style={{ fontSize: 11, color: '#374151', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <Clock width={11} height={11} />
+                    <span>12 October 2026 · 11:00 AM</span>
                   </div>
                 </div>
 
@@ -1125,7 +1139,7 @@ export default function RootPage() {
                       color: '#111111',
                       border: 'none',
                       borderRadius: 9999,
-                      padding: '4px 10px',
+                      padding: '4px 11px',
                       fontSize: 11,
                       fontWeight: 800,
                       cursor: 'pointer',
@@ -1146,7 +1160,7 @@ export default function RootPage() {
                       color: '#111111',
                       border: 'none',
                       borderRadius: 9999,
-                      padding: '4px 10px',
+                      padding: '4px 11px',
                       fontSize: 11,
                       fontWeight: 800,
                       cursor: 'pointer',
@@ -1355,15 +1369,15 @@ export default function RootPage() {
             </div>
           </div>
 
-          {/* Card 3: For Administrators (Electric Blue #3C5BFF) */}
+          {/* Card 3: For Administrators (Electric Blue #2563EB) */}
           <div
             onClick={() => handleQuickLogin('admin')}
             style={{
-              backgroundColor: '#3C5BFF',
+              backgroundColor: '#2563EB',
               color: '#FFFFFF',
               borderRadius: 26,
               padding: 26,
-              boxShadow: '0 8px 24px rgba(60,91,255,0.25)',
+              boxShadow: '0 8px 24px rgba(37,99,235,0.25)',
               cursor: 'pointer',
               display: 'flex',
               flexDirection: 'column',
@@ -1380,11 +1394,11 @@ export default function RootPage() {
                       width: 52,
                       height: 52,
                       borderRadius: 16,
-                      backgroundColor: '#2642DE',
+                      backgroundColor: '#1D4ED8',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: '#FFFFFF',
+                      color: '#111111',
                     }}
                   >
                     <BarChart3 width={26} height={26} />
@@ -1405,7 +1419,7 @@ export default function RootPage() {
                     height: 40,
                     borderRadius: '50%',
                     backgroundColor: '#FFFFFF',
-                    color: '#3C5BFF',
+                    color: '#111111',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -1420,24 +1434,24 @@ export default function RootPage() {
               {/* 2 Rows of White Pill Tags */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  <span style={{ backgroundColor: 'rgba(255,255,255,0.92)', color: '#111111', borderRadius: 9999, padding: '6px 14px', fontSize: 12, fontWeight: 700 }}>
+                  <span style={{ backgroundColor: '#FFFFFF', color: '#2563EB', borderRadius: 9999, padding: '6px 14px', fontSize: 12, fontWeight: 700 }}>
                     Approval Queue
                   </span>
-                  <span style={{ backgroundColor: 'rgba(255,255,255,0.92)', color: '#111111', borderRadius: 9999, padding: '6px 14px', fontSize: 12, fontWeight: 700 }}>
+                  <span style={{ backgroundColor: '#FFFFFF', color: '#2563EB', borderRadius: 9999, padding: '6px 14px', fontSize: 12, fontWeight: 700 }}>
                     Analytics
                   </span>
-                  <span style={{ backgroundColor: 'rgba(255,255,255,0.92)', color: '#111111', borderRadius: 9999, padding: '6px 14px', fontSize: 12, fontWeight: 700 }}>
+                  <span style={{ backgroundColor: '#FFFFFF', color: '#2563EB', borderRadius: 9999, padding: '6px 14px', fontSize: 12, fontWeight: 700 }}>
                     Role Management
                   </span>
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  <span style={{ backgroundColor: 'rgba(255,255,255,0.92)', color: '#111111', borderRadius: 9999, padding: '6px 14px', fontSize: 12, fontWeight: 700 }}>
+                  <span style={{ backgroundColor: '#FFFFFF', color: '#2563EB', borderRadius: 9999, padding: '6px 14px', fontSize: 12, fontWeight: 700 }}>
                     Readership Stats
                   </span>
-                  <span style={{ backgroundColor: 'rgba(255,255,255,0.92)', color: '#111111', borderRadius: 9999, padding: '6px 14px', fontSize: 12, fontWeight: 700 }}>
+                  <span style={{ backgroundColor: '#FFFFFF', color: '#2563EB', borderRadius: 9999, padding: '6px 14px', fontSize: 12, fontWeight: 700 }}>
                     Audit Logs
                   </span>
-                  <span style={{ backgroundColor: 'rgba(255,255,255,0.92)', color: '#111111', borderRadius: 9999, padding: '6px 14px', fontSize: 12, fontWeight: 700 }}>
+                  <span style={{ backgroundColor: '#FFFFFF', color: '#2563EB', borderRadius: 9999, padding: '6px 14px', fontSize: 12, fontWeight: 700 }}>
                     System Control
                   </span>
                 </div>

@@ -55,9 +55,8 @@ body {
   line-height: 20px;
   -webkit-font-smoothing: antialiased;
 }
-button, input, select, textarea {
+h1, h2, h3, h4, h5, h6, p, button, input, select, textarea {
   font-family: inherit;
-  font-weight: 700;
 }
 button { cursor: pointer; }
 button:disabled { cursor: not-allowed; opacity: .5; }
