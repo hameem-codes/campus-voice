@@ -60,6 +60,7 @@ interface StoreContextType {
   logout: () => void
 
   // Data
+  users: UserProfile[]
   updates: UpdateItem[]
   notifications: NotificationItem[]
   categories: CategoryItem[]
@@ -1389,12 +1390,13 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(
     () => ({
       currentUser,
-      role: currentUser.role,
+      role: (currentUser.role === 'staff' ? 'faculty' : currentUser.role) as Role,
       isAuthenticated,
       isLoaded,
       setRole,
       login,
       logout,
+      users,
       updates,
       notifications,
       categories,
@@ -1482,6 +1484,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       setRole,
       login,
       logout,
+      users,
       updates,
       notifications,
       categories,
