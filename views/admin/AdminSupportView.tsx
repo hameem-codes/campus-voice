@@ -10,6 +10,7 @@ import {
   Megaphone,
   CalendarDays,
   Briefcase,
+  Box,
   GraduationCap,
   Building2,
   Home,
@@ -100,8 +101,8 @@ export function AdminSupportView() {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
 
-  // FAQ Accordion State (open FAQ ID)
-  const [expandedFaq, setExpandedFaq] = useState<number | null>(0)
+  // FAQ Accordion State (open FAQ ID - all collapsed by default to match reference image)
+  const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
 
   // Tickets List State
   const [tickets, setTickets] = useState<SupportTicket[]>([
@@ -503,7 +504,7 @@ export function AdminSupportView() {
                 }}
               >
                 <Image
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=128&q=80"
+                  src="/images/mateen_avatar.jpg"
                   alt="Admin"
                   fill
                   sizes="36px"
@@ -768,7 +769,7 @@ export function AdminSupportView() {
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <Briefcase width={16} height={16} />
+                  <Box width={16} height={16} />
                   <span>Placements</span>
                 </div>
                 <ChevronRight width={14} height={14} />
@@ -903,7 +904,7 @@ export function AdminSupportView() {
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <Activity width={16} height={16} />
+                  <BarChart2 width={16} height={16} />
                   <span>Reports & Analytics</span>
                 </div>
                 <ChevronRight width={14} height={14} />
@@ -1086,17 +1087,16 @@ export function AdminSupportView() {
             </div>
 
             {/* Sticker + 3D Support Agent Visual */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 20, zIndex: 2 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, zIndex: 2 }}>
               {/* Tilted Sticker: QUICK EASY SUPPORT FOR A SMOOTHER CAMPUS EXPERIENCE */}
               <div
                 style={{
                   position: 'relative',
-                  transform: 'rotate(-3deg)',
+                  transform: 'rotate(-5deg)',
                   backgroundColor: '#D5FF38',
-                  border: '2px solid #111111',
                   borderRadius: 12,
-                  padding: '6px 14px',
-                  boxShadow: '3px 3px 0px #111111',
+                  padding: '7px 14px',
+                  boxShadow: '0 4px 14px rgba(0,0,0,0.06)',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
@@ -1107,9 +1107,9 @@ export function AdminSupportView() {
                 <div
                   style={{
                     position: 'absolute',
-                    top: -8,
+                    top: -6,
                     left: -10,
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: 900,
                     color: '#111111',
                     transform: 'rotate(-25deg)',
@@ -1120,9 +1120,9 @@ export function AdminSupportView() {
                 <div
                   style={{
                     position: 'absolute',
-                    top: -6,
+                    top: -4,
                     right: -8,
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: 900,
                     color: '#111111',
                     transform: 'rotate(25deg)',
@@ -1130,16 +1130,16 @@ export function AdminSupportView() {
                 >
                   //
                 </div>
-                <span style={{ fontSize: 9.5, fontWeight: 900, letterSpacing: 0.8, color: '#111111' }}>
+                <span style={{ fontSize: 9.5, fontWeight: 900, letterSpacing: 0.5, color: '#111111' }}>
                   QUICK
                 </span>
-                <span style={{ fontSize: 9.5, fontWeight: 900, letterSpacing: 0.8, color: '#111111' }}>
+                <span style={{ fontSize: 9.5, fontWeight: 900, letterSpacing: 0.5, color: '#111111' }}>
                   EASY SUPPORT
                 </span>
-                <span style={{ fontSize: 9.5, fontWeight: 900, letterSpacing: 0.8, color: '#111111' }}>
+                <span style={{ fontSize: 9.5, fontWeight: 900, letterSpacing: 0.5, color: '#111111' }}>
                   FOR A SMOOTHER
                 </span>
-                <span style={{ fontSize: 9.5, fontWeight: 900, letterSpacing: 0.8, color: '#111111' }}>
+                <span style={{ fontSize: 9.5, fontWeight: 900, letterSpacing: 0.5, color: '#111111' }}>
                   CAMPUS EXPERIENCE
                 </span>
               </div>
@@ -1147,13 +1147,12 @@ export function AdminSupportView() {
               {/* 3D Character Illustration Avatar */}
               <div
                 style={{
-                  width: 110,
-                  height: 100,
+                  width: 135,
+                  height: 105,
                   borderRadius: 20,
                   overflow: 'hidden',
                   position: 'relative',
-                  boxShadow: '0 8px 24px rgba(147, 51, 234, 0.15)',
-                  backgroundColor: '#EDE9FE',
+                  background: 'radial-gradient(circle at 60% 50%, rgba(221, 214, 254, 0.9) 0%, rgba(224, 242, 254, 0.6) 50%, transparent 100%)',
                   flexShrink: 0,
                 }}
               >
@@ -1161,75 +1160,62 @@ export function AdminSupportView() {
                   src="/images/support_agent_3d.jpg"
                   alt="Campus Support Agent"
                   fill
-                  sizes="110px"
+                  sizes="135px"
                   style={{ objectFit: 'cover' }}
                 />
               </div>
             </div>
           </div>
 
-          {/* LARGE SEARCH BAR & POPULAR SEARCHES */}
-          <div
-            style={{
-              backgroundColor: '#FFFFFF',
-              borderRadius: 20,
-              padding: '16px 20px',
-              border: '1px solid #E5E7EB',
-              boxShadow: '0 2px 10px rgba(0,0,0,0.02)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 12,
-            }}
-          >
-            <form onSubmit={handleSearchSubmit} style={{ display: 'flex', gap: 10 }}>
-              <div
+          {/* STANDALONE PILL SEARCH BAR & POPULAR SEARCHES */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <form
+              onSubmit={handleSearchSubmit}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #E5E7EB',
+                borderRadius: 16,
+                padding: '6px 6px 6px 18px',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+              }}
+            >
+              <Search width={17} height={17} color="#9CA3AF" style={{ marginRight: 10, flexShrink: 0 }} />
+              <input
+                type="text"
+                placeholder="Search for help articles, guides, or support topics..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 style={{
                   flex: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  backgroundColor: '#F9FAFB',
-                  border: '1px solid #E5E7EB',
-                  borderRadius: 14,
-                  padding: '9px 16px',
+                  border: 'none',
+                  background: 'transparent',
+                  outline: 'none',
+                  fontSize: 13,
+                  color: '#111111',
                 }}
-              >
-                <Search width={17} height={17} color="#9CA3AF" style={{ marginRight: 10 }} />
-                <input
-                  type="text"
-                  placeholder="Search for help articles, guides, or support topics..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  style={{
-                    width: '100%',
-                    border: 'none',
-                    background: 'transparent',
-                    outline: 'none',
-                    fontSize: 13,
-                    color: '#111111',
-                  }}
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery('')}
-                    style={{ background: 'none', border: 'none', color: '#9CA3AF', cursor: 'pointer', padding: 0 }}
-                  >
-                    <X width={15} height={15} />
-                  </button>
-                )}
-              </div>
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  style={{ background: 'none', border: 'none', color: '#9CA3AF', cursor: 'pointer', padding: '0 8px' }}
+                >
+                  <X width={15} height={15} />
+                </button>
+              )}
               <button
                 type="submit"
                 style={{
                   backgroundColor: '#111111',
                   color: '#FFFFFF',
-                  padding: '0 24px',
-                  borderRadius: 14,
+                  padding: '9px 24px',
+                  borderRadius: 12,
                   border: 'none',
                   fontSize: 13,
                   fontWeight: 800,
                   cursor: 'pointer',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                 }}
               >
                 Search
@@ -1238,7 +1224,7 @@ export function AdminSupportView() {
 
             {/* Popular Searches Pills */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 11, fontWeight: 700, color: '#6B7280' }}>Popular searches:</span>
+              <span style={{ fontSize: 11.5, fontWeight: 700, color: '#6B7280' }}>Popular searches:</span>
               {[
                 'Create announcement',
                 'Event registration',
@@ -1251,18 +1237,25 @@ export function AdminSupportView() {
                   type="button"
                   onClick={() => setSearchQuery(term)}
                   style={{
-                    backgroundColor: '#F3F4F6',
-                    border: 'none',
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #E5E7EB',
                     borderRadius: 9999,
-                    padding: '4px 10px',
+                    padding: '4px 12px',
                     fontSize: 11,
-                    fontWeight: 700,
+                    fontWeight: 600,
                     color: '#374151',
                     cursor: 'pointer',
-                    transition: 'background-color 0.15s ease',
+                    transition: 'all 0.15s ease',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.02)',
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#E5E7EB')}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#F3F4F6')}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#F3F4F6'
+                    e.currentTarget.style.borderColor = '#D1D5DB'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#FFFFFF'
+                    e.currentTarget.style.borderColor = '#E5E7EB'
+                  }}
                 >
                   {term}
                 </button>
@@ -1284,42 +1277,42 @@ export function AdminSupportView() {
                 desc: 'Browse guides, FAQs and tutorials',
                 icon: BookOpen,
                 cardBg: '#FAF5FF',
-                iconBg: '#F3E8FF',
-                iconColor: '#9333EA',
-                chevronBg: '#E9D5FF',
-                chevronColor: '#7E22CE',
+                iconBg: '#7C3AED',
+                iconColor: '#FFFFFF',
+                chevronBg: '#EDE9FE',
+                chevronColor: '#6D28D9',
                 action: () => addToast({ type: 'info', title: 'Knowledge Base', message: 'Opening documentation library.' }),
               },
               {
                 title: 'FAQs',
                 desc: 'Find answers to common questions',
-                icon: FileQuestion,
+                icon: MessageSquare,
                 cardBg: '#F0F9FF',
-                iconBg: '#E0F2FE',
-                iconColor: '#0284C7',
+                iconBg: '#38BDF8',
+                iconColor: '#FFFFFF',
                 chevronBg: '#BAE6FD',
-                chevronColor: '#0369A1',
-                action: () => setExpandedFaq(0),
+                chevronColor: '#0284C7',
+                action: () => addToast({ type: 'info', title: 'FAQs', message: 'Showing common questions and answers.' }),
               },
               {
                 title: 'Contact Support',
                 desc: 'Get in touch with our support team',
                 icon: Headphones,
                 cardBg: '#FEFCE8',
-                iconBg: '#FEF9C3',
-                iconColor: '#CA8A04',
+                iconBg: '#FACC15',
+                iconColor: '#111111',
                 chevronBg: '#FEF08A',
-                chevronColor: '#A16207',
+                chevronColor: '#854D0E',
                 action: () => setIsLiveChatOpen(true),
               },
               {
                 title: 'Raise a Ticket',
                 desc: 'Report an issue or request assistance',
                 icon: Ticket,
-                cardBg: '#FDF2F8',
-                iconBg: '#FCE7F3',
-                iconColor: '#DB2777',
-                chevronBg: '#FBCFE8',
+                cardBg: '#FFF1F5',
+                iconBg: '#F43F5E',
+                iconColor: '#FFFFFF',
+                chevronBg: '#FCE7F3',
                 chevronColor: '#BE185D',
                 action: () => setIsCreateTicketOpen(true),
               },
@@ -1328,9 +1321,9 @@ export function AdminSupportView() {
                 desc: 'Step-by-step guides for all features',
                 icon: FileText,
                 cardBg: '#F0FDF4',
-                iconBg: '#DCFCE7',
-                iconColor: '#16A34A',
-                chevronBg: '#BBF7D0',
+                iconBg: '#22C55E',
+                iconColor: '#FFFFFF',
+                chevronBg: '#DCFCE7',
                 chevronColor: '#15803D',
                 action: () => addToast({ type: 'info', title: 'User Guides', message: 'Loaded 12 interactive user guides.' }),
               },
@@ -1568,16 +1561,14 @@ export function AdminSupportView() {
                 </button>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {filteredFaqs.map((faq, idx) => {
                   const isOpen = expandedFaq === idx
                   return (
                     <div
                       key={idx}
                       style={{
-                        border: '1px solid #F3F4F6',
-                        borderRadius: 12,
-                        overflow: 'hidden',
+                        borderBottom: idx === filteredFaqs.length - 1 ? 'none' : '1px solid #F3F4F6',
                         transition: 'background-color 0.15s ease',
                       }}
                     >
@@ -1586,17 +1577,17 @@ export function AdminSupportView() {
                         onClick={() => setExpandedFaq(isOpen ? null : idx)}
                         style={{
                           width: '100%',
-                          padding: '10px 14px',
+                          padding: '8px 2px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
                           gap: 10,
-                          background: isOpen ? '#F9FAFB' : '#FFFFFF',
+                          background: 'transparent',
                           border: 'none',
                           cursor: 'pointer',
                           textAlign: 'left',
                           fontSize: 12.5,
-                          fontWeight: 700,
+                          fontWeight: 600,
                           color: '#111111',
                         }}
                       >
@@ -1616,12 +1607,10 @@ export function AdminSupportView() {
                       {isOpen && (
                         <div
                           style={{
-                            padding: '10px 14px 12px',
+                            padding: '4px 2px 10px',
                             fontSize: 11.5,
                             color: '#4B5563',
                             lineHeight: 1.45,
-                            backgroundColor: '#F9FAFB',
-                            borderTop: '1px solid #F3F4F6',
                           }}
                         >
                           {faq.a}
@@ -1811,14 +1800,48 @@ export function AdminSupportView() {
                     fontSize: 12,
                     fontWeight: 800,
                     cursor: 'pointer',
+                    zIndex: 2,
                   }}
                 >
                   Contact Support →
                 </button>
 
-                {/* Paper plane illustration doodle */}
-                <div style={{ color: '#60A5FA', transform: 'rotate(15deg)', marginRight: 10 }}>
-                  <Send width={28} height={28} />
+                {/* Paper plane illustration with dashed flight loop and clouds */}
+                <div style={{ position: 'relative', width: 105, height: 75, flexShrink: 0, marginBottom: -10, marginRight: -8 }}>
+                  <svg width="105" height="75" viewBox="0 0 105 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    {/* Clouds at bottom */}
+                    <path
+                      d="M32 72C32 67 37 63 42 63C43.5 63 45 63.4 46 64C48 61 51.5 59 56 59C61.5 59 66 62 67 66.5C68.5 65.8 70 65.5 72 65.5C76 65.5 79 68.5 79 72.5H32V72Z"
+                      fill="#EFF6FF"
+                    />
+                    <path
+                      d="M55 74C55 70 58.5 67 63 67C64.5 67 65.8 67.4 67 68C68.5 66 71.5 64 75 64C79.5 64 83 66.5 84 70.5C85 70 86.5 69.5 88 69.5C91.5 69.5 94.5 72 94.5 75H55V74Z"
+                      fill="#DBEAFE"
+                    />
+                    {/* Dashed flight loop trail */}
+                    <path
+                      d="M12 66C18 58 26 50 34 52C42 54 40 64 32 64C24 64 25 45 42 36C52 30 64 22 76 12"
+                      stroke="#60A5FA"
+                      strokeWidth="1.6"
+                      strokeDasharray="3.5 3.5"
+                      strokeLinecap="round"
+                    />
+                    {/* Blue Paper Airplane */}
+                    <g transform="translate(68, 6) rotate(15)">
+                      <path
+                        d="M24 0L0 10L9 15L24 0Z"
+                        fill="#2563EB"
+                      />
+                      <path
+                        d="M24 0L9 15L10 22L15 17L24 0Z"
+                        fill="#3B82F6"
+                      />
+                      <path
+                        d="M10 22L12.5 17L9 15L10 22Z"
+                        fill="#1D4ED8"
+                      />
+                    </g>
+                  </svg>
                 </div>
               </div>
             </div>
@@ -2374,6 +2397,7 @@ export function AdminSupportView() {
             </div>
             <button
               type="button"
+              aria-label="Close Live Chat"
               onClick={() => setIsLiveChatOpen(false)}
               style={{ background: 'none', border: 'none', color: '#9CA3AF', cursor: 'pointer' }}
             >
