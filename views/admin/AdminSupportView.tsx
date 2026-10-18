@@ -1042,6 +1042,9 @@ export function AdminSupportView() {
               gap: 16,
               flexWrap: 'wrap',
               position: 'relative',
+              background: 'radial-gradient(ellipse at 88% 40%, rgba(224, 231, 255, 0.7) 0%, rgba(237, 233, 254, 0.45) 45%, transparent 75%)',
+              borderRadius: 20,
+              padding: '6px 8px 6px 0',
             }}
           >
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, zIndex: 2 }}>
@@ -1147,20 +1150,20 @@ export function AdminSupportView() {
               {/* 3D Character Illustration Avatar */}
               <div
                 style={{
-                  width: 135,
-                  height: 105,
-                  borderRadius: 20,
+                  width: 165,
+                  height: 125,
+                  borderRadius: 24,
                   overflow: 'hidden',
                   position: 'relative',
-                  background: 'radial-gradient(circle at 60% 50%, rgba(221, 214, 254, 0.9) 0%, rgba(224, 242, 254, 0.6) 50%, transparent 100%)',
                   flexShrink: 0,
+                  marginRight: -4,
                 }}
               >
                 <Image
                   src="/images/support_agent_3d.jpg"
                   alt="Campus Support Agent"
                   fill
-                  sizes="135px"
+                  sizes="165px"
                   style={{ objectFit: 'cover' }}
                 />
               </div>
@@ -1720,18 +1723,43 @@ export function AdminSupportView() {
                         justifyContent: 'center',
                         position: 'relative',
                         boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+                        overflow: 'hidden',
                       }}
                     >
+                      {/* Decorative Mini UI Mockup */}
+                      {idx === 0 && (
+                        <div style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: 4, opacity: 0.35 }}>
+                          <div style={{ width: 20, height: 20, borderRadius: '50%', backgroundColor: '#FFFFFF' }} />
+                          <div style={{ width: 34, height: 4, borderRadius: 2, backgroundColor: '#FFFFFF' }} />
+                        </div>
+                      )}
+                      {idx === 1 && (
+                        <div style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: 3, opacity: 0.35 }}>
+                          <div style={{ width: 28, height: 20, borderRadius: 4, border: '1.5px solid #FFFFFF', padding: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                            <div style={{ width: '80%', height: 2, backgroundColor: '#FFFFFF', borderRadius: 1 }} />
+                            <div style={{ width: '60%', height: 2, backgroundColor: '#FFFFFF', borderRadius: 1 }} />
+                          </div>
+                        </div>
+                      )}
+                      {idx === 2 && (
+                        <div style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: 3, opacity: 0.35 }}>
+                          <div style={{ width: 18, height: 18, borderRadius: '50%', backgroundColor: '#FFFFFF' }} />
+                          <div style={{ width: 30, height: 3, borderRadius: 1.5, backgroundColor: '#FFFFFF' }} />
+                        </div>
+                      )}
+
                       <div
                         style={{
                           width: 32,
                           height: 32,
                           borderRadius: '50%',
-                          backgroundColor: 'rgba(255,255,255,0.9)',
+                          backgroundColor: 'rgba(255,255,255,0.95)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
                           color: '#111111',
+                          boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                          zIndex: 2,
                         }}
                       >
                         <PlayCircle width={18} height={18} />
@@ -1741,12 +1769,13 @@ export function AdminSupportView() {
                           position: 'absolute',
                           bottom: 6,
                           right: 6,
-                          backgroundColor: 'rgba(0,0,0,0.75)',
+                          backgroundColor: 'rgba(0,0,0,0.8)',
                           color: '#FFFFFF',
                           fontSize: 9.5,
                           fontWeight: 700,
                           padding: '1px 5px',
                           borderRadius: 4,
+                          zIndex: 2,
                         }}
                       >
                         {vid.duration}
