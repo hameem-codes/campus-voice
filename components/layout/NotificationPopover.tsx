@@ -146,27 +146,6 @@ export function NotificationPopover({ onClose }: { onClose: () => void }) {
           </div>
         )}
       </div>
-
-      <div
-        style={{
-          borderTop: '1px solid var(--border)',
-          padding: '8px 12px',
-          textAlign: 'center',
-          backgroundColor: 'var(--surface-hover)',
-        }}
-      >
-        <button
-          type="button"
-          onClick={() => {
-            onClose()
-            router.push('/student/notifications')
-          }}
-          className="btn ghost small"
-          style={{ width: '100%', fontSize: 12, fontWeight: 700, color: 'var(--text-1)' }}
-        >
-          View all notifications →
-        </button>
-      </div>
     </div>
   )
 }

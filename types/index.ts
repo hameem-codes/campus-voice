@@ -79,15 +79,12 @@ export interface UserProfile {
   id: string
   name: string
   email: string
-  role: Role | 'staff'
+  role: Role
   department: string
   year?: string
   section?: string
   studentId?: string
   avatarInitials: string
-  avatarUrl?: string
-  phone?: string
-  joinedOn?: string
   active: boolean
   lastSeen?: string
   notificationPreferences: {
@@ -157,15 +154,6 @@ export interface AuditLogItem {
   details: string
   timestamp: string
   updateId?: string
-  module?: string
-  ipAddress?: string
-  severity?: 'Low' | 'Medium' | 'High'
-  userAvatar?: string
-  userEmail?: string
-  userId?: string
-  device?: string
-  location?: string
-  status?: string
 }
 
 export interface AppSettings {

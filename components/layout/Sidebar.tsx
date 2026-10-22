@@ -26,13 +26,6 @@ import {
   Sun,
   Moon,
   LogOut,
-  Compass,
-  Megaphone,
-  Briefcase,
-  Folder,
-  Timer,
-  Bell,
-  LayoutGrid,
 } from 'lucide-react'
 import { Role } from '@/types'
 import { useStore } from '@/lib/store'
@@ -51,21 +44,15 @@ interface NavItemDef {
 
 const roleNavMap: Record<Role, NavItemDef[]> = {
   student: [
-    { href: '/student', label: 'Announcements', icon: Megaphone },
-    { href: '/student/explore', label: 'Explore Campus', icon: Compass },
-    { href: '/student/activity', label: 'My Activity', icon: UserRound },
-    { href: '/student/calendar', label: 'Events', icon: CalendarDays },
-    { href: '/student/placements', label: 'Placements', icon: Briefcase },
-    { href: '/student/academic', label: 'Academic', icon: GraduationCap },
-    { href: '/student/general', label: 'General', icon: Folder },
-    { href: '/student/saved', label: 'Bookmarked', icon: Bookmark, badgeKey: 'saved' },
-    { href: '/student/notifications', label: 'Notifications', icon: Bell, badgeKey: 'updates' },
-    { href: '/student/streak', label: 'Reading Streak', icon: Timer },
+    { href: '/student', label: 'Home', icon: Home },
+    { href: '/student/updates', label: 'Updates', icon: Inbox, badgeKey: 'updates' },
+    { href: '/student/calendar', label: 'Calendar', icon: CalendarDays },
+    { href: '/student/saved', label: 'Saved', icon: Bookmark, badgeKey: 'saved' },
+    { href: '/student/profile', label: 'Profile', icon: UserRound },
   ],
   faculty: [
     { href: '/faculty', label: 'Home', icon: Home },
     { href: '/faculty/create', label: 'New notice', icon: FilePlus2 },
-    { href: '/faculty/templates', label: 'Notice Templates', icon: LayoutGrid },
     { href: '/faculty/updates', label: 'My notices', icon: Inbox, badgeKey: 'updates' },
     { href: '/faculty/analytics', label: 'Analytics', icon: LineChart },
   ],
@@ -153,7 +140,6 @@ export function Sidebar() {
   const getNavLabel = (item: NavItemDef) => {
     switch (item.href) {
       case '/student':
-        return 'Announcements'
       case '/faculty':
         return t('navHome')
       case '/student/updates':
