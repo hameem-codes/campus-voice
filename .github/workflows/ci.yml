@@ -24,6 +24,14 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
+      - name: Generate Prisma Client & Validate Schema
+        env:
+          DATABASE_URL: 'postgresql://postgres:mock@localhost:5432/mock'
+          DIRECT_URL: 'postgresql://postgres:mock@localhost:5432/mock'
+        run: |
+          npx prisma validate
+          npx prisma generate
+
       - name: Run ESLint
         run: npm run lint
 

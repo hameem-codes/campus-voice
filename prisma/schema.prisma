@@ -1,0 +1,274 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum GlobalRole {
+  STANDARD_USER
+  PLATFORM_ADMIN
+}
+
+enum TenantStatus {
+  ACTIVE
+  SUSPENDED
+  ARCHIVED
+}
+
+enum TenantRole {
+  STUDENT
+  FACULTY
+  TENANT_ADMIN
+}
+
+enum MembershipStatus {
+  ACTIVE
+  SUSPENDED
+  REVOKED
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REVOKED
+  EXPIRED
+}
+
+model Tenant {
+  id        String       @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String       @unique
+  domain    String?
+  status    TenantStatus @default(ACTIVE)
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+
+  settings      TenantSettings?
+  memberships   TenantMembership[]
+  departments   Department[]
+  academicYears AcademicYear[]
+  sections      Section[]
+  courses       Course[]
+  categories    Category[]
+  invitations   Invitation[]
+  auditLogs     AuditLog[]
+  sessions      Session[]
+
+  @@map("tenants")
+}
+
+model TenantSettings {
+  id                            String   @id @default(uuid()) @db.Uuid
+  tenantId                      String   @unique @map("tenant_id") @db.Uuid
+  allowStudentComments          Boolean  @default(false) @map("allow_student_comments")
+  requireAdminApprovalForUrgent Boolean  @default(true) @map("require_admin_approval_for_urgent")
+  retentionMonths               Int      @default(36) @map("retention_months")
+  themePrimaryColor             String   @default("#3F7CE0") @map("theme_primary_color")
+  logoUrl                       String?  @map("logo_url")
+  notificationChannels          Json     @default("{\"email\":true,\"push\":true,\"sms\":false}") @map("notification_channels")
+  createdAt                     DateTime @default(now()) @map("created_at")
+  updatedAt                     DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("tenant_settings")
+}
+
+model User {
+  id              String     @id @default(uuid()) @db.Uuid
+  email           String     @unique
+  passwordHash    String     @map("password_hash")
+  fullName        String     @map("full_name")
+  avatarUrl       String?    @map("avatar_url")
+  globalRole      GlobalRole @default(STANDARD_USER) @map("global_role")
+  isActive        Boolean    @default(true) @map("is_active")
+  emailVerifiedAt DateTime?  @map("email_verified_at")
+  createdAt       DateTime   @default(now()) @map("created_at")
+  updatedAt       DateTime   @updatedAt @map("updated_at")
+
+  memberships     TenantMembership[]
+  sessions        Session[]
+  sentInvitations Invitation[]       @relation("InvitedByUser")
+  actorAuditLogs  AuditLog[]         @relation("ActorUser")
+
+  @@map("users")
+}
+
+model TenantMembership {
+  id             String           @id @default(uuid()) @db.Uuid
+  tenantId       String           @map("tenant_id") @db.Uuid
+  userId         String           @map("user_id") @db.Uuid
+  role           TenantRole       @default(STUDENT)
+  status         MembershipStatus @default(ACTIVE)
+  studentId      String?          @map("student_id")
+  departmentId   String?          @map("department_id") @db.Uuid
+  academicYearId String?          @map("academic_year_id") @db.Uuid
+  sectionId      String?          @map("section_id") @db.Uuid
+  joinedAt       DateTime         @default(now()) @map("joined_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  department   Department?   @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  academicYear AcademicYear? @relation(fields: [academicYearId], references: [id], onDelete: SetNull)
+  section      Section?      @relation(fields: [sectionId], references: [id], onDelete: SetNull)
+
+  @@unique([tenantId, userId])
+  @@index([tenantId, role, status])
+  @@map("tenant_memberships")
+}
+
+model Session {
+  id              String    @id @default(uuid()) @db.Uuid
+  userId          String    @map("user_id") @db.Uuid
+  tokenHash       String    @unique @map("token_hash")
+  currentTenantId String?   @map("current_tenant_id") @db.Uuid
+  ipAddress       String?   @map("ip_address")
+  userAgent       String?   @map("user_agent")
+  expiresAt       DateTime  @map("expires_at")
+  revokedAt       DateTime? @map("revoked_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currentTenant Tenant? @relation(fields: [currentTenantId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([tokenHash])
+  @@map("sessions")
+}
+
+model Department {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  name      String
+  code      String
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  memberships TenantMembership[]
+  sections    Section[]
+  courses     Course[]
+  invitations Invitation[]
+
+  @@unique([tenantId, code])
+  @@map("departments")
+}
+
+model AcademicYear {
+  id        String    @id @default(uuid()) @db.Uuid
+  tenantId  String    @map("tenant_id") @db.Uuid
+  name      String
+  code      String
+  startDate DateTime? @map("start_date")
+  endDate   DateTime? @map("end_date")
+  isActive  Boolean   @default(true) @map("is_active")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  memberships TenantMembership[]
+
+  @@unique([tenantId, code])
+  @@map("academic_years")
+}
+
+model Section {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  departmentId String   @map("department_id") @db.Uuid
+  name         String
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  department  Department         @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  memberships TenantMembership[]
+
+  @@unique([tenantId, departmentId, name])
+  @@map("sections")
+}
+
+model Course {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  departmentId String   @map("department_id") @db.Uuid
+  name         String
+  code         String
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  tenant     Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  department Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, code])
+  @@map("courses")
+}
+
+model Category {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  name         String
+  slug         String
+  color        String   @default("#3F7CE0")
+  displayOrder Int      @default(0) @map("display_order")
+  isSystem     Boolean  @default(false) @map("is_system")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, name])
+  @@unique([tenantId, slug])
+  @@map("categories")
+}
+
+model Invitation {
+  id              String           @id @default(uuid()) @db.Uuid
+  tenantId        String           @map("tenant_id") @db.Uuid
+  email           String
+  role            TenantRole       @default(STUDENT)
+  departmentId    String?          @map("department_id") @db.Uuid
+  tokenHash       String           @unique @map("token_hash")
+  expiresAt       DateTime         @map("expires_at")
+  status          InvitationStatus @default(PENDING)
+  invitedByUserId String           @map("invited_by_user_id") @db.Uuid
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+
+  tenant        Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  department    Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  invitedByUser User        @relation("InvitedByUser", fields: [invitedByUserId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, email])
+  @@map("invitations")
+}
+
+model AuditLog {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String?  @map("tenant_id") @db.Uuid
+  actorUserId  String?  @map("actor_user_id") @db.Uuid
+  actorRole    String?  @map("actor_role")
+  action       String
+  resourceType String   @map("resource_type")
+  resourceId   String?  @map("resource_id")
+  details      Json?
+  ipAddress    String?  @map("ip_address")
+  userAgent    String?  @map("user_agent")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  tenant    Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  actorUser User?   @relation("ActorUser", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, createdAt])
+  @@index([actorUserId])
+  @@map("audit_logs")
+}
